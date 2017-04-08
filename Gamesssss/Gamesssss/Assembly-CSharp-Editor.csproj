@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <RootNamespace></RootNamespace>
+    <ProjectGuid>{EF659F6A-C0FB-16FD-2E3D-5682D7712936}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <AssemblyName>Assembly-CSharp-Editor</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <BaseDirectory>Assets</BaseDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Temp\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_4_3;UNITY_5_4;UNITY_5;UNITY_64;ENABLE_NEW_BUGREPORTER;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_DUCK_TYPING;ENABLE_EDITOR_RETINA;ENABLE_RETINA_GUISTYLES;ENABLE_FRAME_DEBUGGER;ENABLE_GENERICS;ENABLE_HOME_SCREEN;ENABLE_IMAGEEFFECTS;ENABLE_LIGHT_PROBES_LEGACY;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_PLUGIN_INSPECTOR;ENABLE_SHADOWS;ENABLE_SPRITERENDERER_FLIPPING;ENABLE_SPRITES;ENABLE_SPRITE_POLYGON;ENABLE_TERRAIN;ENABLE_RAKNET;ENABLE_UNET;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_COLLAB;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_HUB;ENABLE_CLOUD_PROJECT_ID;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_METRICS;ENABLE_EDITOR_METRICS_CACHING;INCLUDE_DYNAMIC_GI;INCLUDE_GI;INCLUDE_IL2CPP;INCLUDE_DIRECTX12;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;INCLUDE_PUBNUB;ENABLE_LOCALIZATION;ENABLE_ANDROID_ATLAS_ETC1_COMPRESSION;ENABLE_EDITOR_TESTS_RUNNER;UNITY_STANDALONE_OSX;UNITY_STANDALONE;ENABLE_SUBSTANCE;ENABLE_GAMECENTER;ENABLE_TEXTUREID_MAP;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_UNITYWEBREQUEST;ENABLE_CLUSTERINPUT;ENABLE_WEBSOCKET_HOST;ENABLE_MONO;ENABLE_PROFILER;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_OSX;UNITY_TEAM_LICENSE;UNITY_PRO_LICENSE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Temp\bin\Release\</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="UnityEngine">
+      <HintPath>/Applications/Unity/Unity.app/Contents/Managed/UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor">
+      <HintPath>/Applications/Unity/Unity.app/Contents/Managed/UnityEditor.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+     <Compile Include="Assets\BitmapFontImporter\Editor\BFImporter.cs" />
+     <Compile Include="Assets\BitmapFontImporter\Editor\BFMenuTool.cs" />
+     <Compile Include="Assets\BitmapFontImporter\Editor\FntParse.cs" />
+     <Compile Include="Assets\Demigiant\DOTweenPro\Editor\DOTweenAnimationInspector.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\AdvancedBuilder.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\AdvancedBuilderRenderer.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\AdvancedBuilderWindow.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Builder\AppParametersHelper.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Builder\IAdvancedCustomBuild.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Builder\PlatformBuilder.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Configuration\Configuration.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Error\ErrorReporter.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Platforms\DistributionPlatform\DistributionPlatform.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Platforms\DistributionPlatform\DistributionsPlatformRenderer.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Platforms\Platform\Android\PlatformAndroid.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Platforms\Platform\Android\PlatformAndroidAdditionalRenderer.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Platforms\Platform\BlackBerry\PlatformBlackBerry.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Platforms\Platform\Interfaces\IPlatform.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Platforms\Platform\Interfaces\IPlatformAdditionalRenderer.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Platforms\Platform\Linux\PlatformLinux.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Platforms\Platform\Mac\PlatformMac.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Platforms\Platform\PlatformProperties.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Platforms\Platform\PlatformRenderer.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Platforms\Platform\WebGL\PlatformWebGL.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Platforms\Platform\WebPlayer\PlatformWebPlayer.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Platforms\Platform\Windows\PlatformWindows.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Platforms\Platform\WindowsPhone8\PlatformWindowsPhone8.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Platforms\Platform\WindowsStore\PlatformWindowsStore.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Platforms\Platform\iOS\PlatformiOS.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Platforms\Platform\tvOS\PlatformtvOS.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Platforms\PlatformArchitecture\PlatformArchitecture.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Platforms\PlatformType.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Platforms\Platforms.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Platforms\PlatformsRenderer.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Platforms\TextureCompression\Android\TextureCompressionAndroid.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Platforms\TextureCompression\BlackBerry\TextureCompressionBlackBerry.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Platforms\TextureCompression\Default\DefaultTextureCompression.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Platforms\TextureCompression\ITextureCompression.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Platforms\TextureCompression\TextureProperties.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\ProductParameters\ProductParameters.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\ProductParameters\ProductParametersRenderer.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\ProjectConfiguration\ConfigurationSceneRenderer.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\ProjectConfiguration\ProjectConfigurations.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\ProjectConfiguration\ProjectConfigurationsRenderer.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\ReleaseTypes\ReleaseType.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\ReleaseTypes\ReleaseTypeRenderer.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\ReleaseTypes\ReleaseTypes.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\ReleaseTypes\ReleaseTypesRenderer.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Renderer\IDefaultRenderer.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Settings\AdvancedSettings.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Settings\AdvancedSettingsRenderer.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Utils\GUIUtils.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Utils\LegacyGUIStyle.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Utils\PMEditorWindow.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Utils\PMPackaging.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\Utils\PMUtils.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Example\Editor\MyCustomBuild.cs" />
+     <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Example\Editor\SetAndroidPasswordCustomBuild.cs" />
+     <None Include="Assets\Demigiant\DOTweenPro\readme.txt" />
+     <None Include="Assets\Fonts\MarioNet@2x.fnt" />
+     <None Include="Assets\Demigiant\DOTween\DOTween50.xml" />
+     <None Include="Assets\Fonts\MarioNetFont@3x.fnt" />
+     <None Include="Assets\Fonts\12.fnt" />
+     <None Include="Assets\BitmapFontImporter\Examples\Font1\font1.fnt" />
+     <None Include="Assets\Demigiant\DOTween\DOTween46.xml" />
+     <None Include="Assets\Demigiant\DOTween\readme.txt" />
+     <None Include="Assets\Demigiant\DOTween\DOTween43.xml" />
+     <None Include="Assets\BitmapFontImporter\Examples\Font2\font2.fnt" />
+     <None Include="Assets\PygmyMonkey\AdvancedBuilder\ReadMe.txt" />
+     <None Include="Assets\Demigiant\readme_DOTweenPro.txt" />
+ <Reference Include="UnityEditor.Advertisements">
+ <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll</HintPath>
+ </Reference>
+ <Reference Include="nunit.framework">
+ <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/EditorTestsRunner/Editor/nunit.framework.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.EditorTestsRunner">
+ <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/EditorTestsRunner/Editor/UnityEditor.EditorTestsRunner.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.UI">
+ <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.UI">
+ <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/Editor/UnityEditor.UI.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.Networking">
+ <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.Networking">
+ <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Networking/Editor/UnityEditor.Networking.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.TreeEditor">
+ <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/TreeEditor/Editor/UnityEditor.TreeEditor.dll</HintPath>
+ </Reference>
+ <Reference Include="DOTween">
+ <HintPath>/Users/xiaoyuma/Documents/My_Works/Gamesssss/Gamesssss/Gamesssss/Assets/Demigiant/DOTween/DOTween.dll</HintPath>
+ </Reference>
+ <Reference Include="DOTween43">
+ <HintPath>/Users/xiaoyuma/Documents/My_Works/Gamesssss/Gamesssss/Gamesssss/Assets/Demigiant/DOTween/DOTween43.dll</HintPath>
+ </Reference>
+ <Reference Include="DOTween46">
+ <HintPath>/Users/xiaoyuma/Documents/My_Works/Gamesssss/Gamesssss/Gamesssss/Assets/Demigiant/DOTween/DOTween46.dll</HintPath>
+ </Reference>
+ <Reference Include="DOTween50">
+ <HintPath>/Users/xiaoyuma/Documents/My_Works/Gamesssss/Gamesssss/Gamesssss/Assets/Demigiant/DOTween/DOTween50.dll</HintPath>
+ </Reference>
+ <Reference Include="DOTweenEditor">
+ <HintPath>/Users/xiaoyuma/Documents/My_Works/Gamesssss/Gamesssss/Gamesssss/Assets/Demigiant/DOTween/Editor/DOTweenEditor.dll</HintPath>
+ </Reference>
+ <Reference Include="DOTweenPro">
+ <HintPath>/Users/xiaoyuma/Documents/My_Works/Gamesssss/Gamesssss/Gamesssss/Assets/Demigiant/DOTweenPro/DOTweenPro.dll</HintPath>
+ </Reference>
+ <Reference Include="DOTweenProEditor">
+ <HintPath>/Users/xiaoyuma/Documents/My_Works/Gamesssss/Gamesssss/Gamesssss/Assets/Demigiant/DOTweenPro/Editor/DOTweenProEditor.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.Graphs">
+ <HintPath>/Applications/Unity/Unity.app/Contents/Managed/UnityEditor.Graphs.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.iOS.Extensions">
+ <HintPath>/Applications/Unity/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.AppleTV.Extensions">
+ <HintPath>/Applications/Unity/PlaybackEngines/AppleTVSupport/UnityEditor.AppleTV.Extensions.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.OSXStandalone.Extensions">
+ <HintPath>/Applications/Unity/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.iOS.Extensions.Common">
+ <HintPath>/Applications/Unity/PlaybackEngines/AppleTVSupport/UnityEditor.iOS.Extensions.Common.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+ <HintPath>/Applications/Unity/PlaybackEngines/AppleTVSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+ </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp.csproj">
+      <Project>{3A000A3A-8E6C-45B9-23C9-EB0B5816BE08}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  
+</Project>
