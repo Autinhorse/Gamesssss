@@ -181,7 +181,7 @@ public class GameLogic  {
             break;
         }
 
-        gameLogic = new GameLogicMathDice( dif );
+        gameLogic = new GameLogicResolveNumber( dif );
         dif++;
 
 
@@ -235,6 +235,9 @@ public class GameLogic  {
 
     public virtual void OnBoardTapped( Vector3 pos ) {
         
+    }
+
+    public virtual void OnTouchSwipe( int dir ) {
     }
 
     public virtual void Clear() {

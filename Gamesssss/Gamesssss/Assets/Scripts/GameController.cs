@@ -35,6 +35,10 @@ public class GameController : MonoBehaviour {
     public const int Button_Two = 2;
     public const int Button_Three = 3;
 
+    public const int DIR_LEFT = 0;
+    public const int DIR_RIGHT = 1;
+
+
     GameLogic _gameLogic;
     int _buttonMode;
     public int boardWidth {
@@ -211,5 +215,10 @@ public class GameController : MonoBehaviour {
         _gameLogic.OnBoardTapped( pos );
     }
 
+
+    public void OnTouchSwipe( int dir ) {
+        Debug.Log( "OnTouchSwipe!");
+        _gameLogic.OnTouchSwipe( dir );
+    }
 
 }

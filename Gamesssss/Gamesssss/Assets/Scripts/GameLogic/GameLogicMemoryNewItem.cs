@@ -208,6 +208,7 @@ public class GameLogicMemoryNewItem : GameLogic {
 
         imgBoard.rectTransform.sizeDelta = new Vector2( MapBlockSize, MapBlockSize );
         imgBoard.rectTransform.localPosition = new Vector3( pos.x, pos.y, 0 );
+        imgBoard.rectTransform.localScale = Vector3.one;
         //_mapBoard[m,n]=imgBoard;
         _goList.Add( imgBoard.gameObject );
 
@@ -215,14 +216,14 @@ public class GameLogicMemoryNewItem : GameLogic {
         imgShape.gameObject.SetActive( true );
         imgShape.transform.SetParent( imgBoard.gameObject.transform );
         imgShape.rectTransform.localPosition = Vector3.zero;
+        imgShape.rectTransform.localScale = Vector3.one;
         imgShape.color = Color.white;
         imgShape.sprite = MainPage.instance.SptShapes[shape];
         //_mapShape[m,n]=imgShape;
 
         imgShape.rectTransform.sizeDelta = new Vector2( MapBlockSize-32, MapBlockSize-32 );
-
-        imgBoard.rectTransform.localScale = Vector3.zero;
-        DOTween.Play( imgBoard.rectTransform.DOScale( Vector3.one, 0.75f).SetEase( Ease.OutBack ) );
+        imgShape.rectTransform.localScale = Vector3.zero;
+        DOTween.Play( imgShape.rectTransform.DOScale( Vector3.one, 0.75f).SetEase( Ease.OutBack ) );
     }
 
     Vector2 GetPosition( int x, int y ) {

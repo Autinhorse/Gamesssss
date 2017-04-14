@@ -55,9 +55,11 @@
      <Compile Include="Assets\Scripts\GameLogic.cs" />
      <Compile Include="Assets\Scripts\GameLogic\GameLogicActionShootUFO.cs" />
      <Compile Include="Assets\Scripts\GameLogic\GameLogicActionSpark.cs" />
+     <Compile Include="Assets\Scripts\GameLogic\GameLogicActionSwipeArrow.cs" />
      <Compile Include="Assets\Scripts\GameLogic\GameLogicActionTapScreen.cs" />
      <Compile Include="Assets\Scripts\GameLogic\GameLogicDecisionHand.cs" />
      <Compile Include="Assets\Scripts\GameLogic\GameLogicDecisionHowMany.cs" />
+     <Compile Include="Assets\Scripts\GameLogic\GameLogicDecisionNoExistChar.cs" />
      <Compile Include="Assets\Scripts\GameLogic\GameLogicDecisionTapShape.cs" />
      <Compile Include="Assets\Scripts\GameLogic\GameLogicMathBigger.cs" />
      <Compile Include="Assets\Scripts\GameLogic\GameLogicMathDice.cs" />
@@ -65,9 +67,11 @@
      <Compile Include="Assets\Scripts\GameLogic\GameLogicMathSum.cs" />
      <Compile Include="Assets\Scripts\GameLogic\GameLogicMemeoryMissItem.cs" />
      <Compile Include="Assets\Scripts\GameLogic\GameLogicMemoryNewItem.cs" />
+     <Compile Include="Assets\Scripts\GameLogic\GameLogicMemoryOrder.cs" />
      <Compile Include="Assets\Scripts\GameLogic\GameLogicMemoryPair.cs" />
      <Compile Include="Assets\Scripts\GameLogic\GameLogicResolveHeadup.cs" />
      <Compile Include="Assets\Scripts\GameLogic\GameLogicResolveMaze.cs" />
+     <Compile Include="Assets\Scripts\GameLogic\GameLogicResolveNumber.cs" />
      <Compile Include="Assets\Scripts\GameLogic\GameLogicResolveRotatePuzzle.cs" />
      <Compile Include="Assets\Scripts\GameLogic\GameLogicThreeButtons.cs" />
      <Compile Include="Assets\Scripts\GameLogic\GameLogicTwoButtons.cs" />

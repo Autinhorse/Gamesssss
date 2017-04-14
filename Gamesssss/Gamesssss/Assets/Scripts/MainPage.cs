@@ -65,6 +65,7 @@ public class MainPage : MonoBehaviour {
 
     public Sprite SptActor;
     public Sprite SptArrow;
+    public Sprite SptArrowEmpty;
     public Sprite SptUFO;
     public Sprite SptCannon;
     public Sprite SptAlien;
@@ -127,7 +128,7 @@ public class MainPage : MonoBehaviour {
     TouchInfo[] _touches;
     bool _mousePressed;
     float _lastMouseTime;
-    Vector2[] _lastMousePosition;
+    Vector2 _lastMousePosition;
 
     Vector2 _testMousePostion;
 
@@ -296,6 +297,9 @@ public class MainPage : MonoBehaviour {
 
 
     void FixedUpdate() {
+        if(_touchCount>0) {
+            //Debug.Log( "Touched!!!"+_touches[0].phase+"---"+_touches[0].position );
+        }
     }
 
     void StartGame() {
