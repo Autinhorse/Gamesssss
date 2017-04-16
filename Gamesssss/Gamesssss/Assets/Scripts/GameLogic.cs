@@ -181,10 +181,8 @@ public class GameLogic  {
             break;
         }
 
-        gameLogic = new GameLogicResolveNumber( dif );
+        gameLogic = new GameLogicResolveRotatePuzzle( dif );
         dif++;
-
-
         return gameLogic;
     }
 

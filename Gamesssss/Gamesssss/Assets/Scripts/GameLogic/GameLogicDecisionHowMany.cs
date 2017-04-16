@@ -15,23 +15,24 @@ public class GameLogicDecisionHowMany : GameLogicThreeButtons {
 
         base.SetGameController( controller );
 
-        _gameController.SetGameNameAndDescription( "COUNT", "How many       are here?", null );
+        _gameController.SetGameName( "COUNT" );
+        _gameController.SetGameDescription1( 2, "How many         are here?" );
 
-        _gameController.SetColorIndex( 1 );
+        _gameController.SetColorIndex( 4 );
 
         int mapWidth = 4;
         int mapHeight = 3;
 
-        int difficulty = _difficulty*2/3;
-        if(difficulty>7) {
-            difficulty=7;
+        int difficulty = _difficulty;
+        if(difficulty>12) {
+            difficulty=12;
         }
 
-        mapWidth=3+(difficulty+1)/2;
-        mapHeight=3+difficulty/2;
+        mapWidth=3+difficulty/4;
+        mapHeight=2+(difficulty+2)/4;
 
-        int mapBlockDelta = 16;
-        int mapBlockSize = (int) _gameController.boardWidth/(mapWidth+2);
+        int mapBlockDelta = 24;
+        int mapBlockSize = (int) _gameController.boardWidth/(mapWidth+4);
 
         float startPointX = -1*(mapWidth-1.0f)/2*(mapBlockSize+mapBlockDelta);
         float startPointY = (mapHeight-1.0f)/2*(mapBlockSize+mapBlockDelta);
@@ -63,8 +64,9 @@ public class GameLogicDecisionHowMany : GameLogicThreeButtons {
                 go.rectTransform.localPosition = new Vector3( startPointX+(mapBlockSize+mapBlockDelta)*m, startPointY-(mapBlockSize+mapBlockDelta)*n, 0 ); 
 
                 go.rectTransform.sizeDelta = new Vector2( mapBlockSize, mapBlockSize );
+                go.rectTransform.localScale = Vector3.one;
 
-                go.color = Color.black;
+                go.color = Color.white;
                 int shapeIndex = UnityEngine.Random.Range(0,3);
                 go.sprite = MainPage.instance.SptShapes[shapes[shapeIndex]];
 
@@ -81,11 +83,12 @@ public class GameLogicDecisionHowMany : GameLogicThreeButtons {
         go1.gameObject.SetActive( true );
 
         go1.gameObject.transform.SetParent( _gameController.goBoardArea.transform );
-        go1.rectTransform.localPosition = new Vector3( 16, 420, 0 ); 
+        go1.rectTransform.localPosition = new Vector3( 12, 372, 0 ); 
 
         go1.rectTransform.sizeDelta = new Vector2( 48, 48 );
+        go1.rectTransform.localScale = Vector3.one;
 
-        go1.color = Color.black;
+        go1.color = Color.white;
 
         go1.sprite = MainPage.instance.SptShapes[shapes[maxIndex]];
 

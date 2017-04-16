@@ -7,7 +7,7 @@ using DG.Tweening;
 
 public class GameLogicMemoryPair : GameLogic {
     const int Status_Remebering = 3;
-    const int MapBlockDelta = 16;
+    const int MapBlockDelta = 24;
     int MapBlockSize;
 
     float _timer;
@@ -28,28 +28,34 @@ public class GameLogicMemoryPair : GameLogic {
     }
 
     // 关于这个游戏的难度
-    // 难度支持0-11:
+    // 难度支持0-15:
     // 记忆时间从2秒开始，每增加一级多0.5秒。方块从6个（三对）开始，每增加两级增加一对，最多到16个。
     public override void SetGameController( GameController controller ) {
         base.SetGameController( controller );
 
         _gameController.SetButtonMode( GameController.Button_None );
 
-        MapBlockSize = (int) _gameController.boardWidth/6;
+        MapBlockSize = (int) _gameController.boardWidth/7;
 
         _gameController.SetGameNameAndDescription( "Pairs", "Remember the pairs.", null );
 
         _gameController.SetColorIndex( 3 );
 
         int difficulty = _difficulty;
-        if(difficulty>11){
-            difficulty=11;
+        if(difficulty>15){
+            difficulty=15;
         }
         _timer = 2+difficulty/2.0f;
 
-        _blockNumber = (3+(difficulty/2))*2;
+        int[] blockNumber = { 4, 6, 6, 8, 8, 10, 10, 10, 12, 12, 12, 12, 14, 14, 16, 16 };
+
+        _blockNumber = blockNumber[difficulty];
 
         switch(_blockNumber){
+        case 4:
+            _mapWidth=2;
+            _mapHeight=2;
+            break;
         case 6:
             _mapWidth=3;
             _mapHeight=2;
@@ -66,6 +72,11 @@ public class GameLogicMemoryPair : GameLogic {
         case 14:
         case 16:
             _mapWidth=4;
+            _mapHeight=4;
+            break;
+        case 18:
+        case 20:
+            _mapWidth=5;
             _mapHeight=4;
             break;
         }
@@ -105,6 +116,7 @@ public class GameLogicMemoryPair : GameLogic {
         do {
             posX = KWUtility.Random( 0, _mapWidth );
             posY = KWUtility.Random( 0, _mapHeight );
+            Debug.Log( "Pos:"+posX+"-"+posY );
         }while( _mapData[posX, posY]!=-1);
         _mapData[posX,posY]= shape;
 
@@ -112,10 +124,11 @@ public class GameLogicMemoryPair : GameLogic {
         Image imgBoard = (Image) GameObject.Instantiate( _gameController.goBoardImage );
         imgBoard.gameObject.SetActive( true );
         imgBoard.transform.SetParent( _gameController.goBoardArea.transform );
-        imgBoard.color = Color.grey;
-
+        imgBoard.color = new Color( 0, 0, 0, 0.2f );
+            
         imgBoard.rectTransform.sizeDelta = new Vector2( MapBlockSize, MapBlockSize );
         imgBoard.rectTransform.localPosition = new Vector3( pos.x, pos.y, 0 );
+        imgBoard.rectTransform.localScale = Vector3.one;
         _mapBoard[posX,posY]=imgBoard;
         _goList.Add( imgBoard.gameObject );
 
@@ -123,11 +136,12 @@ public class GameLogicMemoryPair : GameLogic {
         imgShape.gameObject.SetActive( true );
         imgShape.transform.SetParent( imgBoard.gameObject.transform );
         imgShape.rectTransform.localPosition = Vector3.zero;
+        imgShape.rectTransform.localScale = Vector3.one;
         imgShape.color = Color.white;
         imgShape.sprite = MainPage.instance.SptShapes[shape];
         _mapShape[posX,posY]=imgShape;
 
-        imgShape.rectTransform.sizeDelta = new Vector2( MapBlockSize-32, MapBlockSize-32 );
+        imgShape.rectTransform.sizeDelta = new Vector2( MapBlockSize*0.75f, MapBlockSize*0.75f );
 
     }
 
@@ -139,17 +153,17 @@ public class GameLogicMemoryPair : GameLogic {
         if(_mapDirection[x,y]==true) {
             _mapDirection[x,y]=false;
 
-            DOTween.Play( _mapShape[x,y].rectTransform.DOScale( Vector3.zero, 0.5f ).SetEase( Ease.InBack ).SetDelay( delay ) );
+            DOTween.Play( _mapShape[x,y].rectTransform.DOScale( Vector3.zero, 0.25f ).SetEase( Ease.InBack ).SetDelay( delay ) );
         }
         else {
             _mapDirection[x,y]=true;
 
-            DOTween.Play( _mapShape[x,y].rectTransform.DOScale( Vector3.one, 0.5f ).SetEase( Ease.OutBack ).SetDelay( delay ) );
+            DOTween.Play( _mapShape[x,y].rectTransform.DOScale( Vector3.one, 0.25f ).SetEase( Ease.OutBack ).SetDelay( delay ) );
         }
     }
 
     void HideCard( int x, int y ) {
-        DOTween.Play( _mapBoard[x,y].rectTransform.DOScale( Vector3.zero, 0.5f ).SetEase( Ease.InBack ).OnComplete( ()=> {
+        DOTween.Play( _mapBoard[x,y].rectTransform.DOScale( Vector3.zero, 0.25f ).SetEase( Ease.InBack ).OnComplete( ()=> {
             _blockNumber--;
             if(_blockNumber==0) {
                 _gameController.SendGameResult( true );
@@ -179,7 +193,9 @@ public class GameLogicMemoryPair : GameLogic {
 
                 for(int m=0; m<_mapWidth; m++ ) {
                     for( int n=0; n<_mapHeight; n++ ) {
-                        TurnCard( m, n, 0 );
+                        if(_mapData[m,n]!=-1) {
+                            TurnCard( m, n, 0 );
+                        }
                     }
                 }
             }

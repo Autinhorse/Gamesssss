@@ -38,17 +38,29 @@ public class GameController : MonoBehaviour {
     public const int DIR_LEFT = 0;
     public const int DIR_RIGHT = 1;
 
+    public int status {
+        get {
+            if(_gameLogic==null) {
+                return GameLogic.Status_Gameover;
+            }
+            else {
+                return _gameLogic.status;
+            }
+        }
+    }
+
+
 
     GameLogic _gameLogic;
     int _buttonMode;
     public int boardWidth {
         get{
-            return (int)(ImgResultShadow.rectTransform.rect.width);
+            return (int)(ImgBackground.rectTransform.rect.width);
         }
     }
     public int boardHeight {
         get{
-            return (int)(ImgResultShadow.rectTransform.rect.height);
+            return (int)(ImgBackground.rectTransform.rect.height);
         }
     }
 
@@ -95,10 +107,15 @@ public class GameController : MonoBehaviour {
         ImgResult.gameObject.transform.localScale = Vector3.zero;
         if(isWin==true) {
             ImgResult.sprite = MainPage.instance.SptAnswerRight;
+            MainPage.instance.PlaySound( MainPage.Sound_Right);
+
         }
         else  {
             ImgResult.sprite = MainPage.instance.SptAnswerWrong;
+            MainPage.instance.PlaySound( MainPage.Sound_Wrong);
         }
+
+        MainPage.instance.SendGameResult(isWin);
 
         ImgResultShadow.gameObject.SetActive( true );
         Color color = ImgResultShadow.color;
@@ -111,8 +128,14 @@ public class GameController : MonoBehaviour {
 
         DOTween.Play( ImgResult.gameObject.transform.DOScale( 1.0f, 0.6f ).SetEase( Ease.OutBack ).OnComplete( ()=>{
             Debug.Log( "Inner SendGameResult!!!" );
-            MainPage.instance.SendGameResult( isWin );
+            MainPage.instance.ExecGameResult( );
         } ) );
+    }
+
+    public void SetGameName( string name ) {
+        TxtGameName.text = name;
+        TxtGameDesc1.text = "";
+        TxtGameDesc2.text = "";
     }
 
     public void SetGameNameAndDescription( string name, string desc1, string desc2 ) {
@@ -125,6 +148,43 @@ public class GameController : MonoBehaviour {
             TxtGameDesc2.gameObject.SetActive( true );
             TxtGameDesc2.text = desc2;
         }
+    }
+
+    public void SetGameDescription1( string desc1 ) {
+        TxtGameDesc1.text = desc1;
+    }
+
+    public void SetGameDescription1( int posIndex, string desc1 ) {
+        switch(posIndex) {
+        case 0:
+            TxtGameDesc1.rectTransform.localPosition = new Vector3( 0, boardHeight/4, 0 );
+            break;
+        case 1:
+            TxtGameDesc1.rectTransform.localPosition = new Vector3( 0, boardHeight/12, 0 );
+            break;
+        case 2:
+            TxtGameDesc1.rectTransform.localPosition = new Vector3( 0, boardHeight*19/80, 0 );
+            break;
+        case 3:
+            TxtGameDesc1.rectTransform.localPosition = new Vector3( 0, boardHeight*21/80, 0 );
+            break;
+        case 4:
+            TxtGameDesc1.rectTransform.localPosition = new Vector3( 0, boardHeight*25/80, 0 );
+            break;
+        }
+        TxtGameDesc1.text = desc1;
+    }
+
+    public void SetGameDescription2( int posIndex, string desc2 ) {
+        switch(posIndex) {
+        case 0:
+            TxtGameDesc2.rectTransform.localPosition = new Vector3( 0, boardHeight/4, 0 );
+            break;
+        case 1:
+            TxtGameDesc2.rectTransform.localPosition = new Vector3( 0, boardHeight/-12, 0 );
+            break;
+        }
+        TxtGameDesc2.text = desc2;
     }
 
     public void SetButtonMode( int buttonMode ) {
@@ -146,11 +206,11 @@ public class GameController : MonoBehaviour {
         case Button_Two:
             Buttons[0].gameObject.SetActive( true );
             pos = Buttons[0].transform.localPosition;
-            pos.x = -1*boardWidth/4;
+            pos.x = -1*boardWidth/5;
             Buttons[0].transform.localPosition = pos;
             Buttons[1].gameObject.SetActive( true );
             pos = Buttons[0].transform.localPosition;
-            pos.x = boardWidth/4;
+            pos.x = boardWidth/5;
             Buttons[1].transform.localPosition = pos;
 
             Buttons[2].gameObject.SetActive( false );
@@ -158,7 +218,7 @@ public class GameController : MonoBehaviour {
         case Button_Three:
             Buttons[0].gameObject.SetActive( true );
             pos = Buttons[0].transform.localPosition;
-            pos.x = -1*boardWidth/3;
+            pos.x = -1*boardWidth*11/40;
             Buttons[0].transform.localPosition = pos;
             Buttons[1].gameObject.SetActive( true );
             Buttons[2].gameObject.SetActive( true );
@@ -182,6 +242,9 @@ public class GameController : MonoBehaviour {
         if(color!=Color.clear) {
             ButtonImage[index].color = color;
         }
+        else {
+            
+        }
         ButtonImage[index].gameObject.SetActive( true );
         ButtonText[index].gameObject.SetActive( false );
     }
@@ -200,10 +263,24 @@ public class GameController : MonoBehaviour {
 
     public void SetColorIndex( int index ) {
         ImgBackground.color = MainPage.instance.GameBoardColor[index];
-
+        /*
         ButtonBGImage[0].color = MainPage.instance.GameBoardColor[index];
         ButtonBGImage[1].color = MainPage.instance.GameBoardColor[index];
         ButtonBGImage[2].color = MainPage.instance.GameBoardColor[index];
+        */
+
+        ButtonBGImage[0].color = Color.white;
+        ButtonBGImage[1].color = Color.white;
+        ButtonBGImage[2].color = Color.white;
+
+
+        ButtonText[0].color = MainPage.instance.GameBoardColor[index];
+        ButtonText[1].color = MainPage.instance.GameBoardColor[index];
+        ButtonText[2].color = MainPage.instance.GameBoardColor[index];
+
+        ButtonImage[0].color = MainPage.instance.GameBoardColor[index];
+        ButtonImage[1].color = MainPage.instance.GameBoardColor[index];
+        ButtonImage[2].color = MainPage.instance.GameBoardColor[index];
     }
 
     public void OnButtonPressed( int index ) {

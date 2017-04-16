@@ -50,6 +50,8 @@ public class GameLogicTwoButtons : GameLogic {
     }
 
     public override void OnButtonPressed( int buttonIndex ) {
+        _status = Status_Gameover;
+
         if(buttonIndex==_rightButtonIndex){
             _gameController.SendGameResult( true );
         }

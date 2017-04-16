@@ -41,7 +41,7 @@ public class GameLogicMemoryNewItem : GameLogic {
 
         MapBlockSize = (int) _gameController.boardWidth/5;
 
-        _gameController.SetGameNameAndDescription( "New Item", "Remember these shapes.", null );
+        _gameController.SetGameName( "NEW SHAPE" );
 
         _gameController.SetColorIndex( 3 );
 
@@ -51,7 +51,15 @@ public class GameLogicMemoryNewItem : GameLogic {
         }
         _timer = 2+_difficulty/2.0f;
 
-        _shapeNumber = 2+_difficulty/2;
+        int[] shapeNumber = { 2, 3, 4, 5, 6, 6, 7, 7, 7, 8, 8, 8, 9, 9, 9, 10 }; 
+        _shapeNumber = shapeNumber[difficulty];
+
+        if((_shapeNumber==11)||(_shapeNumber==10)){
+            _gameController.SetGameDescription1( 4, "Remember these shapes." );
+        }
+        else {
+            _gameController.SetGameDescription1( 2, "Remember these shapes." );
+        }
 
         _existData = new List<int>();
 
@@ -154,7 +162,7 @@ public class GameLogicMemoryNewItem : GameLogic {
             break;
         case 7:
             _mapWidth = 3;
-            _mapHeight = 2;
+            _mapHeight = 3;
             _mapData = new int[_mapWidth,_mapHeight];
             for( int m=0; m<_mapWidth; m++) {
                 for( int n=0; n<_mapHeight; n++ ) {
@@ -169,7 +177,7 @@ public class GameLogicMemoryNewItem : GameLogic {
             break;
         case 8:
             _mapWidth = 3;
-            _mapHeight = 2;
+            _mapHeight = 3;
             _mapData = new int[_mapWidth,_mapHeight];
             for( int m=0; m<_mapWidth; m++) {
                 for( int n=0; n<_mapHeight; n++ ) {
@@ -184,11 +192,51 @@ public class GameLogicMemoryNewItem : GameLogic {
             break;
         case 9:
             _mapWidth = 3;
-            _mapHeight = 2;
+            _mapHeight = 3;
             _mapData = new int[_mapWidth,_mapHeight];
             for( int m=0; m<_mapWidth; m++) {
                 for( int n=0; n<_mapHeight; n++ ) {
                     _mapData[m,n]=-1;
+                    CreateShape( data[shapeIndex], m, n );
+                    shapeIndex++;
+                }
+            }
+            break;
+        
+        case 10:
+            _mapWidth = 4;
+            _mapHeight = 3;
+            _mapData = new int[_mapWidth,_mapHeight];
+            for( int m=0; m<_mapWidth; m++) {
+                for( int n=0; n<_mapHeight; n++ ) {
+                    if((n==0)&&((m==1)||(m==2))) {
+                        continue;
+                    }
+                    CreateShape( data[shapeIndex], m, n );
+                    shapeIndex++;
+                }
+            }
+            break;
+        case 11:
+            _mapWidth = 3;
+            _mapHeight = 4;
+            _mapData = new int[_mapWidth,_mapHeight];
+            for( int m=0; m<_mapWidth; m++) {
+                for( int n=0; n<_mapHeight; n++ ) {
+                    if((n==0)&&(m==1)) {
+                        continue;
+                    }
+                    CreateShape( data[shapeIndex], m, n );
+                    shapeIndex++;
+                }
+            }
+            break;
+        case 12:
+            _mapWidth = 4;
+            _mapHeight = 3;
+            _mapData = new int[_mapWidth,_mapHeight];
+            for( int m=0; m<_mapWidth; m++) {
+                for( int n=0; n<_mapHeight; n++ ) {
                     CreateShape( data[shapeIndex], m, n );
                     shapeIndex++;
                 }
@@ -204,8 +252,8 @@ public class GameLogicMemoryNewItem : GameLogic {
         Image imgBoard = (Image) GameObject.Instantiate( _gameController.goBoardImage );
         imgBoard.gameObject.SetActive( true );
         imgBoard.transform.SetParent( _gameController.goBoardArea.transform );
-        imgBoard.color = Color.grey;
-
+        imgBoard.color = new Color( 0, 0, 0, 0.2f );
+            
         imgBoard.rectTransform.sizeDelta = new Vector2( MapBlockSize, MapBlockSize );
         imgBoard.rectTransform.localPosition = new Vector3( pos.x, pos.y, 0 );
         imgBoard.rectTransform.localScale = Vector3.one;
@@ -245,15 +293,15 @@ public class GameLogicMemoryNewItem : GameLogic {
             if(_timer<0) {
                 _status=Status_Playing;
 
-                _gameController.SetGameNameAndDescription( "New Item", "Which one is new?", null );
+                _gameController.SetGameDescription1( "Tap the new one." );
 
                 for(int m=0;m<_goList.Count;m++) {
                     GameObject shapeBoard = _goList[m];
                     if(m!=_goList.Count-1) {
-                        DOTween.Play( shapeBoard.transform.DOScale( Vector3.zero, 0.75f).SetEase( Ease.InBack ) );
+                        DOTween.Play( shapeBoard.transform.DOScale( Vector3.zero, 0.5f).SetEase( Ease.InBack ) );
                     }
                     else {
-                        DOTween.Play( shapeBoard.transform.DOScale( Vector3.zero, 0.75f).SetEase( Ease.InBack ).OnComplete( ()=> {
+                        DOTween.Play( shapeBoard.transform.DOScale( Vector3.zero, 0.5f).SetEase( Ease.InBack ).OnComplete( ()=> {
                             foreach( GameObject go in _goList ) {
                                 GameObject.Destroy( go );
                             }

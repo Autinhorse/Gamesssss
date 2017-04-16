@@ -14,7 +14,10 @@ public class GameLogicActionTapScreen : GameLogic {
 
         _target = 3+_difficulty+KWUtility.Random( 0, 5+_difficulty );
 
-        _gameController.SetGameNameAndDescription( "TAP!", "Tap screen "+_target.ToString()+" times.", "Then press OK." );
+        _gameController.SetGameName( "TAP!" );
+        _gameController.SetGameDescription1( 1, "Tap screen "+_target.ToString()+" times." );
+        _gameController.SetGameDescription2( 1, "Then press OK." );
+
 
         _gameController.SetColorIndex( 2 );
 

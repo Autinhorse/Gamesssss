@@ -28,18 +28,18 @@ public class GameLogicActionShootUFO : GameLogic {
     }
 
     // 这个游戏的难度由UFO数量，UFO大小，和移动速度决定
-    // 0-16级 UFO数量从1个到8个，UFO体积缩小一半，速度增加1倍
+    // 0-16级 UFO数量从1个到6个，UFO体积缩小一半，速度增加1倍
     public override void SetGameController( GameController controller ) {
         base.SetGameController( controller );
 
         _ufos = new List<UFOData>();
 
-        _UFONumber = 1+_difficulty/2;
-        if(_UFONumber>8){
-            _UFONumber=8;
+        _UFONumber = 1+(_difficulty+1)/3;
+        if(_UFONumber>6){
+            _UFONumber=6;
         }
 
-        _UFOSize = 128;
+        _UFOSize = 160;
         _UFOSize/=(1+(_UFONumber-1)/7.0f);
         int posX, posY;
         float speed;
@@ -90,8 +90,8 @@ public class GameLogicActionShootUFO : GameLogic {
         imgCannon.color = Color.white;
         imgCannon.sprite = MainPage.instance.SptCannon;
 
-        imgCannon.rectTransform.sizeDelta = new Vector2( _gameController.boardWidth/12, _gameController.boardWidth/12 );
-        imgCannon.rectTransform.localPosition = new Vector3( 0, _gameController.boardHeight*11/-32, 0 );
+        imgCannon.rectTransform.sizeDelta = new Vector2( _gameController.boardWidth/10, _gameController.boardWidth/10 );
+        imgCannon.rectTransform.localPosition = new Vector3( 0, _gameController.boardHeight*13/-48, 0 );
         imgCannon.rectTransform.localScale = Vector3.one;
         _goList.Add( imgCannon.gameObject );
 
@@ -142,9 +142,12 @@ public class GameLogicActionShootUFO : GameLogic {
                 if(_UFONumber==0){
                     _status = Status_Gameover;
                     _gameController.SendGameResult( true );
-
+                    MainPage.instance.PlaySound( MainPage.Sound_Shoot );
                     _ufos.Clear();
                     return;
+                }
+                else {
+                    MainPage.instance.PlaySound( MainPage.Sound_Shoot );
                 }
             }
 

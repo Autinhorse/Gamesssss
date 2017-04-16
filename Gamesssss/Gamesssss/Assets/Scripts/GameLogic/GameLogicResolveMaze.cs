@@ -176,22 +176,13 @@ public class GameLogicResolveMaze : GameLogic {
 
         _gameController.SetGameNameAndDescription( "Maze", "Help me to exit.", null );
 
-        _gameController.SetColorIndex( 3 );
+        _gameController.SetColorIndex( 1 );
 
         int mapType;
         int[,] mapData=null;
 
         switch(_difficulty) {
         case 0:
-            mapType = 0;
-            if(KWUtility.Random(0,2)==0) {
-                mapData = Map1;
-            }
-            else {
-                mapData = Map2;
-            }
-            break;
-        case 1:
             mapType = 0;
             switch(KWUtility.Random(0,3)) {
             case 0:
@@ -205,22 +196,18 @@ public class GameLogicResolveMaze : GameLogic {
                 break;
             }
             break;
-        case 2:
-            mapType = 1;
-            mapData = Map4;
-            break;
-        case 3:
+        case 1:
             mapType = 1;
             switch(KWUtility.Random(0,2)) {
             case 0:
+                mapData = Map4;
+                break;
+            case 1:
                 mapData = Map5;
                 break;
-            case 1:
-                mapData = Map6;
-                break;
             }
             break;
-        case 4:
+        case 2:
             mapType = 1;
             switch(KWUtility.Random(0,2)) {
             case 0:
@@ -231,18 +218,7 @@ public class GameLogicResolveMaze : GameLogic {
                 break;
             }
             break;
-        case 5:
-            mapType = 1;
-            switch(KWUtility.Random(0,2)) {
-            case 0:
-                mapData = Map7;
-                break;
-            case 1:
-                mapData = Map8;
-                break;
-            }
-            break;
-        case 6:
+        case 3:
             mapType = 1;
             switch(KWUtility.Random(0,2)) {
             case 0:
@@ -253,71 +229,77 @@ public class GameLogicResolveMaze : GameLogic {
                 break;
             }
             break;
-        case 7:
+        case 4:
             mapType = 2;
-            mapData = Map10;
+            switch(KWUtility.Random(0,2)) {
+            case 0:
+                mapData = Map10;
+                break;
+            case 1:
+                mapData = Map11;
+                break;
+            }
             break;
-        case 8:
+        case 5:
             mapType = 2;
-            switch(KWUtility.Random(0,3)) {
+            switch(KWUtility.Random(0,2)) {
             case 0:
                 mapData = Map11;
                 break;
             case 1:
                 mapData = Map12;
                 break;
-            case 2:
-                mapData = Map13;
-                break;
             }
             break;
-        case 9:
+        case 6:
             mapType = 2;
-            switch(KWUtility.Random(0,3)) {
+            switch(KWUtility.Random(0,2)) {
             case 0:
                 mapData = Map12;
                 break;
             case 1:
                 mapData = Map13;
                 break;
-            case 2:
-                mapData = Map14;
-                break;
             }
             break;
-        case 10:
+        case 7:
             mapType = 2;
-            switch(KWUtility.Random(0,3)) {
+            switch(KWUtility.Random(0,2)) {
             case 0:
                 mapData = Map13;
                 break;
             case 1:
                 mapData = Map14;
                 break;
-            case 2:
-                mapData = Map15;
-                break;
             }
             break;
-        case 11:
+        case 8:
             mapType = 2;
-            switch(KWUtility.Random(0,3)) {
+            switch(KWUtility.Random(0,2)) {
             case 0:
                 mapData = Map14;
                 break;
             case 1:
                 mapData = Map15;
                 break;
-            case 2:
+            }
+            break;
+        case 9:
+            mapType = 2;
+            switch(KWUtility.Random(0,2)) {
+            case 0:
+                mapData = Map15;
+                break;
+            case 1:
                 mapData = Map16;
                 break;
             }
             break;
-        case 12:
+        case 10:
             mapType = 3;
             mapData = Map17;
             break;
-        case 13:
+        case 11:
             mapType = 3;
             switch(KWUtility.Random(0,2)) {
             case 0:
@@ -328,7 +310,7 @@ public class GameLogicResolveMaze : GameLogic {
                 break;
             }
             break;
-        case 14:
+        case 12:
             mapType = 3;
             switch(KWUtility.Random(0,2)) {
             case 0:
@@ -339,7 +321,7 @@ public class GameLogicResolveMaze : GameLogic {
                 break;
             }
             break;
-       default: // 15 and above
+        default:// 13 and above
             mapType = 3;
             switch(KWUtility.Random(0,2)) {
             case 0:
@@ -350,6 +332,7 @@ public class GameLogicResolveMaze : GameLogic {
                 break;
             }
             break;
+        
         }
 
         switch( mapType ) {
@@ -440,7 +423,7 @@ public class GameLogicResolveMaze : GameLogic {
             }
         }
 
-        MapBlockSize = (int) _gameController.boardWidth/(_mapWidth+3);
+        MapBlockSize = (int) _gameController.boardWidth/(_mapWidth+2);
 
         for( int m=0; m<_mapWidth; m++ ) {
             for( int n=0; n<_mapHeight; n++ ) {
@@ -449,11 +432,12 @@ public class GameLogicResolveMaze : GameLogic {
                     Image imgBoard = (Image) GameObject.Instantiate( _gameController.goBoardImage );
                     imgBoard.gameObject.SetActive( true );
                     imgBoard.transform.SetParent( _gameController.goBoardArea.transform );
-                    imgBoard.color = Color.grey;
+                    imgBoard.color = new Color(0,0,0,0.2f);
                     imgBoard.sprite = MainPage.instance.SptShapes[0];
 
                     imgBoard.rectTransform.sizeDelta = new Vector2( MapBlockSize, MapBlockSize );
                     imgBoard.rectTransform.localPosition = new Vector3( pos.x, pos.y, 0 );
+                    imgBoard.rectTransform.localScale = Vector3.one;
                     _goList.Add( imgBoard.gameObject );
                 }
 
@@ -473,7 +457,7 @@ public class GameLogicResolveMaze : GameLogic {
                     _imgExit.color = Color.green;
                     _imgExit.text = "EXIT";
 
-                    _imgExit.rectTransform.localScale =  Vector3.one*0.5f;
+                    _imgExit.rectTransform.localScale =  Vector3.one*0.75f;
                     _imgExit.rectTransform.localPosition = new Vector3( pos.x, pos.y, 0 );
                     _goList.Add( _imgExit.gameObject );
                 }
@@ -489,6 +473,7 @@ public class GameLogicResolveMaze : GameLogic {
 
         _imgActor.rectTransform.sizeDelta = new Vector2( MapBlockSize, MapBlockSize );
         _imgActor.rectTransform.localPosition = new Vector3( pos1.x, pos1.y, 0 );
+        _imgActor.rectTransform.localScale =  Vector3.one*0.75f;
         _goList.Add( _imgActor.gameObject );
 
         Button button1 = (Button) GameObject.Instantiate( _gameController.goBoardButton);
@@ -507,13 +492,15 @@ public class GameLogicResolveMaze : GameLogic {
 
         int buttonSize = _gameController.boardWidth/6;
         rect.sizeDelta =  new Vector2( buttonSize, buttonSize );
-        rect.localPosition = new Vector3( _gameController.boardWidth*3/-10, _gameController.boardWidth*-0.6f, 0 );
+        rect.localPosition = new Vector3( _gameController.boardWidth*3/-10, _gameController.boardWidth*-0.55f, 0 );
+        rect.localScale = Vector3.one;
+
         _goList.Add( button1.gameObject );
 
         Image buttonImage = (Image)button1.transform.FindChild( "Image" ).GetComponent<Image>();
         buttonImage.gameObject.SetActive( true );
         buttonImage.sprite = MainPage.instance.SptArrow;
-        buttonImage.color = Color.white;
+        buttonImage.color = MainPage.instance.GameBoardColor[1];
         buttonImage.transform.localEulerAngles = new Vector3( 0, 0, 180 );
 
         button1 = (Button) GameObject.Instantiate( _gameController.goBoardButton);
@@ -531,13 +518,14 @@ public class GameLogicResolveMaze : GameLogic {
         rect = (RectTransform) button1.GetComponent<RectTransform>();
 
         rect.sizeDelta =  new Vector2( buttonSize, buttonSize );
-        rect.localPosition = new Vector3( _gameController.boardWidth*1/-10, _gameController.boardWidth*-0.6f, 0 );
+        rect.localPosition = new Vector3( _gameController.boardWidth*1/-10, _gameController.boardWidth*-0.55f, 0 );
+        rect.localScale = Vector3.one;
         _goList.Add( button1.gameObject );
 
         buttonImage = (Image)button1.transform.FindChild( "Image" ).GetComponent<Image>();
         buttonImage.gameObject.SetActive( true );
         buttonImage.sprite = MainPage.instance.SptArrow;
-        buttonImage.color = Color.white;
+        buttonImage.color = MainPage.instance.GameBoardColor[1];
         //buttonImage.transform.localEulerAngles = new Vector3( 0, 0, 180 );
 
         button1 = (Button) GameObject.Instantiate( _gameController.goBoardButton);
@@ -555,13 +543,14 @@ public class GameLogicResolveMaze : GameLogic {
         rect = (RectTransform) button1.GetComponent<RectTransform>();
 
         rect.sizeDelta =  new Vector2( buttonSize, buttonSize );
-        rect.localPosition = new Vector3( _gameController.boardWidth*1/10, _gameController.boardWidth*-0.6f, 0 );
+        rect.localPosition = new Vector3( _gameController.boardWidth*1/10, _gameController.boardWidth*-0.55f, 0 );
+        rect.localScale = Vector3.one;
         _goList.Add( button1.gameObject );
 
         buttonImage = (Image)button1.transform.FindChild( "Image" ).GetComponent<Image>();
         buttonImage.gameObject.SetActive( true );
         buttonImage.sprite = MainPage.instance.SptArrow;
-        buttonImage.color = Color.white;
+        buttonImage.color = MainPage.instance.GameBoardColor[1];
         buttonImage.transform.localEulerAngles = new Vector3( 0, 0, 90 );
 
         button1 = (Button) GameObject.Instantiate( _gameController.goBoardButton);
@@ -579,13 +568,14 @@ public class GameLogicResolveMaze : GameLogic {
         rect = (RectTransform) button1.GetComponent<RectTransform>();
 
         rect.sizeDelta =  new Vector2( buttonSize, buttonSize );
-        rect.localPosition = new Vector3( _gameController.boardWidth*3/10, _gameController.boardWidth*-0.6f, 0 );
+        rect.localPosition = new Vector3( _gameController.boardWidth*3/10, _gameController.boardWidth*-0.55f, 0 );
+        rect.localScale = Vector3.one;
         _goList.Add( button1.gameObject );
 
         buttonImage = (Image)button1.transform.FindChild( "Image" ).GetComponent<Image>();
         buttonImage.gameObject.SetActive( true );
         buttonImage.sprite = MainPage.instance.SptArrow;
-        buttonImage.color = Color.white;
+        buttonImage.color = MainPage.instance.GameBoardColor[1];
         buttonImage.transform.localEulerAngles = new Vector3( 0, 0, 270 );
     }
 
@@ -608,11 +598,5 @@ public class GameLogicResolveMaze : GameLogic {
     }
 
 
-    public override void StartGame() {
-        _status = Status_Remebering;
 
-    }
-
-    public override void Update() {
-    }
 }

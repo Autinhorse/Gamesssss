@@ -19,7 +19,8 @@ public class GameLogicMathBigger : GameLogic {
     public override void SetGameController( GameController controller ) {
         base.SetGameController( controller );
 
-        _gameController.SetGameNameAndDescription( "Bigger", "Tap the bigger one", null );
+        _gameController.SetGameName( "BIGGER" );
+        _gameController.SetGameDescription1( 0, "Tap the bigger one." );
 
         _gameController.SetColorIndex( 0 );
         string button1="";
@@ -161,20 +162,20 @@ public class GameLogicMathBigger : GameLogic {
 
                 if(KWUtility.Random(0,2)==0) {
                     result2 = number1 + number2;
-                    button1 = number1.ToString()+" + "+number2.ToString();
+                    button2 = number1.ToString()+" + "+number2.ToString();
                 }
                 else {
                     result2 = number2;
-                    button1 = (number1+number2).ToString()+" - "+number1.ToString();
+                    button2 = (number1+number2).ToString()+" - "+number1.ToString();
                 }
 
                 if(KWUtility.Random(0,2)==0) {
                     result2 = result2 + number3;
-                    button1 = button1+" + "+number3.ToString();
+                    button2 = button2+" + "+number3.ToString();
                 }
                 else {
                     result2 = result2-number3;
-                    button1 = button1+" - "+number3.ToString();
+                    button2 = button2+" - "+number3.ToString();
                 }
             }while(result1==result2);
         }
@@ -190,13 +191,13 @@ public class GameLogicMathBigger : GameLogic {
                 _gameController.SendGameResult( true );
             }
             else {
-                _gameController.SendGameResult( true );
+                _gameController.SendGameResult( false );
             }
         });
 
         RectTransform rect = (RectTransform) button.GetComponent<RectTransform>();
 
-        rect.sizeDelta =  new Vector2( _gameController.boardWidth/2, _gameController.boardWidth/8 );
+        rect.sizeDelta =  new Vector2( _gameController.boardWidth/2, _gameController.boardHeight/10 );
         rect.localPosition = new Vector3( 0, _gameController.boardWidth*0.2f, 0 );
         rect.localScale = Vector3.one;
         _goList.Add( button.gameObject );
@@ -204,33 +205,11 @@ public class GameLogicMathBigger : GameLogic {
         Text buttonText = (Text)button.transform.FindChild( "Text" ).GetComponent<Text>();
         buttonText.gameObject.SetActive( true );
         buttonText.text = button1;
-        buttonText.color = Color.white;
-        /*
-        button = (Button) GameObject.Instantiate( _gameController.goBoardButton);
-        button.gameObject.SetActive( true );
-        button.transform.SetParent( _gameController.goBoardButtonArea.transform );
+        buttonText.color = MainPage.instance.GameBoardColor[0];
 
-        button.onClick.AddListener(delegate() { 
-            if(result1==result2){
-                _gameController.SendGameResult( true );
-            }
-            else {
-                _gameController.SendGameResult( true );
-            }
-        });
+        rect = (RectTransform) buttonText.GetComponent<RectTransform>();
 
-        rect = (RectTransform) button.GetComponent<RectTransform>();
-
-        rect.sizeDelta =  new Vector2( _gameController.boardWidth/2, _gameController.boardWidth/8 );
-        rect.localPosition = new Vector3( 0, 0, 0 );
-        rect.localScale = Vector3.one;
-        _goList.Add( button.gameObject );
-
-        buttonText = (Text)button.transform.FindChild( "Text" ).GetComponent<Text>();
-        buttonText.gameObject.SetActive( true );
-        buttonText.text = "EQUAL";
-        buttonText.color = Color.white;
-*/
+        rect.sizeDelta =  new Vector2( _gameController.boardWidth*2/5, _gameController.boardHeight/12 );
 
         button = (Button) GameObject.Instantiate( _gameController.goBoardButton);
         button.gameObject.SetActive( true );
@@ -241,13 +220,13 @@ public class GameLogicMathBigger : GameLogic {
                 _gameController.SendGameResult( true );
             }
             else {
-                _gameController.SendGameResult( true );
+                _gameController.SendGameResult( false );
             }
         });
 
         rect = (RectTransform) button.GetComponent<RectTransform>();
 
-        rect.sizeDelta =  new Vector2( _gameController.boardWidth/2, _gameController.boardWidth/8 );
+        rect.sizeDelta =  new Vector2( _gameController.boardWidth/2, _gameController.boardHeight/10 );
         rect.localPosition = new Vector3( 0, _gameController.boardWidth*-0.2f, 0 );
         rect.localScale = Vector3.one;
         _goList.Add( button.gameObject );
@@ -255,7 +234,11 @@ public class GameLogicMathBigger : GameLogic {
         buttonText = (Text)button.transform.FindChild( "Text" ).GetComponent<Text>();
         buttonText.gameObject.SetActive( true );
         buttonText.text = button2;
-        buttonText.color = Color.white;
+        buttonText.color = MainPage.instance.GameBoardColor[0];
+
+        rect = (RectTransform) buttonText.GetComponent<RectTransform>();
+
+        rect.sizeDelta =  new Vector2( _gameController.boardWidth*2/5, _gameController.boardHeight/12 );
 
     }
 

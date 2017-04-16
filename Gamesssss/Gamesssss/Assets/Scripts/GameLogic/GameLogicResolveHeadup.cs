@@ -35,7 +35,7 @@ public class GameLogicResolveHeadup : GameLogic {
 
         _gameController.SetGameNameAndDescription( "Headup", "Tap the charactors.", "Make them headup." );
 
-        _gameController.SetColorIndex( 4 );
+        _gameController.SetColorIndex( 1 );
 
         int charNumber;
         switch( _difficulty ) {
@@ -146,7 +146,7 @@ public class GameLogicResolveHeadup : GameLogic {
                 string text = character.ToString();
 
                 textObject.text = text;
-                textObject.color = Color.black;
+                textObject.color = Color.white;
 
                 _mapChar[m,n] = textObject;
 
@@ -161,7 +161,7 @@ public class GameLogicResolveHeadup : GameLogic {
                     textObject.rectTransform.localEulerAngles = new Vector3( 0, 0, 270 );
                     break;
                 }
-
+                textObject.rectTransform.localScale = Vector3.one;
             }
         }
 

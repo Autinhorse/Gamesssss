@@ -24,7 +24,8 @@ public class GameLogicMathDice : GameLogicThreeButtons {
     public override void SetGameController( GameController controller ) {
         base.SetGameController( controller );
 
-        _gameController.SetGameNameAndDescription( "DICE", "How many dots on dices?", null );
+        _gameController.SetGameName( "DICE" );
+        _gameController.SetGameDescription1( 0, "How many dots on dices?" );
 
         _gameController.SetColorIndex( 0 );
 
@@ -61,7 +62,7 @@ public class GameLogicMathDice : GameLogicThreeButtons {
             _mapHeight = 2;
             diceNumber=5;
             break;
-        defalut:
+        default:
             diceNumber=6;
             _mapWidth = 3;
             _mapHeight = 2;

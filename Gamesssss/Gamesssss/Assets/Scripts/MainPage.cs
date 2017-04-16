@@ -10,11 +10,18 @@ using UnityEngine.UI;
 
 using DG.Tweening;
 
+using Umeng;
+
+using GoogleMobileAds.Api;
+
+using Heyzap; 
+
 [Serializable]
 public class GameRecord {
     public GameRecord() {
         bestScore = 0;
-        bestHellScore = 0;
+        bestRandomScore = 0;
+        maxGameLogic = 0;
         firstPlay = true;
         soundFlag = true;
         adRemoved = false;
@@ -26,7 +33,8 @@ public class GameRecord {
     }
 
     public int bestScore;
-    public int bestHellScore;
+    public int bestRandomScore;
+    public int maxGameLogic;
     public bool firstPlay;
     public bool adRemoved;
     public bool soundFlag;
@@ -50,8 +58,6 @@ public class MainPage : MonoBehaviour {
 
     public const int Mode_Challenge = 1;
     public const int Mode_Random = 2;
-
-
 
     [Header("----------这里是预定义的游戏参数----------")]
     public Color[] GameBoardColor;
@@ -88,11 +94,34 @@ public class MainPage : MonoBehaviour {
     public GameObject goGameItem;
 
     [Header("----------这里是UI对象----------")]
-    public Text TxtTime;
+    public Text TxtTimeSecond;
+    public Text TxtTimeColon;
+    public Text TxtTimeMiSecond;
+    public Text TxtTimePlusFive;
     public Text TxtScore;
-    public Text TxtGameNumber;
+    public Text TxtGameRightNumber;
+    public Text TxtGameWrongNumber;
+
 
     public Text Txt321Go;
+
+    [Header("----------这里是声音对象----------")]
+    public AudioSource SndMusic;
+    public AudioSource SndRight;
+    public AudioSource SndWrong;
+    public AudioSource SndTap;
+    public AudioSource SndTapWrong;
+    public AudioSource SndGameOver;
+    public AudioSource SndShoot;
+    public AudioSource SndButton;
+
+    public const int Sound_Right = 0;
+    public const int Sound_Wrong = 1;
+    public const int Sound_Tap = 2;
+    public const int Sound_TapWrong = 3;
+    public const int Sound_GameOver = 4;
+    public const int Sound_Shoot = 5;
+    public const int Sound_Button = 6;
 
 
     float ScreenWidth;
@@ -113,6 +142,10 @@ public class MainPage : MonoBehaviour {
     int _score;
     int _gameNumber;
     float _gameTime;
+
+    float _currentGameTimer;
+    int _rightGameNumber;
+    int _wrongGameNumber;
 
     // 触摸相关处理
     public struct TouchInfo
@@ -138,8 +171,47 @@ public class MainPage : MonoBehaviour {
         _record = LoadGame();
     }
 
+    bool _adBannerLoaded;
+    BannerView _bannerView;
+    InterstitialAd _interstitial;
+    int _gameOverCount;
+    bool _showAd;
+
 	// Use this for initialization
 	void Start () {
+
+        HeyzapAds.Start("fb1f6eda98f7cf0ce219322d5f7df381", HeyzapAds.FLAG_NO_OPTIONS);
+
+        _adBannerLoaded = false;
+        _gameOverCount=0;
+        RequestInterstitial();
+        RequestBanner();
+
+        Social.localUser.Authenticate( success => {
+            if (success) {
+                Debug.Log ("Authentication successful");
+                string userInfo = "Username: " + Social.localUser.userName + 
+                    "\nUser ID: " + Social.localUser.id + 
+                    "\nIsUnderage: " + Social.localUser.underage;
+                Debug.Log (userInfo);
+            }
+            else {
+                Debug.Log ("Authentication failed");
+            }
+        });
+
+
+        GA.StartWithAppKeyAndChannelId("58f2431af5ade43ea8000e79", "App Store");
+
+
+
+
+        GameBoardColor[0] = new Color( 57/255.0f, 198/255.0f, 160/255.0f );
+        GameBoardColor[1] = new Color( 36/255.0f, 204/255.0f, 242/255.0f );
+        GameBoardColor[2] = new Color( 255/255.0f, 96/255.0f, 128/255.0f );
+        GameBoardColor[3] = new Color( 242/255.0f, 186/255.0f, 72/255.0f );
+        GameBoardColor[4] = new Color( 212/255.0f, 96/255.0f, 255/255.0f );
+
         Txt321Go.gameObject.SetActive( false );
 
         _status = Status_Main;
@@ -162,6 +234,10 @@ public class MainPage : MonoBehaviour {
         }
 
         _gameMode = Mode_Challenge;
+
+        Color color = TxtTimePlusFive.color;
+        color.a = 0;
+        TxtTimePlusFive.color = color;
 
         StartGame();
 	}
@@ -300,6 +376,32 @@ public class MainPage : MonoBehaviour {
         if(_touchCount>0) {
             //Debug.Log( "Touched!!!"+_touches[0].phase+"---"+_touches[0].position );
         }
+
+        int second=10;
+        int miSecond=0;
+
+
+        if(_currentGameController!=null) {
+            if(_currentGameController[_nextBoardIndex].status==GameLogic.Status_Playing) {
+                _gameTime-=Time.fixedDeltaTime;
+                _currentGameTimer-=Time.fixedDeltaTime;
+
+
+            }
+        }
+        if(_gameTime<0){
+            _gameTime=0;
+        }
+        second = (int)_gameTime;
+        miSecond = (int)((_gameTime-second)*100);
+
+        if(second<100) {
+            TxtTimeSecond.text = second.ToString("00");
+        }
+        else {
+            TxtTimeSecond.text = second.ToString("000");
+        }
+        TxtTimeMiSecond.text = miSecond.ToString( "00" );
     }
 
     void StartGame() {
@@ -313,55 +415,6 @@ public class MainPage : MonoBehaviour {
         Txt321Go.transform.localScale = Vector3.zero;
 
         CreateNextGame();
-
-        /*
-        Txt321Go.rectTransform.localPosition = new Vector3( ScreenWidth*2/3, 0, 0 );
-
-        Sequence seq = DOTween.Sequence();
-        Sequence seq1 = DOTween.Sequence();
-        seq1.Append( Txt321Go.transform.DOScale( Vector3.one, 0.6f ).SetEase( Ease.OutBack ).SetDelay( 0.1f ) );
-        seq1.Insert( 0, Txt321Go.rectTransform.DOLocalMoveX( 0, 0.6f ).SetEase( Ease.OutCubic ).SetDelay( 0.1f ) );
-
-        seq.Append( seq1 );
-        seq.Append( Txt321Go.DOColor( new Color( 1, 1, 1, 0 ), 0.2f ).SetDelay( 0.3f ).OnComplete( ()=> {
-            Txt321Go.rectTransform.localPosition = new Vector3( ScreenWidth*2/3, 0, 0 );
-            Txt321Go.text = "2";
-            Txt321Go.transform.localScale = Vector3.zero;
-            Txt321Go.color = new Color( 1, 1, 1, 1 );
-        } ) );
-
-        Sequence seq2 = DOTween.Sequence();
-        seq2.Append( Txt321Go.transform.DOScale( Vector3.one, 0.6f ).SetEase( Ease.OutBack ).SetDelay( 0.1f ) );
-        seq2.Insert( 0, Txt321Go.rectTransform.DOLocalMoveX( 0, 0.6f ).SetEase( Ease.OutCubic ).SetDelay( 0.1f ) );
-
-        seq.Append( seq2 );
-        seq.Append( Txt321Go.DOColor( new Color( 1, 1, 1, 0 ), 0.2f ).SetDelay( 0.3f ).OnComplete( ()=> {
-            Txt321Go.rectTransform.localPosition = new Vector3( ScreenWidth*2/3, 0, 0 );
-            Txt321Go.text = "1";
-            Txt321Go.transform.localScale = Vector3.zero;
-            Txt321Go.color = new Color( 1, 1, 1, 1 );
-        } ) );
-
-        Sequence seq3 = DOTween.Sequence();
-        seq3.Append( Txt321Go.transform.DOScale( Vector3.one, 0.6f ).SetEase( Ease.OutBack ).SetDelay( 0.1f ) );
-        seq3.Insert( 0, Txt321Go.rectTransform.DOLocalMoveX( 0, 0.6f ).SetEase( Ease.OutCubic ).SetDelay( 0.1f ) );
-
-        seq.Append( seq3 );
-        seq.Append( Txt321Go.DOColor( new Color( 1, 1, 1, 0 ), 0.2f ).SetDelay( 0.3f ).OnComplete( ()=> {
-            Txt321Go.rectTransform.localPosition = new Vector3( ScreenWidth*2/3, 0, 0 );
-            Txt321Go.text = "GO";
-            Txt321Go.transform.localScale = Vector3.zero;
-            Txt321Go.color = new Color( 1, 1, 1, 1 );
-        } ) );
-
-        Sequence seq4 = DOTween.Sequence();
-        seq4.Append( Txt321Go.transform.DOScale( Vector3.one, 0.6f ).SetEase( Ease.OutBack ).SetDelay( 0.1f ) );
-        seq4.Insert( 0, Txt321Go.rectTransform.DOLocalMoveX( 0, 0.6f ).SetEase( Ease.OutCubic ).SetDelay( 0.1f ) );
-
-        seq.Append( seq4 );
-        seq.Append( Txt321Go.DOColor( new Color( 1, 1, 1, 0 ), 0.2f ).SetDelay( 0.3f ).OnComplete( ()=> {
-           
-        } ) );*/
 
         Sequence seq = DOTween.Sequence();  
         seq.Append( Txt321Go.transform.DOScale( Vector3.one, 0.4f ).SetEase( Ease.OutBack ).SetDelay( 0.1f ) );
@@ -392,6 +445,16 @@ public class MainPage : MonoBehaviour {
 
         DOTween.Play( seq );
 
+        _gameTime = 20.0f;
+
+        _score = 0;
+        TxtScore.text = _score.ToString();
+
+        _rightGameNumber = 0;
+        _wrongGameNumber = 0;
+
+        TxtGameRightNumber.text = _rightGameNumber.ToString();
+        TxtGameWrongNumber.text = _wrongGameNumber.ToString();
     }
 
     void CreateNextGame() {
@@ -400,7 +463,7 @@ public class MainPage : MonoBehaviour {
         case Mode_Challenge:
             int gameID = _nextGameIndex%5*8+_nextGameIndex/5 ;
 
-            GameLogic gameLogic = GameLogic.GetGameLogic( gameID, 0 );
+            GameLogic gameLogic = GameLogic.GetGameLogic( gameID, _nextGameIndex/5 );
             _currentGameController[_nextBoardIndex].SetGameLogic( gameLogic );
             //gameLogic.SetGameController( _currentGameController[_nextBoardIndex] );
 
@@ -410,6 +473,8 @@ public class MainPage : MonoBehaviour {
         case Mode_Random:
             break;
         }
+
+        _currentGameTimer = 5.0f;
     }
 
     void MoveGameOut( int boardIndex ) {
@@ -427,11 +492,67 @@ public class MainPage : MonoBehaviour {
 
         DOTween.Play( _currentGameRect[boardIndex].DOScale( Vector3.one*1.1f, 0.65f ).SetEase( Ease.OutCubic ).SetDelay( 0.5f )  );
         DOTween.Play( _currentGameRect[boardIndex].DOLocalMoveX( 0, 0.65f ).SetEase( Ease.OutCubic ).SetDelay( 0.5f ).OnComplete( ()=> {
-            _currentGameController[_nextBoardIndex].StartGame();
+            _currentGameController[boardIndex].StartGame();
         } ) );
     }
 
-    public void SendGameResult( bool isWin ) {
+    public void SendGameResult(bool isWin) {
+
+        if(isWin) {
+            _gameTime+=5;
+
+            TxtTimePlusFive.text = "+5";
+            TxtTimePlusFive.color = new Color( 0.4f, 1.0f, 0.4f, 0.0f );
+
+            Sequence seq = DOTween.Sequence();
+            Color color = TxtTimePlusFive.color;
+            color.a = 1.0f;
+
+            seq.Append( TxtTimePlusFive.DOColor( color, 0.1f) );
+            color.a = 0;
+            seq.Append( TxtTimePlusFive.DOColor( color, 1.0f) );
+
+            DOTween.Play( seq );
+
+            if(_currentGameTimer>0) {
+                int baseScore=100;
+                int difficult = (_nextGameIndex-1)/5+1;
+                for(int m=0;m<difficult;m++){
+                    baseScore*=2;
+                }
+                _score+=(int)(baseScore*_currentGameTimer);
+                TxtScore.text = _score.ToString();
+            }
+
+            _currentGameTimer = 5.0f;
+
+            _rightGameNumber++;
+            TxtGameRightNumber.text = _rightGameNumber.ToString();
+        }
+        else {
+            _gameTime-=5;
+
+            TxtTimePlusFive.text = "-5";
+            TxtTimePlusFive.color = new Color( 1.0f, 0.4f, 0.4f, 0.0f );
+
+            Sequence seq = DOTween.Sequence();
+            Color color = TxtTimePlusFive.color;
+            color.a = 1.0f;
+
+            seq.Append( TxtTimePlusFive.DOColor( color, 0.1f) );
+            color.a = 0;
+            seq.Append( TxtTimePlusFive.DOColor( color, 1.0f) );
+
+            DOTween.Play( seq );
+
+            _currentGameTimer = 5.0f;
+
+            _wrongGameNumber++;
+            TxtGameWrongNumber.text = _wrongGameNumber.ToString();
+        }
+    }
+
+    public void ExecGameResult(  ) {
         Debug.Log( "Mainpage SendGameResult!!!" );
 
         MoveGameOut( _nextBoardIndex );
@@ -442,6 +563,70 @@ public class MainPage : MonoBehaviour {
 
         MoveGameIn( _nextBoardIndex );
 
+    }
+
+    public void PlaySound( int soundIndex ) {
+        if(_record.soundFlag==false) {
+            return;
+        }
+
+        switch( soundIndex ) {
+        case Sound_Tap:
+            SndTap.Play();
+            break;
+        case Sound_TapWrong:
+            SndTapWrong.Play();
+            break;
+        case Sound_Right:
+            SndRight.Play();
+            break;
+        case Sound_Wrong:
+            SndWrong.Play();
+            break;
+        case Sound_Button:
+            SndButton.Play();
+            break;
+        case Sound_GameOver:
+            SndGameOver.Play();
+            break;
+        case Sound_Shoot:
+            SndShoot.Play();
+            break;
+        }
+    }
+
+    public void OnButtonLeaderboard() {
+        if(_record.soundFlag==true) {
+            PlaySound( Sound_Button);
+        }
+
+        Social.ShowLeaderboardUI();
+    }
+
+    public void OnButtonMoreGames() {
+        if(_record.soundFlag==true) {
+            PlaySound( Sound_Button);
+        }
+
+        Application.OpenURL("https://itunes.apple.com/us/developer/kylinworks-software/id348568981");
+    }
+
+    public void OnButtonSound() {
+        if(_record.soundFlag==true) {
+            PlaySound( Sound_Button);
+        }
+
+        if(_record.soundFlag==true) {
+            _record.soundFlag=false;
+            //ImgSoundButton.sprite = SptSoundOff;
+            SndMusic.Stop();
+        }
+        else {
+            _record.soundFlag=true;
+            //ImgSoundButton.sprite = SptSoundOn;
+            SndMusic.Play();
+        }
+        SaveGame();
     }
 
     public  void SaveGame(  ) {
@@ -473,4 +658,56 @@ public class MainPage : MonoBehaviour {
 
         return record;
     }
+
+    private void RequestBanner()
+    {
+        #if UNITY_ANDROID
+        string adUnitId = "INSERT_ANDROID_BANNER_AD_UNIT_ID_HERE";
+        #elif UNITY_IPHONE
+        string adUnitId = "ca-app-pub-5622495864296527/5917302917";
+        #else
+        string adUnitId = "unexpected_platform";
+        #endif
+
+        //if((_showAd==false)||(_record.adRemoved==true)) {
+        //    return;
+        //}
+
+        // Create a 320x50 banner at the top of the screen.
+        //_bannerView = new BannerView(adUnitId, AdSize.Banner, AdPosition.Top);
+        _bannerView = new BannerView(adUnitId, AdSize.SmartBanner, AdPosition.Bottom);
+        _bannerView.OnAdLoaded += HandleOnAdLoaded;
+
+        // Create an empty ad request.
+        AdRequest request = new AdRequest.Builder().Build();
+        // Load the banner with the request.
+        _bannerView.LoadAd(request);
+    }
+
+    private void RequestInterstitial()
+    {
+        #if UNITY_ANDROID
+        string adUnitId = "INSERT_ANDROID_INTERSTITIAL_AD_UNIT_ID_HERE";
+        #elif UNITY_IPHONE
+        string adUnitId = "ca-app-pub-5622495864296527/2824235712";
+        #else
+        string adUnitId = "unexpected_platform";
+        #endif
+
+        // Initialize an InterstitialAd.
+        _interstitial = new InterstitialAd(adUnitId);
+        // Create an empty ad request.
+        AdRequest request = new AdRequest.Builder().Build();
+        // Load the interstitial with the request.
+        _interstitial.LoadAd(request);
+    }
+
+    public void HandleOnAdLoaded(object sender, EventArgs args) {
+        _adBannerLoaded = true;
+    }
+
+    /*
+    Social.ReportScore (_record.bestScore, "com.kylinworks.swipeduel.lb.bestscore", success => {
+        Debug.Log(success ? "Reported score successfully" : "Failed to report score");
+    });*/
 }

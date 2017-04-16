@@ -11,7 +11,8 @@ public class GameLogicMathMath : GameLogicTwoButtons {
     public override void SetGameController( GameController controller ) {
         base.SetGameController( controller );
 
-        _gameController.SetGameNameAndDescription( "Math", "Right or wrong?", null );
+        _gameController.SetGameName( "MATH" );
+        _gameController.SetGameDescription1( 0, "Right or wrong?" );
 
         _gameController.SetColorIndex( 0 );
 

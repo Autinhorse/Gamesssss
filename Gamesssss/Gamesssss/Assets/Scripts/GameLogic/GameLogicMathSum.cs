@@ -9,7 +9,8 @@ public class GameLogicMathSum : GameLogicThreeButtons {
     public override void SetGameController( GameController controller ) {
         base.SetGameController( controller );
 
-        _gameController.SetGameNameAndDescription( "Sum", "Which is the right answer?", null );
+        _gameController.SetGameName( "Sum" );
+        _gameController.SetGameDescription1( 0, "Which is the right answer?" );
 
         _gameController.SetColorIndex( 0 );
 

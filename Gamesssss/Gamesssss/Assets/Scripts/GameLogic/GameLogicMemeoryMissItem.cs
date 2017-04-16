@@ -36,9 +36,10 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
 
         _gameController.SetButtonMode( GameController.Button_None );
 
-        MapBlockSize = (int) _gameController.boardWidth/5;
+        MapBlockSize = (int) _gameController.boardWidth/6;
 
-        _gameController.SetGameNameAndDescription( "Miss Item", "Remember these shapes.", null );
+        _gameController.SetGameName( "MISS  ITEM" );
+        _gameController.SetGameDescription1( 0, "Remember these shapes." );
 
         _gameController.SetColorIndex( 3 );
 
@@ -48,7 +49,8 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
         }
         _timer = 2+_difficulty/2.0f;
 
-        _shapeNumber = 2+_difficulty/2;
+        _shapeNumber = 2+_difficulty*2/3;
+            
 
         _mapData = new List<int>();
 
@@ -139,7 +141,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
             break;
         case 7:
             _mapWidth = 3;
-            _mapHeight = 2;
+            _mapHeight = 3;
             for( int m=0; m<_mapWidth; m++) {
                 for( int n=0; n<_mapHeight; n++ ) {
                     if((n==0)&&((m==0)||(m==2))) {
@@ -152,7 +154,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
             break;
         case 8:
             _mapWidth = 3;
-            _mapHeight = 2;
+            _mapHeight = 3;
             for( int m=0; m<_mapWidth; m++) {
                 for( int n=0; n<_mapHeight; n++ ) {
                     if((m==1)&&(n==0)) {
@@ -165,7 +167,43 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
             break;
         case 9:
             _mapWidth = 3;
-            _mapHeight = 2;
+            _mapHeight = 3;
+            for( int m=0; m<_mapWidth; m++) {
+                for( int n=0; n<_mapHeight; n++ ) {
+                    CreateShape( data[shapeIndex], m, n );
+                    shapeIndex++;
+                }
+            }
+            break;
+        case 10:
+            _mapWidth = 4;
+            _mapHeight = 3;
+            for( int m=0; m<_mapWidth; m++) {
+                for( int n=0; n<_mapHeight; n++ ) {
+                    if((n==0)&&((m==1)||(m==2))) {
+                        continue;
+                    }
+                    CreateShape( data[shapeIndex], m, n );
+                    shapeIndex++;
+                }
+            }
+            break;
+        case 11:
+            _mapWidth = 3;
+            _mapHeight = 4;
+            for( int m=0; m<_mapWidth; m++) {
+                for( int n=0; n<_mapHeight; n++ ) {
+                    if((n==0)&&(m==1)) {
+                        continue;
+                    }
+                    CreateShape( data[shapeIndex], m, n );
+                    shapeIndex++;
+                }
+            }
+                break;
+        case 12:
+            _mapWidth = 4;
+            _mapHeight = 3;
             for( int m=0; m<_mapWidth; m++) {
                 for( int n=0; n<_mapHeight; n++ ) {
                     CreateShape( data[shapeIndex], m, n );
@@ -181,8 +219,8 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
         Image imgBoard = (Image) GameObject.Instantiate( _gameController.goBoardImage );
         imgBoard.gameObject.SetActive( true );
         imgBoard.transform.SetParent( _gameController.goBoardArea.transform );
-        imgBoard.color = Color.grey;
-
+        imgBoard.color = new Color( 0, 0, 0, 0.2f );
+            
         imgBoard.rectTransform.sizeDelta = new Vector2( MapBlockSize, MapBlockSize );
         imgBoard.rectTransform.localPosition = new Vector3( pos.x, pos.y, 0 );
         //_mapBoard[m,n]=imgBoard;
@@ -196,7 +234,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
         imgShape.sprite = MainPage.instance.SptShapes[shape];
         //_mapShape[m,n]=imgShape;
 
-        imgShape.rectTransform.sizeDelta = new Vector2( MapBlockSize-32, MapBlockSize-32 );
+        imgShape.rectTransform.sizeDelta = new Vector2( MapBlockSize*0.75f, MapBlockSize*0.75f );
 
         imgBoard.rectTransform.localScale = Vector3.zero;
         DOTween.Play( imgBoard.rectTransform.DOScale( Vector3.one, 0.75f).SetEase( Ease.OutBack ) );
@@ -225,15 +263,15 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
             if(_timer<0) {
                 _status=Status_Playing;
              
-                _gameController.SetGameNameAndDescription( "Miss Item", "Which one has gone?", null );
+                _gameController.SetGameDescription1( 0, "Which one has gone?" );
 
                 for(int m=0;m<_goList.Count;m++) {
                     GameObject shapeBoard = _goList[m];
                     if(m!=_goList.Count-1) {
-                        DOTween.Play( shapeBoard.transform.DOScale( Vector3.zero, 0.75f).SetEase( Ease.InBack ) );
+                        DOTween.Play( shapeBoard.transform.DOScale( Vector3.zero, 0.5f).SetEase( Ease.InBack ) );
                     }
                     else {
-                        DOTween.Play( shapeBoard.transform.DOScale( Vector3.zero, 0.75f).SetEase( Ease.InBack ).OnComplete( ()=> {
+                        DOTween.Play( shapeBoard.transform.DOScale( Vector3.zero, 0.5f).SetEase( Ease.InBack ).OnComplete( ()=> {
                             foreach( GameObject go in _goList ) {
                                 GameObject.Destroy( go );
                             }

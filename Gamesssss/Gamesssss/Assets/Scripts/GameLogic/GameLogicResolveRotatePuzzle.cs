@@ -41,7 +41,7 @@ public class GameLogicResolveRotatePuzzle : GameLogic {
 
         _gameController.SetGameNameAndDescription( "Rotate", "Tap to rotate the blocks.", null );
 
-        _gameController.SetColorIndex( 3 );
+        _gameController.SetColorIndex( 1 );
 
         int boardNumber=0;
         int rotateNumber=0;

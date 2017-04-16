@@ -6,7 +6,7 @@ using DG.Tweening;
 
 public class GameLogicDecisionTapShape : GameLogic {
 
-    const int MapBlockDelta = 16;
+    const int MapBlockDelta = 24;
     int MapBlockSize;
 
     float _timer;
@@ -44,13 +44,12 @@ public class GameLogicDecisionTapShape : GameLogic {
 
         _gameController.SetButtonMode( GameController.Button_None );
 
+        _gameController.SetGameName( "TAP!" );
 
-
-        _gameController.SetGameNameAndDescription( "Tap!", "Tap all    .", null );
-
-        _gameController.SetColorIndex( 3 );
+        _gameController.SetColorIndex( 4 );
 
         int shapeType;
+        int shapePosY;
 
         switch(_difficulty) {
         case 0:
@@ -107,11 +106,25 @@ public class GameLogicDecisionTapShape : GameLogic {
             break;
         }
         if(_mapWidth>2) {
-            MapBlockSize = (int) _gameController.boardWidth/(_mapWidth+2);
+            MapBlockSize = (int) _gameController.boardWidth/(_mapWidth+3);
         }
         else {
-            MapBlockSize = (int) _gameController.boardWidth/5;
+            MapBlockSize = (int) _gameController.boardWidth/6;
         }
+
+        if( _mapHeight<4 ) {
+            _gameController.SetGameDescription1( 2, "Tap all          ." );
+            shapePosY = 378;
+        }
+        else if( _mapHeight<5 ) {
+            _gameController.SetGameDescription1( 3, "Tap all          ." );
+            shapePosY = 412;
+        }
+        else {
+            _gameController.SetGameDescription1( 4, "Tap all          ." );
+            shapePosY = 476;
+        }
+
 
         int[] shapes = new int[shapeType];
         for(int m=0;m<shapeType; m++ ) {
@@ -168,12 +181,12 @@ public class GameLogicDecisionTapShape : GameLogic {
         go1.gameObject.SetActive( true );
 
         go1.gameObject.transform.SetParent( _gameController.goBoardArea.transform );
-        go1.rectTransform.localPosition = new Vector3( 128, 420, 0 ); 
+        go1.rectTransform.localPosition = new Vector3( 72, shapePosY, 0 ); 
         go1.rectTransform.localScale = Vector3.one;
 
-        go1.rectTransform.sizeDelta = new Vector2( 48, 48 );
+        go1.rectTransform.sizeDelta = new Vector2( 64, 64 );
 
-        go1.color = Color.black;
+        go1.color = Color.white;
 
         go1.sprite = MainPage.instance.SptShapes[_targetShape];
     }
@@ -184,8 +197,8 @@ public class GameLogicDecisionTapShape : GameLogic {
         Image imgBoard = (Image) GameObject.Instantiate( _gameController.goBoardImage );
         imgBoard.gameObject.SetActive( true );
         imgBoard.transform.SetParent( _gameController.goBoardArea.transform );
-        imgBoard.color = Color.grey;
-
+        imgBoard.color = new Color( 0, 0, 0, 0.2f);
+            
         imgBoard.rectTransform.sizeDelta = new Vector2( MapBlockSize, MapBlockSize );
         imgBoard.rectTransform.localPosition = new Vector3( pos.x, pos.y, 0 );
         imgBoard.rectTransform.localScale = Vector3.one;
@@ -199,10 +212,10 @@ public class GameLogicDecisionTapShape : GameLogic {
         imgShape.rectTransform.localPosition = Vector3.zero;
         imgShape.rectTransform.localScale = Vector3.one;
 
-        imgShape.color = Color.white;
+        imgShape.color = Color.white;//MainPage.instance.GameBoardColor[4];
         imgShape.sprite = MainPage.instance.SptShapes[shape];
 
-        imgShape.rectTransform.sizeDelta = new Vector2( MapBlockSize-32, MapBlockSize-32 );
+        imgShape.rectTransform.sizeDelta = new Vector2( MapBlockSize*0.75f, MapBlockSize*0.75f );
 
     }
 

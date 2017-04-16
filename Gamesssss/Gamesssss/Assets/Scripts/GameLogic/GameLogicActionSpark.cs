@@ -22,7 +22,11 @@ public class GameLogicActionSpark : GameLogic {
     public override void SetGameController( GameController controller ) {
         base.SetGameController( controller );
 
-        _target = 8 + _difficulty/2;
+        _target = 4 + _difficulty;
+
+        if(_target>10){
+            _target=10;
+        }
 
         _gameController.SetGameNameAndDescription( "Spark", "Tap to shoot.", _target.ToString() );
 
@@ -30,7 +34,10 @@ public class GameLogicActionSpark : GameLogic {
 
         _gameController.SetButtonMode( GameController.Button_None );
 
-        _rotateSpeed = 90+15*_difficulty;
+        _rotateSpeed = 90+10*_difficulty;
+        if(_rotateSpeed>180)  {
+            _rotateSpeed = 180;
+        }
 
         _sparkList = new List<Image>();
         _flyingSpark = new List<Image>();
@@ -46,6 +53,7 @@ public class GameLogicActionSpark : GameLogic {
 
         _coreImage.rectTransform.sizeDelta = new Vector2( _gameController.boardWidth/3, _gameController.boardWidth/3 );
         _coreImage.rectTransform.localPosition = Vector3.zero;
+        _coreImage.rectTransform.localScale = Vector3.one;
         _goList.Add( _coreImage.gameObject );
 
         _spark = (Image) GameObject.Instantiate( _gameController.goBoardImage );
@@ -56,6 +64,7 @@ public class GameLogicActionSpark : GameLogic {
 
         _spark.rectTransform.sizeDelta = new Vector2( _gameController.boardWidth/16, _gameController.boardWidth/16 );
         _spark.rectTransform.localPosition = new Vector3( 0, _gameController.boardWidth/-2, 0 );
+        _spark.rectTransform.localScale = Vector3.one;
         _goList.Add( _spark.gameObject );
     }
 
@@ -79,7 +88,7 @@ public class GameLogicActionSpark : GameLogic {
                         if(Vector3.Distance( pos, dot.rectTransform.localPosition )<    _gameController.boardWidth/16) {
                             _status = Status_Gameover;
                             _gameController.SendGameResult( false );
-                            break;
+                            return;
                         }
                     }
 
@@ -94,7 +103,7 @@ public class GameLogicActionSpark : GameLogic {
 
                     _sparkList.Add( spark );
                     _target--;
-                    _gameController.SetGameNameAndDescription( "Spark", "Tap to shoot.", _target.ToString() );
+                    _gameController.SetGameNameAndDescription( "Spark", "Tap to pin the ball.", _target.ToString() );
 
                     if(KWUtility.Random(0,2)==0) {
                         _rotateSpeed*=-1;
