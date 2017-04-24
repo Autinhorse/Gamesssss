@@ -7,49 +7,29 @@ public class GameLogic  {
     // Factory of game logic instance
 
     public const int Game_Math_Sum = 0;
-    public const int Game_Math_RightWrong = 1;
+    public const int Game_Math_Math = 1;
     public const int Game_Math_WhichBig = 2;
     public const int Game_Math_DiceSum = 3;
-    public const int Game_Math_SumItem = 4;
-    public const int Game_Math_EvenOdd = 5;
-    public const int Game_Math_SmallToBig = 6;
-    public const int Game_Math_Sign = 7;
 
-    public const int Game_Decision_HowMany = 8;
-    public const int Game_Decision_LeftRight = 9;
-    public const int Game_Decision_SameBlock = 10;
-    public const int Game_Decision_TapSpecial = 11;
-    public const int Game_Decision_Category = 12;
-    public const int Game_Decision_WordColor = 13;
-    public const int Game_Decision_NoExistChar = 14;
-    public const int Game_Decision_NoExistShape = 15;
+    public const int Game_Decision_HowMany = 4;
+    public const int Game_Decision_Hand = 5;
+    public const int Game_Decision_NoExistChar = 6;
+    public const int Game_Decision_TapShape = 7;
 
-    public const int Game_Action_TapScreen = 16;
-    public const int Game_Action_AA = 17;
-    public const int Game_Action_ShootUFO = 18;
-    public const int Game_Action_Frog = 19;
-    public const int Game_Action_ArrowShoot = 20;
-    public const int Game_Action_TopMovingObject = 21;
-    public const int Game_Action_0101 = 22;
-    public const int Game_Action_MoveToTarget = 23;
+    public const int Game_Action_TapScreen = 8;
+    public const int Game_Action_Spark = 9;
+    public const int Game_Action_ShootUFO = 10;
+    public const int Game_Action_SwipeArrow = 11;
 
-    public const int Game_Memory_TapScreen = 24;
-    public const int Game_Memory_MissShape = 25;
-    public const int Game_Memory_AddShape = 26;
-    public const int Game_Memory_Tap = 27;
-    public const int Game_Memory_HideShape = 28;
-    public const int Game_Memory_TurnNumber = 29;
-    public const int Game_Memory_ChangeShape = 30;
-    public const int Game_Memory_MineField = 31;
+    public const int Game_Memory_Pair = 12;
+    public const int Game_Memory_MissShape = 13;
+    public const int Game_Memory_NewShape = 14;
+    public const int Game_Memory_Order = 15;
 
-    public const int Game_Resolve_Mirror = 32;
-    public const int Game_Resolve_MoveObject = 33;
-    public const int Game_Resolve_ConnectTube = 34;
-    public const int Game_Resolve_Rotate = 35;
-    public const int Game_Resolve_TopView = 36;
-    public const int Game_Resolve_SideView = 37;
-    public const int Game_Resolve_Heaviest = 38;
-    public const int Game_Resolve_MovePicture = 39;
+    public const int Game_Resolve_Maze = 16;
+    public const int Game_Resolve_Number = 17;
+    public const int Game_Resolve_Headup = 18;
+    public const int Game_Resolve_RotatePuzzle = 19;
 
     static int dif = 0;
 
@@ -60,129 +40,92 @@ public class GameLogic  {
         switch( gameID ) {
         case Game_Math_Sum:
             gameLogic = new GameLogicMathSum( difficulty );
-            //gameLogic = new GameLogicDecisionHand( difficulty );
             break;
-        case Game_Math_RightWrong:
-            gameLogic = new GameLogicMathSum( difficulty );
+        case Game_Math_Math:
+            gameLogic = new GameLogicMathMath( difficulty );
             break;
         case Game_Math_WhichBig:
-            gameLogic = new GameLogicMathSum( difficulty );
+            gameLogic = new GameLogicMathBigger( difficulty );
             break;
         case Game_Math_DiceSum:
-            gameLogic = new GameLogicMathSum( difficulty );
-            break;
-        case Game_Math_SumItem:
-            gameLogic = new GameLogicMathSum( difficulty );
-            break;
-        case Game_Math_EvenOdd:
-            gameLogic = new GameLogicMathSum( difficulty );
-            break;
-        case Game_Math_SmallToBig:
-            gameLogic = new GameLogicMathSum( difficulty );
-            break;
-        case Game_Math_Sign:
-            gameLogic = new GameLogicMathSum( difficulty );
+            gameLogic = new GameLogicMathDice( difficulty );
             break;
         case Game_Decision_HowMany:
             gameLogic = new GameLogicDecisionHowMany( difficulty );
             break;
-        case Game_Decision_LeftRight:
-            gameLogic = new GameLogicMathSum( difficulty );
-            break;
-        case Game_Decision_SameBlock:
-            gameLogic = new GameLogicMathSum( difficulty );
-            break;
-        case Game_Decision_TapSpecial:
-            gameLogic = new GameLogicMathSum( difficulty );
-            break;
-        case Game_Decision_Category:
-            gameLogic = new GameLogicMathSum( difficulty );
-            break;
-        case Game_Decision_WordColor:
-            gameLogic = new GameLogicMathSum( difficulty );
+        case Game_Decision_Hand:
+            gameLogic = new GameLogicDecisionHand( difficulty );
             break;
         case Game_Decision_NoExistChar:
-            gameLogic = new GameLogicMathSum( difficulty );
+            gameLogic = new GameLogicDecisionNoExistChar( difficulty );
             break;
-        case Game_Decision_NoExistShape:
-            gameLogic = new GameLogicMathSum( difficulty );
+        case Game_Decision_TapShape:
+            gameLogic = new GameLogicDecisionTapShape( difficulty );
             break;
         case Game_Action_TapScreen:
             gameLogic = new GameLogicActionTapScreen( difficulty );
             break;
-        case  Game_Action_AA:
-            gameLogic = new GameLogicMathSum( difficulty );
+        case  Game_Action_Spark:
+            gameLogic = new GameLogicActionSpark( difficulty );
             break;
         case Game_Action_ShootUFO:
-            gameLogic = new GameLogicMathSum( difficulty );
+            gameLogic = new GameLogicActionShootUFO( difficulty );
             break;
-        case Game_Action_Frog:
-            gameLogic = new GameLogicMathSum( difficulty );
+        case Game_Action_SwipeArrow:
+            gameLogic = new GameLogicSwipeArrow( difficulty );
             break;
-        case Game_Action_ArrowShoot:
-            gameLogic = new GameLogicMathSum( difficulty );
-            break;
-        case Game_Action_TopMovingObject:
-            gameLogic = new GameLogicMathSum( difficulty );
-            break;
-        case Game_Action_0101:
-            gameLogic = new GameLogicMathSum( difficulty );
-            break;
-        case Game_Action_MoveToTarget:
-            gameLogic = new GameLogicMathSum( difficulty );
-            break;
-        case Game_Memory_TapScreen:
+        
+        case Game_Memory_Pair:
             gameLogic = new GameLogicMemoryPair( difficulty );
             break;
         case  Game_Memory_MissShape:
-            gameLogic = new GameLogicMathSum( difficulty );
+            gameLogic = new GameLogicMemeoryMissItem( difficulty );
             break;
-        case Game_Memory_AddShape:
-            gameLogic = new GameLogicMathSum( difficulty );
+        case Game_Memory_NewShape:
+            gameLogic = new GameLogicMemoryNewItem( difficulty );
             break;
-        case Game_Memory_Tap:
-            gameLogic = new GameLogicMathSum( difficulty );
+        case Game_Memory_Order:
+            gameLogic = new GameLogicMemoryOrder( difficulty );
             break;
-        case Game_Memory_HideShape:
-            gameLogic = new GameLogicMathSum( difficulty );
-            break;
-        case  Game_Memory_TurnNumber:
-            gameLogic = new GameLogicMathSum( difficulty );
-            break;
-        case Game_Memory_ChangeShape:
-            gameLogic = new GameLogicMathSum( difficulty );
-            break;
-        case Game_Memory_MineField:
-            gameLogic = new GameLogicMathSum( difficulty );
-            break;
-        case Game_Resolve_Mirror:
+
+        case Game_Resolve_Headup:
             gameLogic = new GameLogicResolveHeadup( difficulty );
             break;
-        case Game_Resolve_MoveObject:
-            gameLogic = new GameLogicMathSum( difficulty );
+        case Game_Resolve_Maze:
+            gameLogic = new GameLogicResolveMaze( difficulty );
             break;
-        case Game_Resolve_ConnectTube:
-            gameLogic = new GameLogicMathSum( difficulty );
+        case Game_Resolve_Number:
+            gameLogic = new GameLogicResolveNumber( difficulty );
             break;
-        case Game_Resolve_Rotate:
-            gameLogic = new GameLogicMathSum( difficulty );
+        case Game_Resolve_RotatePuzzle:
+            gameLogic = new GameLogicResolveRotatePuzzle( difficulty );
             break;
-        case Game_Resolve_TopView:
-            gameLogic = new GameLogicMathSum( difficulty );
+
+        }
+
+        //gameLogic = new GameLogicActionSpark( dif );
+        /*
+        switch(dif%5){
+        case 0:
+            gameLogic = new GameLogicMathSum( dif );
             break;
-        case Game_Resolve_SideView:
-            gameLogic = new GameLogicMathSum( difficulty );
+        case 1:
+            gameLogic = new GameLogicDecisionHowMany( dif );
             break;
-        case Game_Resolve_Heaviest:
-            gameLogic = new GameLogicMathSum( difficulty );
+        case 2:
+            gameLogic = new GameLogicMemoryOrder( dif );
             break;
-        case Game_Resolve_MovePicture:
-            gameLogic = new GameLogicMathSum( difficulty );
+        case 3:
+            gameLogic = new GameLogicResolveNumber( dif );
+            break;
+        case 4:
+            gameLogic = new GameLogicActionShootUFO( dif );
             break;
         }
 
-        gameLogic = new GameLogicResolveRotatePuzzle( dif );
-        dif++;
+        dif++;*/
+        gameLogic = new GameLogicResolveRotatePuzzle(difficulty);
+
         return gameLogic;
     }
 

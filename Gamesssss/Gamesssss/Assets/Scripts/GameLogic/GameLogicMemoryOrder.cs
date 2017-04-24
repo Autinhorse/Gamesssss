@@ -203,9 +203,14 @@ public class GameLogicMemoryOrder : GameLogic {
                 TurnCard( tapX, tapY, 0 );
 
                 _tapIndex++;
+
+
                 if(_tapIndex==_blockNumber) {
                     _status = Status_Gameover;
                     _gameController.SendGameResult( true );
+                }
+                else {
+                    MainPage.instance.PlaySound( MainPage.Sound_Tap );
                 }
             }
             else if(_mapData[tapX,tapY]<_tapIndex) {

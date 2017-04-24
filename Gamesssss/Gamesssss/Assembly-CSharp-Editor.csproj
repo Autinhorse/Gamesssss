@@ -53,6 +53,10 @@
      <Compile Include="Assets\Editor\Vungle\VunglePostBuilder.cs" />
      <Compile Include="Assets\Editor\VungleBuildHelper.cs" />
      <Compile Include="Assets\GoogleMobileAds\Editor\AdMobDependencies.cs" />
+     <Compile Include="Assets\Image Warp\Editor\ImageWarpEditor.cs" />
+     <Compile Include="Assets\Image Warp\Editor\ImageWarpMenuOptions.cs" />
+     <Compile Include="Assets\Image Warp\Editor\RawImageWarpEditor.cs" />
+     <Compile Include="Assets\Image Warp\Editor\RawImageWarpMenuOptions.cs" />
      <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\AdvancedBuilder.cs" />
      <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\AdvancedBuilderRenderer.cs" />
      <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Editor\AdvancedBuilderWindow.cs" />
@@ -267,18 +271,6 @@
  <Reference Include="DOTweenProEditor">
  <HintPath>/Users/xiaoyuma/Documents/My_Works/Gamesssss/Gamesssss/Gamesssss/Assets/Demigiant/DOTweenPro/Editor/DOTweenProEditor.dll</HintPath>
  </Reference>
- <Reference Include="UnityEditor.Graphs">
- <HintPath>/Applications/Unity/Unity.app/Contents/Managed/UnityEditor.Graphs.dll</HintPath>
- </Reference>
- <Reference Include="UnityEditor.iOS.Extensions">
- <HintPath>/Applications/Unity/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.dll</HintPath>
- </Reference>
- <Reference Include="UnityEditor.AppleTV.Extensions">
- <HintPath>/Applications/Unity/PlaybackEngines/AppleTVSupport/UnityEditor.AppleTV.Extensions.dll</HintPath>
- </Reference>
- <Reference Include="UnityEditor.OSXStandalone.Extensions">
- <HintPath>/Applications/Unity/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll</HintPath>
- </Reference>
  <Reference Include="Google.IOSResolver">
  <HintPath>/Users/xiaoyuma/Documents/My_Works/Gamesssss/Gamesssss/Gamesssss/Assets/PlayServicesResolver/Editor/Google.IOSResolver.dll</HintPath>
  </Reference>
@@ -290,6 +282,18 @@
  </Reference>
  <Reference Include="UnityEngine.Advertisements.Editor">
  <HintPath>/Users/xiaoyuma/Documents/My_Works/Gamesssss/Gamesssss/Gamesssss/Assets/UnityAds/UnityEngine.Advertisements.Editor.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.Graphs">
+ <HintPath>/Applications/Unity/Unity.app/Contents/Managed/UnityEditor.Graphs.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.iOS.Extensions">
+ <HintPath>/Applications/Unity/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.AppleTV.Extensions">
+ <HintPath>/Applications/Unity/PlaybackEngines/AppleTVSupport/UnityEditor.AppleTV.Extensions.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.OSXStandalone.Extensions">
+ <HintPath>/Applications/Unity/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.iOS.Extensions.Common">
  <HintPath>/Applications/Unity/PlaybackEngines/AppleTVSupport/UnityEditor.iOS.Extensions.Common.dll</HintPath>

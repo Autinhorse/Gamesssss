@@ -28,7 +28,7 @@ public class GameLogicActionSpark : GameLogic {
             _target=10;
         }
 
-        _gameController.SetGameNameAndDescription( "Spark", "Tap to shoot.", _target.ToString() );
+        _gameController.SetGameNameAndDescription( "Spark", "Tap to pin the ball.", _target.ToString() );
 
         _gameController.SetColorIndex( 2 );
 

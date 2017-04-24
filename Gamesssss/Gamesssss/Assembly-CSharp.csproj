@@ -92,6 +92,9 @@
      <Compile Include="Assets\GoogleMobileAds\Platforms\iOS\NativeExpressAdClient.cs" />
      <Compile Include="Assets\GoogleMobileAds\Platforms\iOS\RewardBasedVideoAdClient.cs" />
      <Compile Include="Assets\GoogleMobileAds\Platforms\iOS\Utils.cs" />
+     <Compile Include="Assets\Image Warp\Demo\ImageWarpDemo.cs" />
+     <Compile Include="Assets\Image Warp\Scripts\ImageWarp.cs" />
+     <Compile Include="Assets\Image Warp\Scripts\RawImageWarp.cs" />
      <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Example\Scripts\Demo1.cs" />
      <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Example\Scripts\Demo2.cs" />
      <Compile Include="Assets\PygmyMonkey\AdvancedBuilder\Runtime\AppParameters.cs" />

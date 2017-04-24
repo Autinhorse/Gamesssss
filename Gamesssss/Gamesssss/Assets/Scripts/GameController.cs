@@ -68,6 +68,11 @@ public class GameController : MonoBehaviour {
     public void SetGameLogic( GameLogic gameLogic ) {
         _gameLogic = gameLogic;
 
+        if(gameLogic==null){
+            int x=0;
+            x++;
+        }
+
         _gameLogic.SetGameController( this );
     }
 
@@ -141,12 +146,15 @@ public class GameController : MonoBehaviour {
     public void SetGameNameAndDescription( string name, string desc1, string desc2 ) {
         TxtGameName.text = name;
         TxtGameDesc1.text = desc1;
+        TxtGameDesc1.rectTransform.localPosition = new Vector3( 0, boardHeight*23/80, 0 );
+
         if(desc2==null) {
             TxtGameDesc2.gameObject.SetActive( false );
         }
         else {
             TxtGameDesc2.gameObject.SetActive( true );
             TxtGameDesc2.text = desc2;
+            TxtGameDesc2.rectTransform.localPosition = new Vector3( 0, boardHeight*18/80, 0 );
         }
     }
 
@@ -224,6 +232,8 @@ public class GameController : MonoBehaviour {
             Buttons[2].gameObject.SetActive( true );
             pos.x*=-1;
             Buttons[2].transform.localPosition = pos;
+            pos.x=0;
+            Buttons[1].transform.localPosition = pos;
             break;
         }
     }

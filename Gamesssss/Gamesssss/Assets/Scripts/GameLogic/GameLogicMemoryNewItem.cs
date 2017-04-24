@@ -51,7 +51,7 @@ public class GameLogicMemoryNewItem : GameLogic {
         }
         _timer = 2+_difficulty/2.0f;
 
-        int[] shapeNumber = { 2, 3, 4, 5, 6, 6, 7, 7, 7, 8, 8, 8, 9, 9, 9, 10 }; 
+        int[] shapeNumber = { 2, 3, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8 }; 
         _shapeNumber = shapeNumber[difficulty];
 
         if((_shapeNumber==11)||(_shapeNumber==10)){

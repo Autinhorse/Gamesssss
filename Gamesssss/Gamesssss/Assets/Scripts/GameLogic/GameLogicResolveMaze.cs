@@ -174,7 +174,7 @@ public class GameLogicResolveMaze : GameLogic {
 
 
 
-        _gameController.SetGameNameAndDescription( "Maze", "Help me to exit.", null );
+        _gameController.SetGameNameAndDescription( "MAZE", "Help me to exit.", null );
 
         _gameController.SetColorIndex( 1 );
 
@@ -580,6 +580,8 @@ public class GameLogicResolveMaze : GameLogic {
     }
 
     public void MoveActor( int x, int y ) {
+        MainPage.instance.PlaySound( MainPage.Sound_Tap );
+
         Vector2 pos = GetPosition( x, y );
 
         _actorX = x;

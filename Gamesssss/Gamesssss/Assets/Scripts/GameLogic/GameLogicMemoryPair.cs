@@ -222,6 +222,7 @@ public class GameLogicMemoryPair : GameLogic {
         if(_lastTappedX==-1) {
             if((tapX>=0)&&(tapX<_mapWidth)&&(tapY>=0)&&(tapY<_mapHeight)) {
                 TurnCard( tapX, tapY, 0 );
+                MainPage.instance.PlaySound( MainPage.Sound_Tap );
                 _lastTappedX=tapX;
                 _lastTappedY=tapY;
             }
@@ -248,9 +249,10 @@ public class GameLogicMemoryPair : GameLogic {
                             HideCard( tapX1, tapY1 );
                             HideCard( tapX2, tapY2 );
 
-
+                            MainPage.instance.PlaySound( MainPage.Sound_Tap );
                         }
                         else {
+                            MainPage.instance.PlaySound( MainPage.Sound_Wrong );
                             TurnCard( tapX1, tapY1, 0 );
                             TurnCard( tapX2, tapY2, 0 );
                         }

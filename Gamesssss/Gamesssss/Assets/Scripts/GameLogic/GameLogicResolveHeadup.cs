@@ -191,6 +191,8 @@ public class GameLogicResolveHeadup : GameLogic {
         }
 
         if(tapX>=0) {
+            
+
             _mapData[tapX*_mapHeight+tapY]--;
             if(_mapData[tapX*_mapHeight+tapY]<0) {
                 _mapData[tapX*_mapHeight+tapY]=3;
@@ -217,6 +219,9 @@ public class GameLogicResolveHeadup : GameLogic {
 
             if(count==0) {
                 _gameController.SendGameResult( true );
+            }
+            else {
+                MainPage.instance.PlaySound( MainPage.Sound_Tap );
             }
         }
 

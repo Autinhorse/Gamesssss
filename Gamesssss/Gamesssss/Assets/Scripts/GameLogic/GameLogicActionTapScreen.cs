@@ -35,6 +35,8 @@ public class GameLogicActionTapScreen : GameLogic {
     }
 
     public override void OnBoardTapped( Vector3 pos ) {
+        MainPage.instance.PlaySound( MainPage.Sound_Tap );
+
         _count++;
     }
 }

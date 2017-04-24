@@ -113,15 +113,15 @@ public class GameLogicDecisionTapShape : GameLogic {
         }
 
         if( _mapHeight<4 ) {
-            _gameController.SetGameDescription1( 2, "Tap all          ." );
+            _gameController.SetGameDescription1( 2, "Tap all           " );
             shapePosY = 378;
         }
         else if( _mapHeight<5 ) {
-            _gameController.SetGameDescription1( 3, "Tap all          ." );
+            _gameController.SetGameDescription1( 3, "Tap all           " );
             shapePosY = 412;
         }
         else {
-            _gameController.SetGameDescription1( 4, "Tap all          ." );
+            _gameController.SetGameDescription1( 4, "Tap all           " );
             shapePosY = 476;
         }
 
@@ -255,8 +255,12 @@ public class GameLogicDecisionTapShape : GameLogic {
             if(_mapData[tapX,tapY]==_targetShape) {
                 HideCard( tapX, tapY );
                 _shapeNumber--;
+
                 if(_shapeNumber==0) {
                     _gameController.SendGameResult( true );
+                }
+                else {
+                    MainPage.instance.PlaySound( MainPage.Sound_Tap );
                 }
             }
             else {

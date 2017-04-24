@@ -39,7 +39,7 @@ public class GameLogicResolveRotatePuzzle : GameLogic {
 
         MapBlockSize = (int) _gameController.boardWidth/6;
 
-        _gameController.SetGameNameAndDescription( "Rotate", "Tap to rotate the blocks.", null );
+        _gameController.SetGameNameAndDescription( "ROTATE", "Tap to rotate the blocks.", null );
 
         _gameController.SetColorIndex( 1 );
 
@@ -213,7 +213,7 @@ public class GameLogicResolveRotatePuzzle : GameLogic {
                 Vector2 pos = GetPosition( m, n);
                 imgBoard.rectTransform.sizeDelta = new Vector2( MapBlockSize, MapBlockSize );
                 imgBoard.rectTransform.localPosition = new Vector3( pos.x, pos.y, 0 );
-                imgBoard.rectTransform.localScale = Vector3.one*0.99f;
+                imgBoard.rectTransform.localScale = Vector3.one*0.96f;
 
                 _mapBoard[m,n] = imgBoard;
 
@@ -280,6 +280,7 @@ public class GameLogicResolveRotatePuzzle : GameLogic {
                         _mapBoard[m,n].rectTransform.localEulerAngles = new Vector3( 0, 0, 270 );
                         break;
                     }
+                    MainPage.instance.PlaySound( MainPage.Sound_Tap );
                 }
 
                 count += _mapData[m,n];
@@ -291,6 +292,7 @@ public class GameLogicResolveRotatePuzzle : GameLogic {
                 for(int n=0; n<_mapHeight;n++ ) {
                     if((m==_mapWidth-1)&&(n==_mapHeight-1)) {
                         DOTween.Play( _mapBoard[m,n].rectTransform.DOScale( Vector3.one, 0.2f).OnComplete( () => {
+                            _status=Status_Gameover;
                             _gameController.SendGameResult( true );
                         } ) );
                     }
@@ -301,6 +303,7 @@ public class GameLogicResolveRotatePuzzle : GameLogic {
             }
            
         }
+
 
     }
 }

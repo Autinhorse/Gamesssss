@@ -38,7 +38,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
 
         MapBlockSize = (int) _gameController.boardWidth/6;
 
-        _gameController.SetGameName( "MISS  ITEM" );
+        _gameController.SetGameName( "MISS  SHAPE" );
         _gameController.SetGameDescription1( 0, "Remember these shapes." );
 
         _gameController.SetColorIndex( 3 );
@@ -49,7 +49,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
         }
         _timer = 2+_difficulty/2.0f;
 
-        _shapeNumber = 2+_difficulty*2/3;
+        _shapeNumber = 2+(_difficulty+1)*2;
             
 
         _mapData = new List<int>();

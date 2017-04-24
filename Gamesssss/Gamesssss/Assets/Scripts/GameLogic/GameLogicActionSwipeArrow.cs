@@ -89,7 +89,7 @@ public class GameLogicSwipeArrow : GameLogic {
         arrowImg.sprite = MainPage.instance.SptArrow;
 
         arrowImg.rectTransform.sizeDelta = new Vector2( _gameController.boardWidth/10, _gameController.boardWidth/10 );
-        arrowImg.rectTransform.localPosition = new Vector3( _gameController.boardWidth*-3/8, _gameController.boardHeight*23/64, 0 );
+        arrowImg.rectTransform.localPosition = new Vector3( _gameController.boardWidth*-3/8, _gameController.boardHeight*23/80+60, 0 );
         arrowImg.rectTransform.localScale = Vector3.one;
         _goList.Add( arrowImg.gameObject );
 
@@ -100,7 +100,7 @@ public class GameLogicSwipeArrow : GameLogic {
         arrowEmpty.sprite = MainPage.instance.SptArrowEmpty;
 
         arrowEmpty.rectTransform.sizeDelta = new Vector2( _gameController.boardWidth/10, _gameController.boardWidth/10 );
-        arrowEmpty.rectTransform.localPosition = new Vector3( _gameController.boardWidth*-3/8, _gameController.boardHeight*19/64, 0 );
+        arrowEmpty.rectTransform.localPosition = new Vector3( _gameController.boardWidth*-3/8, _gameController.boardHeight*18/80+60, 0 );
         arrowEmpty.rectTransform.localScale = Vector3.one;
         _goList.Add( arrowEmpty.gameObject );
 
