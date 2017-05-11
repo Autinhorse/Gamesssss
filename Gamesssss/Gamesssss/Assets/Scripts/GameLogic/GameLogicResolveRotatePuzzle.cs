@@ -22,7 +22,7 @@ public class GameLogicResolveRotatePuzzle : GameLogic {
     int _mapHeight;
 
 
-    public GameLogicResolveRotatePuzzle( int difficulty ) : base(difficulty) {
+    public GameLogicResolveRotatePuzzle(int gameID, int difficulty, int randomSeed  ) : base(gameID,difficulty,randomSeed) {
 
     }
 
@@ -105,44 +105,45 @@ public class GameLogicResolveRotatePuzzle : GameLogic {
             _mapWidth =4 ;
             _mapHeight = 4;
             boardNumber = 5;
-            rotateNumber = 10;
+            rotateNumber = 8;
             break;
-        case 10:
+        default:
             _mapWidth =4 ;
             _mapHeight = 4;
             boardNumber = 6;
-            rotateNumber = 11;
+            rotateNumber = 9;
             break;
+            /*
         case 11:
             _mapWidth =4 ;
             _mapHeight = 4;
             boardNumber = 7;
-            rotateNumber = 12;
+            rotateNumber = 10;
             break;
         case 12:
             _mapWidth =4 ;
             _mapHeight = 4;
             boardNumber = 7;
-            rotateNumber = 14;
+            rotateNumber = 11;
             break;
         case 13:
             _mapWidth =4 ;
             _mapHeight = 4;
             boardNumber = 8;
-            rotateNumber = 15;
+            rotateNumber = 12;
             break;
         case 14:
             _mapWidth =4 ;
             _mapHeight = 4;
             boardNumber = 8;
-            rotateNumber = 16;
+            rotateNumber = 13;
             break;
         default:
             _mapWidth =4 ;
             _mapHeight = 4;
             boardNumber = 9;
-            rotateNumber = 18;
-            break;
+            rotateNumber = 14;
+            break;*/
         }
 
         _mapData=new int[_mapWidth,_mapHeight];
@@ -243,6 +244,7 @@ public class GameLogicResolveRotatePuzzle : GameLogic {
         DOTween.Play( _mapBoard[x,y].rectTransform.DOScale( Vector3.zero, 0.5f ).SetEase( Ease.InBack ).OnComplete( ()=> {
             _blockNumber--;
             if(_blockNumber==0) {
+                _status = Status_Gameover;
                 _gameController.SendGameResult( true );
             }
         } ) );

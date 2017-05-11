@@ -7,7 +7,7 @@ using DG.Tweening;
 
 public class GameLogicMathBigger : GameLogic {
 
-    public GameLogicMathBigger( int difficulty ) : base(difficulty) {
+    public GameLogicMathBigger( int gameID, int difficulty, int randomSeed  ) : base(gameID,difficulty,randomSeed) {
     }
 
     // 难度0-1，只有两个数比较
@@ -18,6 +18,8 @@ public class GameLogicMathBigger : GameLogic {
 
     public override void SetGameController( GameController controller ) {
         base.SetGameController( controller );
+
+        _gameController.SetButtonMode( GameController.Button_None );
 
         _gameController.SetGameName( "BIGGER" );
         _gameController.SetGameDescription1( 0, "Tap the bigger one." );
@@ -37,7 +39,7 @@ public class GameLogicMathBigger : GameLogic {
             button1 = result1.ToString();
             button2 = result2.ToString();
         }  
-        else if(_difficulty<5 ) {
+        else if(_difficulty<4 ) {
             int number1, number2;
             number1 = KWUtility.Random( 3, 8+_difficulty );
             number2 = KWUtility.Random( 3, 8+_difficulty );
@@ -67,7 +69,7 @@ public class GameLogicMathBigger : GameLogic {
                 button2=tempStr;
             }
         }
-        else if(_difficulty<8 ) {
+        else if(_difficulty<6 ) {
             int number1, number2;
             number1 = KWUtility.Random( _difficulty, 8+_difficulty*3/2 );
             number2 = KWUtility.Random( _difficulty, 8+_difficulty*3/2 );
@@ -103,7 +105,7 @@ public class GameLogicMathBigger : GameLogic {
                 button2=tempStr;
             }
         }
-        else if(_difficulty<13 ) {
+        else if(_difficulty<9 ) {
             int number1, number2;
             number1 = KWUtility.Random( _difficulty/2, 8+_difficulty );
             number2 = KWUtility.Random( _difficulty/2, 8+_difficulty );
@@ -180,13 +182,13 @@ public class GameLogicMathBigger : GameLogic {
             }while(result1==result2);
         }
 
-
-
         Button button = (Button) GameObject.Instantiate( _gameController.goBoardButton);
         button.gameObject.SetActive( true );
         button.transform.SetParent( _gameController.goBoardButtonArea.transform );
 
         button.onClick.AddListener(delegate() { 
+            _status = Status_Gameover;
+
             if(result1>result2){
                 _gameController.SendGameResult( true );
             }
@@ -216,6 +218,8 @@ public class GameLogicMathBigger : GameLogic {
         button.transform.SetParent( _gameController.goBoardButtonArea.transform );
 
         button.onClick.AddListener(delegate() { 
+            _status = Status_Gameover;
+
             if(result1<result2){
                 _gameController.SendGameResult( true );
             }

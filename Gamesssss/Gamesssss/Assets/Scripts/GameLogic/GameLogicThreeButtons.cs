@@ -5,7 +5,7 @@ public class GameLogicThreeButtons : GameLogic {
 
     protected int _rightButtonIndex;
 
-    public GameLogicThreeButtons( int difficulty ) : base (difficulty) {
+    public GameLogicThreeButtons( int gameID, int difficulty, int randomSeed  ) : base(gameID,difficulty,randomSeed)  {
         
     }
 

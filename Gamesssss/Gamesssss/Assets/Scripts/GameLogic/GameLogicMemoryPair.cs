@@ -23,7 +23,7 @@ public class GameLogicMemoryPair : GameLogic {
     int _lastTappedX;
     int _lastTappedY;
 
-    public GameLogicMemoryPair( int difficulty ) : base(difficulty) {
+    public GameLogicMemoryPair( int gameID, int difficulty, int randomSeed  ) : base(gameID,difficulty,randomSeed)  {
         
     }
 
@@ -37,7 +37,7 @@ public class GameLogicMemoryPair : GameLogic {
 
         MapBlockSize = (int) _gameController.boardWidth/7;
 
-        _gameController.SetGameNameAndDescription( "Pairs", "Remember the pairs.", null );
+        _gameController.SetGameNameAndDescription( "PAIRS", "Remember the pairs.", null );
 
         _gameController.SetColorIndex( 3 );
 
@@ -47,7 +47,7 @@ public class GameLogicMemoryPair : GameLogic {
         }
         _timer = 2+difficulty/2.0f;
 
-        int[] blockNumber = { 4, 6, 6, 8, 8, 10, 10, 10, 12, 12, 12, 12, 14, 14, 16, 16 };
+        int[] blockNumber = { 4, 6, 6, 8, 8, 8, 10, 10, 10, 12, 12, 14, 14, 14, 16, 16 };
 
         _blockNumber = blockNumber[difficulty];
 
@@ -166,6 +166,7 @@ public class GameLogicMemoryPair : GameLogic {
         DOTween.Play( _mapBoard[x,y].rectTransform.DOScale( Vector3.zero, 0.25f ).SetEase( Ease.InBack ).OnComplete( ()=> {
             _blockNumber--;
             if(_blockNumber==0) {
+                _status = Status_Gameover;
                 _gameController.SendGameResult( true );
             }
         } ) );
@@ -182,6 +183,10 @@ public class GameLogicMemoryPair : GameLogic {
     }
 
     public override void FixedUpdate() {
+        if(_status==Status_Gameover) {
+            return;
+        }
+
         if(_status==Status_Remebering) {
             _timer-=Time.fixedDeltaTime;
             if(_timer<0) {
@@ -189,7 +194,7 @@ public class GameLogicMemoryPair : GameLogic {
                 _lastTappedX=-1;
                 _lastTappedY=-1;
 
-                _gameController.SetGameNameAndDescription( "Pairs", "Tap the pairs.", null );
+                _gameController.SetGameNameAndDescription( "PAIRS", "Tap the pairs.", null );
 
                 for(int m=0; m<_mapWidth; m++ ) {
                     for( int n=0; n<_mapHeight; n++ ) {

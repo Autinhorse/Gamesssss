@@ -5,7 +5,7 @@ public class GameLogicTwoButtons : GameLogic {
 
     protected int _rightButtonIndex;
 
-    public GameLogicTwoButtons( int difficulty ) : base (difficulty) {
+    public GameLogicTwoButtons( int gameID, int difficulty, int randomSeed  ) : base(gameID,difficulty,randomSeed) {
 
     }
 
@@ -50,6 +50,10 @@ public class GameLogicTwoButtons : GameLogic {
     }
 
     public override void OnButtonPressed( int buttonIndex ) {
+        if(_status!=Status_Playing) {
+            return;
+        }
+
         _status = Status_Gameover;
 
         if(buttonIndex==_rightButtonIndex){

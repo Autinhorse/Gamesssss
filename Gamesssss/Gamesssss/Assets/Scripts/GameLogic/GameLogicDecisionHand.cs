@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class GameLogicDecisionHand : GameLogicTwoButtons {
 
-    public GameLogicDecisionHand( int difficulty ) : base(difficulty) {
+    public GameLogicDecisionHand( int gameID, int difficulty, int randomSeed  ) : base(gameID,difficulty,randomSeed)  {
     }
 
     public override void SetGameController( GameController controller ) {

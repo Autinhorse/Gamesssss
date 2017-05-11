@@ -25,7 +25,7 @@ public class GameLogicMemoryOrder : GameLogic {
 
     int _tapIndex;
 
-    public GameLogicMemoryOrder( int difficulty ) : base(difficulty) {
+    public GameLogicMemoryOrder( int gameID, int difficulty, int randomSeed  ) : base(gameID,difficulty,randomSeed) {
 
     }
 
@@ -161,6 +161,10 @@ public class GameLogicMemoryOrder : GameLogic {
     }
 
     public override void FixedUpdate() {
+        if(_status==Status_Gameover) {
+            return;
+        }
+
         if(_status==Status_Remebering) {
             _timer-=Time.fixedDeltaTime;
             if(_timer<0) {

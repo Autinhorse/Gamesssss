@@ -26,7 +26,7 @@ public class GameLogicMemoryNewItem : GameLogic {
     int _mapWidth;
     int _mapHeight;
 
-    public GameLogicMemoryNewItem( int difficulty ) : base(difficulty) {
+    public GameLogicMemoryNewItem( int gameID, int difficulty, int randomSeed  ) : base(gameID,difficulty,randomSeed)  {
 
     }
 
@@ -51,7 +51,7 @@ public class GameLogicMemoryNewItem : GameLogic {
         }
         _timer = 2+_difficulty/2.0f;
 
-        int[] shapeNumber = { 2, 3, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8 }; 
+        int[] shapeNumber = { 2, 3, 3, 4, 4, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8 }; 
         _shapeNumber = shapeNumber[difficulty];
 
         if((_shapeNumber==11)||(_shapeNumber==10)){
@@ -288,6 +288,10 @@ public class GameLogicMemoryNewItem : GameLogic {
     }
 
     public override void FixedUpdate() {
+        if(_status==Status_Gameover) {
+            return;
+        }
+
         if(_status==Status_Remebering) {
             _timer-=Time.fixedDeltaTime;
             if(_timer<0) {
@@ -362,6 +366,7 @@ public class GameLogicMemoryNewItem : GameLogic {
 
         if((tapX>=0)&&(tapX<_mapWidth)&&(tapY>=0)&&(tapY<_mapHeight)) {
             Debug.Log( "Tapped Shape:"+tapX+"-"+tapY+"=="+_mapData[tapX,tapY]+"--------"+_newShape );
+            _status = Status_Gameover;
             if(_mapData[tapX,tapY]==_newShape) {
                 _gameController.SendGameResult( true );
             }

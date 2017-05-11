@@ -8,4 +8,8 @@ public class KWUtility  {
         int result = UnityEngine.Random.Range( min, max );
         return result;
     }
+
+    public static void SetRandomSeed( int seed ) {
+        UnityEngine.Random.InitState( seed );
+    }
 }

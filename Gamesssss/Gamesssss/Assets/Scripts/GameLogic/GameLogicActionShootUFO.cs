@@ -24,7 +24,7 @@ public class GameLogicActionShootUFO : GameLogic {
     Vector3 _bulletPos;
     float _bulletSpeed;
 
-    public GameLogicActionShootUFO( int difficulty ) : base(difficulty) {
+    public GameLogicActionShootUFO( int gameID, int difficulty, int randomSeed  ) : base(gameID,difficulty,randomSeed)  {
     }
 
     // 这个游戏的难度由UFO数量，UFO大小，和移动速度决定
@@ -34,25 +34,42 @@ public class GameLogicActionShootUFO : GameLogic {
 
         _ufos = new List<UFOData>();
 
-        _UFONumber = 1+(_difficulty+1)/3;
-        if(_UFONumber>6){
-            _UFONumber=6;
+
+        switch(_difficulty) {
+        case 0:
+        case 1:
+            _UFONumber = 1;
+            break;
+        case 2:
+        case 3:
+            _UFONumber = 2;
+            break;
+        case 4:
+        case 5:
+        case 6:
+            _UFONumber = 3;
+            break;
+        default:
+            _UFONumber = 4;
+            break;
         }
 
         _UFOSize = 160;
         _UFOSize/=(1+(_UFONumber-1)/7.0f);
         int posX, posY;
-        float speed;
+        //loat speed;
 
         int[] line = new int[8];
         line[0] = 2;
         line[1] = 4;
         line[2] = 1;
         line[3] = 3;
-        line[4] = 6;
-        line[5] = 0;
+        line[4] = 0;
+        line[5] = 5;
         line[6] = 8;
         line[7] = 7;
+
+
 
 
         for(int m=0; m<_UFONumber;m++ ) {
@@ -60,7 +77,7 @@ public class GameLogicActionShootUFO : GameLogic {
             ufo.isLive = true;
 
             posX = KWUtility.Random( -1*_gameController.boardWidth/5, _gameController.boardHeight/5 );
-            posY = _gameController.boardWidth/2-_gameController.boardWidth/12*line[m];//KWUtility.Random( 0, _gameController.boardWidth/3 );
+            posY = _gameController.boardWidth*5/12-_gameController.boardWidth/12*line[m];//KWUtility.Random( 0, _gameController.boardWidth/3 );
 
             ufo.pos = new Vector3( posX, posY, 0 );
 
@@ -114,9 +131,14 @@ public class GameLogicActionShootUFO : GameLogic {
         _goList.Add( _bullet.gameObject );
 
         _bulletSpeed = -1;
+        _bulletPos = new Vector2( 0, _gameController.boardHeight*11/-32 );
     }
 
     public override void FixedUpdate() {
+        if(_status==Status_Gameover) {
+            return;
+        }
+
         foreach( UFOData data in _ufos ) {
             if(data.isLive==false) {
                 continue;
@@ -158,7 +180,7 @@ public class GameLogicActionShootUFO : GameLogic {
             _bulletPos.y+=_bulletSpeed*Time.fixedDeltaTime;
             _bullet.rectTransform.localPosition = _bulletPos;
 
-            if(_bulletPos.y>_gameController.boardWidth*7/12) {
+            if(_bulletPos.y>_gameController.boardWidth/2) {
                 _bullet.gameObject.SetActive( false );
                 _bulletSpeed=-1;
                 _gameController.SetButtonEnable( 0, true );

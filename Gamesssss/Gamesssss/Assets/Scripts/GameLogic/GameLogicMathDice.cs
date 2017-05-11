@@ -11,7 +11,7 @@ public class GameLogicMathDice : GameLogicThreeButtons {
     int _mapWidth;
     int _mapHeight;
 
-    public GameLogicMathDice( int difficulty ) : base(difficulty) {
+    public GameLogicMathDice( int gameID, int difficulty, int randomSeed  ) : base(gameID,difficulty,randomSeed) {
     }
 
     // 难度0-15
@@ -34,33 +34,26 @@ public class GameLogicMathDice : GameLogicThreeButtons {
         int diceNumber=0;
         switch(_difficulty){
         case 0:
-        case 1:
             diceNumber=2;
             _mapWidth = 1;
             _mapHeight = 2;
             break;
+        case 1:
         case 2:
-        case 3:
-        case 4:
             diceNumber=3;
             _mapWidth = 3;
             _mapHeight = 1;
             break;
-        case 5:
-        case 6:
-        case 7:
-        case 8:
+        case 3:
+        case 4:
             diceNumber=4;
             _mapWidth = 2;
             _mapHeight = 2;
             break;
-        case 9:
-        case 10:
-        case 11:
-        case 12:
+        case 5:
+            diceNumber=5;
             _mapWidth = 3;
             _mapHeight = 2;
-            diceNumber=5;
             break;
         default:
             diceNumber=6;

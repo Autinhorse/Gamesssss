@@ -28,6 +28,7 @@ public class GameController : MonoBehaviour {
     public Text[] ButtonText;
     public Image[] ButtonBGImage;
     public Image[] ButtonImage;
+    public Image ImgContentCover;
 
 
     public const int Button_None = 0;
@@ -52,6 +53,12 @@ public class GameController : MonoBehaviour {
 
 
     GameLogic _gameLogic;
+    public GameLogic gameLogic {
+        get {
+            return _gameLogic;
+        }
+    }
+
     int _buttonMode;
     public int boardWidth {
         get{
@@ -103,24 +110,52 @@ public class GameController : MonoBehaviour {
     }
 
     public void StartGame() {
-        _gameLogic.StartGame();
+        Color color = ImgContentCover.color;
+        color.a = 0;
+            
+        DOTween.Play( ImgContentCover.DOColor( color, 0.2f ).SetDelay( 1.0f ).OnComplete( ()=>{ 
+            ImgContentCover.gameObject.SetActive( false );
+            _gameLogic.StartGame();
+        } ) );
     }
 
+    public const int GameResult_Win = 1;
+    public const int GameResult_Lose = 2;
+    public const int GameResult_Timeout = 3;
+
     public void SendGameResult( bool isWin ) {
+        if(isWin==true){
+            SendGameResult( GameResult_Win );
+        }
+        else {
+            SendGameResult( GameResult_Lose );
+        }
+    }
+
+    public void SendGameResult( int gameResult ) {
         Debug.Log( "Out SendGameResult!!!" );
         ImgResult.gameObject.SetActive( true );
+        bool resultFlag = true;
         ImgResult.gameObject.transform.localScale = Vector3.zero;
-        if(isWin==true) {
+        switch(gameResult) {
+        case GameResult_Win:
             ImgResult.sprite = MainPage.instance.SptAnswerRight;
             MainPage.instance.PlaySound( MainPage.Sound_Right);
-
-        }
-        else  {
+            break;
+        case GameResult_Lose:
             ImgResult.sprite = MainPage.instance.SptAnswerWrong;
             MainPage.instance.PlaySound( MainPage.Sound_Wrong);
+            resultFlag = false;
+            break;
+        case GameResult_Timeout:
+            ImgResult.sprite = MainPage.instance.SptAnswerTimeout;
+            MainPage.instance.PlaySound( MainPage.Sound_Wrong);
+            resultFlag = false;
+            break;
+
         }
 
-        MainPage.instance.SendGameResult(isWin);
+        MainPage.instance.SendGameResult(resultFlag);
 
         ImgResultShadow.gameObject.SetActive( true );
         Color color = ImgResultShadow.color;
@@ -163,21 +198,32 @@ public class GameController : MonoBehaviour {
     }
 
     public void SetGameDescription1( int posIndex, string desc1 ) {
+        
         switch(posIndex) {
         case 0:
             TxtGameDesc1.rectTransform.localPosition = new Vector3( 0, boardHeight/4, 0 );
+            ImgContentCover.rectTransform.sizeDelta = new Vector2( 798, 880 );
+            ImgContentCover.rectTransform.localPosition = new Vector3( 0, -200 );
             break;
         case 1:
             TxtGameDesc1.rectTransform.localPosition = new Vector3( 0, boardHeight/12, 0 );
+            ImgContentCover.rectTransform.sizeDelta = new Vector2( 798, 880 );
+            ImgContentCover.rectTransform.localPosition = new Vector3( 0, -200 );
             break;
         case 2:
             TxtGameDesc1.rectTransform.localPosition = new Vector3( 0, boardHeight*19/80, 0 );
+            ImgContentCover.rectTransform.sizeDelta = new Vector2( 798, 880 );
+            ImgContentCover.rectTransform.localPosition = new Vector3( 0, -200 );
             break;
         case 3:
             TxtGameDesc1.rectTransform.localPosition = new Vector3( 0, boardHeight*21/80, 0 );
+            ImgContentCover.rectTransform.sizeDelta = new Vector2( 798, 840 );
+            ImgContentCover.rectTransform.localPosition = new Vector3( 0, -220 );
             break;
         case 4:
             TxtGameDesc1.rectTransform.localPosition = new Vector3( 0, boardHeight*25/80, 0 );
+            ImgContentCover.rectTransform.sizeDelta = new Vector2( 798, 920 );
+            ImgContentCover.rectTransform.localPosition = new Vector3( 0, -180 );
             break;
         }
         TxtGameDesc1.text = desc1;
@@ -291,6 +337,9 @@ public class GameController : MonoBehaviour {
         ButtonImage[0].color = MainPage.instance.GameBoardColor[index];
         ButtonImage[1].color = MainPage.instance.GameBoardColor[index];
         ButtonImage[2].color = MainPage.instance.GameBoardColor[index];
+
+        ImgContentCover.gameObject.SetActive( true );
+        ImgContentCover.color = MainPage.instance.GameBoardColor[index];
     }
 
     public void OnButtonPressed( int index ) {

@@ -22,7 +22,7 @@ public class GameLogicSwipeArrow : GameLogic {
     int _startArrow;
     int _endArrow;
 
-    public GameLogicSwipeArrow( int difficulty ) : base(difficulty) {
+    public GameLogicSwipeArrow( int gameID, int difficulty, int randomSeed  ) : base(gameID,difficulty,randomSeed) {
     }
 
     // 这个游戏的难度由箭头数量决定
@@ -33,8 +33,8 @@ public class GameLogicSwipeArrow : GameLogic {
         _arrows = new List<ArrowData>();
 
         _arrowNumber = 3+_difficulty;
-        if(_arrowNumber>15){
-            _arrowNumber=15;
+        if(_arrowNumber>12){
+            _arrowNumber=12;
         }
 
         for(int m=0; m<_arrowNumber;m++ ) {
@@ -107,18 +107,20 @@ public class GameLogicSwipeArrow : GameLogic {
         SetArrowPosition();
     }
 
-    public override void FixedUpdate() {
-        
-    }
-
     public void SetArrowPosition( ) {
+        
+        float targetY = -_gameController.boardHeight/3;
+
         for( int m=0; m<4; m++ ) {
             if(_startArrow+m>=_arrows.Count) {
                 return;
             }
 
+            float deltaPos = _gameController.boardHeight/(6+m*2);
+            targetY+=deltaPos;
+
             _arrows[m+_startArrow].imgArrow.gameObject.SetActive( true );
-            float targetY = -_gameController.boardHeight/6+_gameController.boardHeight/8*m;
+           
             DOTween.Play( _arrows[m+_startArrow].imgArrow.rectTransform.DOLocalMoveY( targetY, 0.3f) );
 
             float alpha = 1.0f-0.1f*m;

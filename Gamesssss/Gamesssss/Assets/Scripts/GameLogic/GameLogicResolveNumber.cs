@@ -19,7 +19,7 @@ public class GameLogicResolveNumber : GameLogicThreeButtons {
     int _mapWidth;
     int _mapHeight;
 
-    public GameLogicResolveNumber( int difficulty ) : base(difficulty) {
+    public GameLogicResolveNumber( int gameID, int difficulty, int randomSeed  ) : base(gameID,difficulty,randomSeed)  {
     }
 
     // 难度0-15

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class GameLogicMathMath : GameLogicTwoButtons {
 
-    public GameLogicMathMath( int difficulty ) : base(difficulty) {
+    public GameLogicMathMath(int gameID, int difficulty, int randomSeed  ) : base(gameID,difficulty,randomSeed) {
     }
 
     // 难度0-7，只有加减法
@@ -16,7 +16,7 @@ public class GameLogicMathMath : GameLogicTwoButtons {
 
         _gameController.SetColorIndex( 0 );
 
-        if(_difficulty<8) {
+        if(_difficulty<4) {
             int maxNumber = _difficulty*3+4;
             int number1 = UnityEngine.Random.Range( _difficulty, maxNumber )+1;
             int number2 = UnityEngine.Random.Range( _difficulty, maxNumber )+1;

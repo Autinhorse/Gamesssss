@@ -6,13 +6,16 @@ public class GameLogicActionTapScreen : GameLogic {
     int _target;
     int _count;
 
-    public GameLogicActionTapScreen( int difficulty ) : base(difficulty) {
+    public GameLogicActionTapScreen( int gameID, int difficulty, int randomSeed  ) : base(gameID,difficulty,randomSeed) {
     }
 
     public override void SetGameController( GameController controller ) {
         base.SetGameController( controller );
 
-        _target = 3+_difficulty+KWUtility.Random( 0, 5+_difficulty );
+        _target = 4+_difficulty+KWUtility.Random( 0, 5+_difficulty )-2;
+        if(_target>15) {
+            _target=15;
+        }
 
         _gameController.SetGameName( "TAP!" );
         _gameController.SetGameDescription1( 1, "Tap screen "+_target.ToString()+" times." );
@@ -26,6 +29,7 @@ public class GameLogicActionTapScreen : GameLogic {
     }
 
     public override void OnButtonPressed( int buttonIndex ) {
+        _status = Status_Gameover;
         if(_count==_target) {
             _gameController.SendGameResult( true );
         }

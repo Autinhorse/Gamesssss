@@ -29,7 +29,7 @@ public class GameLogicResolveMaze : GameLogic {
     int _actorX;
     int _actorY;
 
-    public GameLogicResolveMaze( int difficulty ) : base(difficulty) {
+    public GameLogicResolveMaze( int gameID, int difficulty, int randomSeed  ) : base(gameID,difficulty,randomSeed) {
 
     }
 
@@ -580,6 +580,9 @@ public class GameLogicResolveMaze : GameLogic {
     }
 
     public void MoveActor( int x, int y ) {
+        if( _status!=Status_Playing) {
+            return;
+        }
         MainPage.instance.PlaySound( MainPage.Sound_Tap );
 
         Vector2 pos = GetPosition( x, y );
@@ -589,6 +592,7 @@ public class GameLogicResolveMaze : GameLogic {
 
         DOTween.Play( _imgActor.rectTransform.DOLocalMove( new Vector3( pos.x, pos.y, 0 ), 0.1f ).OnComplete( ()=> {
             if(_mapData[_actorX,_actorY]==3) {
+                _status = Status_Gameover;
                 _gameController.SendGameResult( true );
             }
         } ) );

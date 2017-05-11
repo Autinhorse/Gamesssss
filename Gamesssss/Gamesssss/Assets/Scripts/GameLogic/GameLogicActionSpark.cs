@@ -16,19 +16,19 @@ public class GameLogicActionSpark : GameLogic {
     float _sparkSpeed;
     List<Image> _flyingSpark;
 
-    public GameLogicActionSpark( int difficulty ) : base(difficulty) {
+    public GameLogicActionSpark( int gameID, int difficulty, int randomSeed  ) : base(gameID,difficulty,randomSeed) {
     }
 
     public override void SetGameController( GameController controller ) {
         base.SetGameController( controller );
 
-        _target = 4 + _difficulty;
+        _target = 3 + _difficulty;
 
         if(_target>10){
-            _target=10;
+            _target=9;
         }
 
-        _gameController.SetGameNameAndDescription( "Spark", "Tap to pin the ball.", _target.ToString() );
+        _gameController.SetGameNameAndDescription( "SPARK", "Tap to pin the ball.", _target.ToString() );
 
         _gameController.SetColorIndex( 2 );
 
@@ -69,6 +69,10 @@ public class GameLogicActionSpark : GameLogic {
     }
 
     public override void FixedUpdate() {
+        if(_status==Status_Gameover) {
+            return;
+        }
+
         if(_status==Status_Playing) {
             Vector3 angle = _coreImage.rectTransform.localEulerAngles;
             angle.z+=_rotateSpeed*Time.fixedDeltaTime;
@@ -98,12 +102,13 @@ public class GameLogicActionSpark : GameLogic {
                     bar.color = Color.white;
                     bar.sprite = MainPage.instance.SptShapes[0];
 
-                    bar.rectTransform.sizeDelta = new Vector2( _gameController.boardWidth/128, _gameController.boardWidth/6 );
+                    bar.rectTransform.sizeDelta = new Vector2( _gameController.boardWidth/64, _gameController.boardWidth/5 );
                     bar.rectTransform.localPosition = new Vector3( 0, _gameController.boardWidth/12, 0 );
+                    bar.rectTransform.localScale = Vector3.one;
 
                     _sparkList.Add( spark );
                     _target--;
-                    _gameController.SetGameNameAndDescription( "Spark", "Tap to pin the ball.", _target.ToString() );
+                    _gameController.SetGameNameAndDescription( "SPARK", "Tap to pin the ball.", _target.ToString() );
 
                     if(KWUtility.Random(0,2)==0) {
                         _rotateSpeed*=-1;

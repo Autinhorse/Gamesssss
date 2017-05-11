@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class GameLogicDecisionNoExistChar : GameLogicThreeButtons {
 
-    public GameLogicDecisionNoExistChar( int difficulty ) : base(difficulty) {
+    public GameLogicDecisionNoExistChar( int gameID, int difficulty, int randomSeed  ) : base(gameID,difficulty,randomSeed)  {
     }
 
     // 难度从0到15
@@ -19,11 +19,11 @@ public class GameLogicDecisionNoExistChar : GameLogicThreeButtons {
         _gameController.SetColorIndex( 4 );
 
         int dif = _difficulty;
-        if(dif>15){
-            dif=15;
+        if(dif>10){
+            dif=10;
         }
 
-        int charNumber = dif+6;
+        int charNumber =(int)( dif*1.5f+6);
         int candidateNumber = 2+(dif+2)/2;
 
         string chars="";

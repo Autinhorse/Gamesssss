@@ -10,7 +10,7 @@ public class GameLogicResolveHeadup : GameLogic {
     const int MapBlockDelta = 32;
     int MapBlockSize;
 
-    public GameLogicResolveHeadup( int difficulty ) : base(difficulty) {
+    public GameLogicResolveHeadup( int gameID, int difficulty, int randomSeed  ) : base(gameID,difficulty,randomSeed) {
     }
 
     int _mapWidth;
@@ -71,28 +71,53 @@ public class GameLogicResolveHeadup : GameLogic {
             break;
         case 6:
             _mapWidth=3;
-            _mapHeight=2;
+            _mapHeight=3;
             charNumber=6;
             break;
         case 7:
             _mapWidth=3;
             _mapHeight=3;
-            charNumber=5;
+            charNumber=7;
             break;
         case 8:
             _mapWidth=3;
             _mapHeight=3;
-            charNumber=6;
+            charNumber=8;
             break;
         case 9:
             _mapWidth=3;
             _mapHeight=3;
-            charNumber=7;
+            charNumber=8;
             break;
         case 10:
-            _mapWidth=3;
+            _mapWidth=4;
             _mapHeight=3;
-            charNumber=8;
+            charNumber=9;
+            break;
+        case 11:
+            _mapWidth=4;
+            _mapHeight=3;
+            charNumber=10;
+            break;
+        case 12:
+            _mapWidth=4;
+            _mapHeight=3;
+            charNumber=11;
+            break;
+        case 13:
+            _mapWidth=4;
+            _mapHeight=4;
+            charNumber=11;
+            break;
+        case 14:
+            _mapWidth=4;
+            _mapHeight=4;
+            charNumber=12;
+            break;
+        case 15:
+            _mapWidth=4;
+            _mapHeight=4;
+            charNumber=13;
             break;
         default:
             _mapWidth=3;
@@ -152,14 +177,17 @@ public class GameLogicResolveHeadup : GameLogic {
 
                 switch( _mapData[m*_mapHeight+n] ) {
                 case 1:
+                case 2:
+                case 3:
+                    _mapData[m*_mapHeight+n]  = 1;
                     textObject.rectTransform.localEulerAngles = new Vector3( 0, 0, 90 );
                     break;
-                case 2:
+                /*case 2:
                     textObject.rectTransform.localEulerAngles = new Vector3( 0, 0, 180 );
                     break;
                 case 3:
                     textObject.rectTransform.localEulerAngles = new Vector3( 0, 0, 270 );
-                    break;
+                    break;*/
                 }
                 textObject.rectTransform.localScale = Vector3.one;
             }
@@ -218,6 +246,7 @@ public class GameLogicResolveHeadup : GameLogic {
             }
 
             if(count==0) {
+                _status = Status_Gameover;
                 _gameController.SendGameResult( true );
             }
             else {

@@ -7,7 +7,7 @@ public class GameLogicDecisionHowMany : GameLogicThreeButtons {
 
 
 
-    public GameLogicDecisionHowMany( int difficulty ) : base(difficulty) {
+    public GameLogicDecisionHowMany( int gameID, int difficulty, int randomSeed  ) : base(gameID,difficulty,randomSeed)  {
     }
 
     public override void SetGameController( GameController controller ) {
@@ -24,8 +24,8 @@ public class GameLogicDecisionHowMany : GameLogicThreeButtons {
         int mapHeight = 3;
 
         int difficulty = _difficulty;
-        if(difficulty>12) {
-            difficulty=12;
+        if(difficulty>10) {
+            difficulty=10;
         }
 
         mapWidth=3+difficulty/4;
@@ -37,17 +37,24 @@ public class GameLogicDecisionHowMany : GameLogicThreeButtons {
         float startPointX = -1*(mapWidth-1.0f)/2*(mapBlockSize+mapBlockDelta);
         float startPointY = (mapHeight-1.0f)/2*(mapBlockSize+mapBlockDelta);
 
-        int[] shapes = new int[3];
+        int[] shapes = new int[mapWidth];
         shapes[0] = KWUtility.Random( 0, MainPage.instance.SptShapes.Length);
-        do {
-            shapes[1] = KWUtility.Random( 0, MainPage.instance.SptShapes.Length);
-        }while(shapes[1]==shapes[0]);
-        do {
-            shapes[2] = KWUtility.Random( 0, MainPage.instance.SptShapes.Length);
-        }while((shapes[2]==shapes[0])||(shapes[2]==shapes[1]));
+        for(int m=1;m<mapWidth;m++ ) {
+            bool sameFlag;
+            do {
+                sameFlag = false;
+                shapes[m] = KWUtility.Random( 0, MainPage.instance.SptShapes.Length);
+                for(int n=0; n<m; n++ ) {
+                    if(shapes[m]==shapes[n]) {
+                        sameFlag = true;
+                        break;
+                    }
+                }
+            }while(sameFlag==true);
+        }
 
-        int[] shapeCount = new int[3];
-        for(int m=0;m<3;m++) {
+        int[] shapeCount = new int[mapWidth];
+        for(int m=0;m<mapWidth;m++) {
             shapeCount[m]=0;
         }
 

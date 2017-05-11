@@ -29,6 +29,12 @@ public class GameRecord {
         adRemoved = false;
         energy = 5;
         startSecond = 0;
+        playerID = -1;
+        loginID = 0;
+        gamecenterIDReported = false;
+        gamePlayIndex = 0;
+        logoutTime = "";
+        duration = 0;
         data1 = 0;
         data2 = 0;
         data3 = 0;
@@ -44,12 +50,20 @@ public class GameRecord {
     public bool soundFlag;
     public int energy;
     public long startSecond;
+    public int playerID;
+    public int loginID;
+    public bool gamecenterIDReported;
+    public int gamePlayIndex;
+    public string logoutTime;
+    public int duration;
     public int data1;
     public int data2;
     public int data3;
     public int data4;
     public int data5;
 }
+
+public delegate void WWWCallbackFunction( WWW www );
 
 public delegate void CallbackFunction();
 
@@ -97,11 +111,25 @@ public class MainPage : MonoBehaviour {
     public const int Mode_Challenge = 1;
     public const int Mode_Random = 2;
 
+    // local test server of local host
+    /*
+    public const string URLRegisterUser = "http://localhost/5Seconds/Register.php";
+    public const string URLUpdateGameCenterID = "http://localhost/5Seconds/UpdateGameCenterID.php";
+    public const string URLLogin = "http://localhost/5Seconds/Login.php";
+    public const string URLPlayGame = "http://localhost/5Seconds/PlayGame.php";
+*/
+    // public server on linode, NoArtistStudio.com
+    public const string URLRegisterUser = "https://NoArtistStudio.com/Games5Seconds/Register.php";
+    public const string URLUpdateGameCenterID = "https://NoArtistStudio.com/Games5Seconds/UpdateGameCenterID.php";
+    public const string URLLogin = "https://NoArtistStudio.com/Games5Seconds/Login.php";
+    public const string URLPlayGame = "https://NoArtistStudio.com/Games5Seconds/PlayGame.php";
+
     [Header("----------这里是预定义的游戏参数----------")]
     public Color[] GameBoardColor;
 
     public Sprite SptAnswerRight;
     public Sprite SptAnswerWrong;
+    public Sprite SptAnswerTimeout;
 
     public Sprite[] SptShapes;
     public Sprite[] SptHands;
@@ -121,8 +149,12 @@ public class MainPage : MonoBehaviour {
 
     public float FiveWithBoardFarDelta = 40;
 
-    public AnimationCurve CurveNoArtist;
+    public AnimationCurve CurveNoArtistScaleX;
+    public AnimationCurve CurveNoArtistScaleY;
+    public AnimationCurve CurveNoArtistPosY;
+
     public float NoArtistHideDuration = 0.6f;
+    public float GameOverHideDuration = 0.6f;
     public int NoArtistHidePosY = 240;
     public int NoArtistHideXWide = 360;
     public float NoArtistHideAngle = 5;
@@ -132,6 +164,14 @@ public class MainPage : MonoBehaviour {
 
     public AnimationCurve CurvePlayButtonZoom;
     public float PlayButtonZoomDuration;
+
+    public AnimationCurve CurveBoardMoveX;
+    public AnimationCurve CurveBoardMoveY;
+    public AnimationCurve CurveBoardMoveZoom;
+
+    public AnimationCurve CurveBoardMoveXOut;
+    public AnimationCurve CurveBoardMoveYOut;
+    public AnimationCurve CurveBoardMoveZoomOut;
 
 
     /*
@@ -159,23 +199,28 @@ public class MainPage : MonoBehaviour {
     public Sprite Spt321GoHand2;
     public Sprite Spt321GoHand1;
 
+    public URLController urlController;
+
 
     [Header("----------这里是UI对象----------")]
     public RectTransform RectFiveWithBoard;
-    public Image ImgFive;
-    public Image ImgFiveBoard;
+    //public Image ImgFive;
+    //public Image ImgFiveBoard;
 
     public RectTransform RectBtnPlay;
     public RectTransform RectBtnLeaderboard;
     public RectTransform RectBtnMoreGames;
     public RectTransform RectBtnSounds;
+    public RectTransform RectImgButtonBG;
 
     public Image ImgBtnPlay;
     public Image ImgBtnLeaderboard;
     public Image ImgBtnMoreGames;
     public Image ImgBtnSound;
 
+
     public RectTransform RectGameOver;
+    public Image ImgGameOverBG;
     public Text TxtGameOverTimeup;
     public Text TxtGameOver;
     public Text TxtGameOverScore;
@@ -202,10 +247,12 @@ public class MainPage : MonoBehaviour {
     public Text TxtTimeSecond;
     public Text TxtTimeColon;
     public Text TxtTimeMiSecond;
-    public Text TxtTimePlusFive;
+    //public Text TxtTimePlusFive;
     public Text TxtScore;
     public Text TxtGameRightNumber;
-    public Text TxtGameWrongNumber;
+    //public Text TxtGameWrongNumber;
+
+    public Image[] ImgLives;
 
     public RectTransform RectNoArtist;
     public Image  ImgNoArtist;
@@ -276,6 +323,8 @@ public class MainPage : MonoBehaviour {
     int _gameNumber;
     float _gameTime;
     float _totalGameTime;
+    string _gameResult="";
+    int _lives;
 
     int _nextGameIndex;
 
@@ -290,6 +339,8 @@ public class MainPage : MonoBehaviour {
     float _secondDropTimer;
 
     int _gamePlayedCounter;
+    int _gameSeed;
+    string _levelResult;
    
     // 触摸相关处理
     public struct TouchInfo
@@ -308,6 +359,8 @@ public class MainPage : MonoBehaviour {
     Vector2 _lastMousePosition;
 
     Vector2 _testMousePostion;
+
+    DateTime _loginTime;
 
     protected int AddCallbackFunction( CallbackFunction callback ) {
         return AddCallbackFunction( callback, 0, false );
@@ -330,9 +383,11 @@ public class MainPage : MonoBehaviour {
     }
 
     void Awake() {
+        Debug.Log( "Application awake!" );
+
         _instance = this;
 
-            _callbackList = new List<CallbackItem>();
+        _callbackList = new List<CallbackItem>();
 
         _record = LoadGame();
 
@@ -354,16 +409,20 @@ public class MainPage : MonoBehaviour {
         }
 
         _gamePlayedCounter = 0;
+
+
+
     }
 
-    bool _adBannerLoaded;
+    //bool _adBannerLoaded;
     BannerView _bannerView;
     InterstitialAd _interstitial;
-    int _gameOverCount;
+    //int _gameOverCount;
     bool _showAd;
 
 	// Use this for initialization
 	void Start () {
+        Debug.Log( "Application start!" );
 
         //MainCamera.backgroundColor = new Color( 0/255.0f, 144/255.0f, 118/255.0f, 1.0f );
 
@@ -465,8 +524,8 @@ public class MainPage : MonoBehaviour {
 
         //HeyzapAds.ShowMediationTestSuite();
 
-        _adBannerLoaded = false;
-        _gameOverCount=0;
+       //_adBannerLoaded = false;
+        //_gameOverCount=0;
         RequestInterstitial();
         RequestBanner();
 
@@ -477,6 +536,15 @@ public class MainPage : MonoBehaviour {
                     "\nUser ID: " + Social.localUser.id + 
                     "\nIsUnderage: " + Social.localUser.underage;
                 Debug.Log (userInfo);
+
+                if((_record.gamecenterIDReported==false)&&(_record.playerID!=-1)) {
+                    Dictionary<string,string> postData = new Dictionary<string,string>();
+                    postData.Add( "playerID", _record.playerID.ToString() );
+                    postData.Add( "gamecenterID", Social.localUser.userName );
+
+
+                    urlController.POST( URLUpdateGameCenterID,  postData );
+                }
             }
             else {
                 Debug.Log ("Authentication failed");
@@ -515,12 +583,6 @@ public class MainPage : MonoBehaviour {
             _currentGameRect[i].localPosition = new Vector3( ScreenWidth, 0, 0 );
         }
 
-        color = TxtTimePlusFive.color;
-        color.a = 0;
-        TxtTimePlusFive.color = color;
-
-       // ImgWhiteBar.color = color;
-
         _gamePlayed = new bool[MaxGameNumber];
 
         Vector3 pos = RectTopBar.localPosition;
@@ -555,15 +617,14 @@ public class MainPage : MonoBehaviour {
         RectBtnLeaderboard.localScale = Vector3.zero;
         RectBtnMoreGames.localScale = Vector3.zero;
         RectBtnSounds.localScale = Vector3.zero;
+        RectImgButtonBG.localScale = new Vector3(1, 0, 1);
+            
 
         pos = RectGameOver.localPosition;
         pos.x = ScreenWidth;
         RectGameOver.localPosition = pos;
 
         _secondDropTimer = -1;
-
-
-
       
         ImgSeconds.gameObject.SetActive( false );
         SetFiveWithBoardAngle( 0 );
@@ -584,11 +645,55 @@ public class MainPage : MonoBehaviour {
         ImgTouchCover.gameObject.SetActive( false );
 
         //StartGame();
+
+        urlController.wwwCallback = MainWWWCallbackFunction;
+
+
+
+       // Debug.Log( "WWW result:"+www.text );
 	}
 
     void OnApplicationPause(bool paused)
     {
-        _gamePlayedCounter = 0;
+        Debug.Log( "OnApplicationPause:"+paused );
+
+        if(paused==true) {
+            _gamePlayedCounter = 0;
+
+            DateTime logoutTime = DateTime.Now;
+           
+            _record.logoutTime = (logoutTime.Year%100).ToString("00")+logoutTime.Month.ToString("00")+logoutTime.Day.ToString("00")
+                +logoutTime.Hour.ToString("00")+logoutTime.Minute.ToString("00")+logoutTime.Second.ToString("00");
+            _record.duration =(int) (logoutTime-_loginTime).TotalSeconds;
+
+            SaveGame();
+        }
+    }
+
+    void OnApplicationFocus(bool focused) {
+        Debug.Log( "OnApplicationFocus:"+focused );
+
+        if(focused==true) {
+            if(_record.playerID==-1) {
+                urlController.GET( URLRegisterUser );
+            }
+            else {
+                Dictionary<string,string> postData = new Dictionary<string,string>();
+                postData.Add( "playerID", _record.playerID.ToString() );
+                postData.Add( "loginID", _record.loginID.ToString() );
+                postData.Add( "logoutTime", _record.logoutTime );
+                postData.Add( "duration", _record.duration.ToString() );
+
+                urlController.POST( URLLogin,  postData );
+
+                Debug.Log( "Send Login:"+_record.playerID.ToString()+"---"+_record.loginID.ToString()+"---"+_record.logoutTime+"---"+ _record.duration.ToString() );
+
+                _record.loginID++;
+                SaveGame();
+            }
+
+            _loginTime = DateTime.Now;
+        }
     }
 	
 	// Update is called once per frame
@@ -684,8 +789,6 @@ public class MainPage : MonoBehaviour {
         }
 	}
 
-    Sequence testSeq;
-
     void FixedUpdate() {
 
         foreach( CallbackItem item in _callbackList ) {
@@ -710,13 +813,6 @@ public class MainPage : MonoBehaviour {
             deleteFlag = false;
         }while(deleteFlag==true);
 
-        if(_touchCount>0) {
-            //Debug.Log( "Touched!!!"+_touches[0].phase+"---"+_touches[0].position );
-        }
-
-        int second=10;
-        int miSecond=0;
-
         Vector3 pos;
 
         switch(_status ) {
@@ -733,40 +829,47 @@ public class MainPage : MonoBehaviour {
             if(_timer<0){
                 
                 _fiveSpeedY=0;
-                Gravity = 2400;
+                Gravity = 3200;
                 _status=Status_ShowFiveWithBoard;
-            }
 
+                pos = RectFiveWithBoard.localPosition;
+                pos.y=1280;
+                RectFiveWithBoard.localPosition = pos;
+            }
           
             float scale = (NoArtistHideDuration-_timer)/NoArtistHideDuration;
-            float rate = CurveNoArtist.Evaluate( scale );
+            //float rate = CurveNoArtist.Evaluate( scale );
 
-            float targetY=NoArtistHidePosY*rate;
-
+            float targetY=NoArtistHidePosY*CurveNoArtistPosY.Evaluate( scale );
 
             pos =RectNoArtist.localPosition;
-            pos.y = targetY*rate;
+            pos.y = targetY;
             RectNoArtist.localPosition=pos;
 
-
-            float scaleY=1-0.98f*rate;
-            float scaleX=((640-NoArtistHideXWide)*(1-rate)+NoArtistHideXWide)/640.0f;
+            float scaleY=1-0.98f*CurveNoArtistScaleY.Evaluate(scale);
+            if(scaleY<0.02f) {
+                scaleY = 0.02f;
+            }
+            float scaleX=((640-NoArtistHideXWide)*(1-CurveNoArtistScaleX.Evaluate(scale))+NoArtistHideXWide)/640.0f;
 
             RectNoArtist.localScale = new Vector3( scaleX, scaleY, 1);
 
-
-            if(scale>0.6f) {
+            if(scale<0.4f) {
                 Color sourceColor = new Color( 198/255.0f, 80/255.0f, 80/255.0f, 1.0f );
-                Color targetColor = Color.white;
-
-                ImgWhiteBar.color = Color.Lerp( sourceColor, targetColor, (scale-0.6f)/0.4f );
+                Color targetColor = new Color( 80/255.0f, 160/255.0f, 212/255.0f, 1.0f );
+                    
+                ImgWhiteBar.color = Color.Lerp( sourceColor, targetColor, scale/0.6f );
 
                 sourceColor = ImgNoArtist.color;
                 sourceColor.a = 1.0f;
                 targetColor = ImgNoArtist.color;
                 targetColor.a = 0.0f;
 
-                ImgNoArtist.color = Color.Lerp( sourceColor, targetColor, ( scale-0.6f)/ 0.4f );
+                ImgNoArtist.color = Color.Lerp( sourceColor, targetColor, scale/ 0.6f );
+            }
+            else {
+                ImgWhiteBar.color = new Color( 80/255.0f, 160/255.0f, 212/255.0f, 1.0f );
+                ImgNoArtist.color = new Color( 80/255.0f, 160/255.0f, 212/255.0f, 1.0f );
             }
 
             break;
@@ -776,8 +879,8 @@ public class MainPage : MonoBehaviour {
             pos = RectFiveWithBoard.localPosition;
             pos.y-=_fiveSpeedY*Time.fixedDeltaTime;
 
-            if(pos.y<400){
-                pos.y=400;
+            if(pos.y<320){
+                pos.y=320;
                 Gravity/=1.5f;
                 _fiveSpeedY*=-0.32f;
 
@@ -791,6 +894,8 @@ public class MainPage : MonoBehaviour {
 
                 if((_secondDropTimer>0)&&(_secondDropTimer<0.5f)&&(_buttonShowed==false)) {
                     _buttonShowed=true;
+                    DOTween.Play( RectImgButtonBG.DOScale( Vector3.one, 0.2f).SetEase( Ease.OutBack ) );
+
                     DOTween.Play( RectBtnSounds.DOScale( Vector3.one, 0.25f).SetEase( Ease.OutBack ) );
                     DOTween.Play( RectBtnMoreGames.DOScale( Vector3.one, 0.25f).SetEase( Ease.OutBack ).SetDelay(0.1f) );
                     DOTween.Play( RectBtnLeaderboard.DOScale( Vector3.one, 0.25f).SetEase( Ease.OutBack ).SetDelay(0.2f) );
@@ -809,8 +914,6 @@ public class MainPage : MonoBehaviour {
                             seq.Append( RectBtnPlay.DOScale( Vector3.one*1.5f, PlayButtonZoomDuration).SetEase(CurvePlayButtonZoom));
                             seq.Append( RectBtnPlay.DOScale( Vector3.one, PlayButtonZoomDuration).SetEase(CurvePlayButtonZoom));
                             DOTween.Play( seq);
-
-                            //OTween.Play( RectBtnPlay.DOScale( Vector3.one*1.5f, 1.25f).SetLoops( -1, LoopType.Yoyo ) );
 
                         }, 2.6f, true );
                         _btnOtherCallbackIndex = AddCallbackFunction( ()=> {
@@ -873,109 +976,83 @@ public class MainPage : MonoBehaviour {
             }
         }
 
-
-
-
         if((_currentGameController!=null)&&(_status==Status_Playing)) {
             if(_currentGameController[_nextBoardIndex].status==GameLogic.Status_Playing) {
-                int secondValue = (int)_gameTime;
-                _gameTime-=Time.fixedDeltaTime;
-                _totalGameTime+=Time.fixedDeltaTime;
-                _currentGameTimer-=Time.fixedDeltaTime;
+                ShowGameTime();
+            }
+        }
+    }
 
-                if(secondValue!=(int)_gameTime) {
-                    if(secondValue<=5) {
-                        Sequence seq = DOTween.Sequence();
-                        seq = DOTween.Sequence();
-                        seq.Append( TxtTimeSecond.rectTransform.DOScale( 1.2f, 0.2f) );
-                        seq.Append( TxtTimeSecond.rectTransform.DOScale( 1.0f, 0.5f) );
-                        DOTween.Play( seq );
+    Tween tweenSecond, tweenColon, tweenMiSecond;
 
-                        seq = DOTween.Sequence();
-                        seq.Append( TxtTimeColon.rectTransform.DOScale( 1.2f, 0.2f) );
-                        seq.Append( TxtTimeColon.rectTransform.DOScale( 1.0f, 0.5f) );
-                        DOTween.Play( seq );
+    void ShowGameTime() {
+        int secondValue = (int)_currentGameTimer;
 
-                        seq = DOTween.Sequence();
-                        seq.Append( TxtTimeMiSecond.rectTransform.DOScale( 1.2f, 0.2f) );
-                        seq.Append( TxtTimeMiSecond.rectTransform.DOScale( 1.0f, 0.5f) );
-                        DOTween.Play( seq );
+        _totalGameTime+=Time.fixedDeltaTime;
+        _currentGameTimer-=Time.fixedDeltaTime;
 
-                        Color color = new Color( 1.0f, 0.5f-0.1f*(6-secondValue), 0.5f-0.1f*(6-secondValue), 1.0f );
-                        seq = DOTween.Sequence();
-                        seq.Append( TxtTimeSecond.DOColor(  color, 0.2f) );
-                        color = new Color( 1.0f, 0.5f-0.1f*(5-secondValue), 0.5f-0.1f*(5-secondValue), 1.0f );
-                        seq.Append( TxtTimeSecond.DOColor(  color, 0.5f).OnComplete( ()=> {
-                            if(_gameTime>5) {
-                                AddCallbackFunction( ()=> {
-                                    TxtTimeSecond.color = Color.white;
-                                    TxtTimeMiSecond.color = Color.white;
-                                    TxtTimeColon.color = Color.white;
-                                } );
-                            }
-                        } ) );
-                        DOTween.Play( seq );
+        if(secondValue!=(int)_currentGameTimer) {
+            if(secondValue<=3) {
+                Sequence seq = DOTween.Sequence();
+                seq = DOTween.Sequence();
+                seq.Append( TxtTimeSecond.rectTransform.DOScale( 1.2f, 0.2f) );
+                seq.Append( TxtTimeSecond.rectTransform.DOScale( 1.0f, 0.5f) );
+                DOTween.Play( seq );
 
-                        color = new Color( 1.0f, 1.0f-0.2f*(6-secondValue), 1.0f-0.2f*(6-secondValue), 1.0f );
-                        seq = DOTween.Sequence();
-                        seq.Append( TxtTimeColon.DOColor(  color, 0.2f) );
-                        color = new Color( 1.0f, 1.0f-0.2f*(5-secondValue), 1.0f-0.2f*(5-secondValue), 1.0f );
-                        seq.Append( TxtTimeColon.DOColor(  color, 0.5f) );
-                        DOTween.Play( seq );
+                seq = DOTween.Sequence();
+                seq.Append( TxtTimeColon.rectTransform.DOScale( 1.2f, 0.2f) );
+                seq.Append( TxtTimeColon.rectTransform.DOScale( 1.0f, 0.5f) );
+                DOTween.Play( seq );
 
-                        color = new Color( 1.0f, 1.0f-0.2f*(6-secondValue), 1.0f-0.2f*(6-secondValue), 1.0f );
-                        seq = DOTween.Sequence();
-                        seq.Append( TxtTimeMiSecond.DOColor(  color, 0.2f) );
-                        color = new Color( 1.0f, 1.0f-0.2f*(5-secondValue), 1.0f-0.2f*(5-secondValue), 1.0f );
-                        seq.Append( TxtTimeMiSecond.DOColor(  color, 0.5f) );
-                        DOTween.Play( seq );
-                    }
-                }
+                seq = DOTween.Sequence();
+                seq.Append( TxtTimeMiSecond.rectTransform.DOScale( 1.2f, 0.2f) );
+                seq.Append( TxtTimeMiSecond.rectTransform.DOScale( 1.0f, 0.5f) );
+                DOTween.Play( seq );
 
-                if(_gameTime<0){
-                    _gameTime=0;
+                Color color = new Color( 1.0f, 0.5f-0.1f*(6-secondValue), 0.5f-0.1f*(6-secondValue), 1.0f );
+                seq = DOTween.Sequence();
+                seq.Append( TxtTimeSecond.DOColor(  color, 0.2f) );
+                color = new Color( 1.0f, 0.5f-0.1f*(5-secondValue), 0.5f-0.1f*(5-secondValue), 1.0f );
+                seq.Append( TxtTimeSecond.DOColor(  color, 0.5f));
+                DOTween.Play( seq );
+                tweenSecond = seq;
 
-                    PlaySound( Sound_GameOver );
-                    _status = Status_GameOver;
+                color = new Color( 1.0f, 0.5f-0.1f*(6-secondValue), 0.5f-0.1f*(6-secondValue), 1.0f );
+                seq = DOTween.Sequence();
+                seq.Append( TxtTimeColon.DOColor(  color, 0.2f) );
+                color = new Color( 1.0f, 0.5f-0.1f*(5-secondValue), 0.5f-0.1f*(5-secondValue), 1.0f );
+                seq.Append( TxtTimeColon.DOColor(  color, 0.5f) );
+                DOTween.Play( seq );
+                tweenColon = seq;
 
-                    // Show game over
-                    _bannerView.Hide();
+                color = new Color( 1.0f, 0.5f-0.1f*(6-secondValue), 0.5f-0.1f*(6-secondValue), 1.0f );
+                seq = DOTween.Sequence();
+                seq.Append( TxtTimeMiSecond.DOColor(  color, 0.2f) );
+                color = new Color( 1.0f, 0.5f-0.1f*(5-secondValue), 0.5f-0.1f*(5-secondValue), 1.0f );
+                seq.Append( TxtTimeMiSecond.DOColor(  color, 0.5f) );
+                DOTween.Play( seq );
+                tweenMiSecond = seq;
 
-                    pos = RectTopBar.localPosition;
-                    pos.y+=160;
-                    DOTween.Play( RectTopBar.DOLocalMoveY(pos.y, 0.35f ).SetEase( Ease.OutCubic ).SetDelay( 0.25f )  );
-
-                    RectGameOver.gameObject.SetActive( true );
-                    TxtGameOverTimeup.color = new Color( 208/255.0f, 64/255.0f, 64/255.0f, 1.0f );
-                    TxtGameOverTimeup.rectTransform.localPosition = Vector3.zero;
-                    TxtGameOverTimeup.rectTransform.localScale = new Vector3( 1, 3, 1 );
-                    TxtGameOverTimeup.text = "TIME UP";
-                    RectGameOver.localScale = new Vector3( 1, 0.333333f, 1 );
-                    RectGameOver.localPosition = new Vector3( ScreenWidth, 0, 0 );
-
-                    HideGameOverInfo();
-
-                    MoveGameOut( _nextBoardIndex );
-
-                    DOTween.Play( RectGameOver.DOLocalMoveX( 0, 0.35f ).SetEase( Ease.OutBack ).SetDelay( 0.45f ).OnComplete( ()=> {
-                        ShowGameOver();
-                    } ) );
-                }
-
-                second = (int)_gameTime;
-                miSecond = (int)((_gameTime-second)*100);
-
-                if(second<100) {
-                    TxtTimeSecond.text = second.ToString("00");
-                }
-                else {
-                    TxtTimeSecond.text = second.ToString("000");
-                }
-                TxtTimeMiSecond.text = miSecond.ToString( "00" );
             }
         }
 
+        if(_currentGameTimer<0) {
+            _currentGameController[_nextBoardIndex].gameLogic.SetGameTimeout(  );
+            _currentGameTimer = 0;
+        }
+
+        int second = (int)_currentGameTimer;
+        int miSecond = (int)((_currentGameTimer-second)*100);
+
+        if(second<100) {
+            TxtTimeSecond.text = second.ToString("00");
+        }
+        else {
+            TxtTimeSecond.text = second.ToString("000");
+        }
+        TxtTimeMiSecond.text = miSecond.ToString( "00" );
     }
+
 
     void HideGameOverInfo() {
         Color color = TxtGameOver.color;
@@ -1025,7 +1102,7 @@ public class MainPage : MonoBehaviour {
         color = TxtGameOverBestGamesValue.color;
         color.a = 0;
         TxtGameOverBestGamesValue.color = color;
-        TxtGameOverBestGamesValue.text = _rightGameNumber.ToString();
+        TxtGameOverBestGamesValue.text = _record.bestGameNumber.ToString();
 
         color = TxtGameOverGamesValueBest.color;
         color.a = 0;
@@ -1055,6 +1132,9 @@ public class MainPage : MonoBehaviour {
         _nextGameIndex = 0;
         _nextBoardIndex = 0;
 
+        _gameSeed = KWUtility.Random( 0, 1000000 );
+        _levelResult = "";
+
         TxtTimeColon.color = Color.white;
         TxtTimeSecond.color = Color.white;
         TxtTimeMiSecond.color = Color.white;
@@ -1075,20 +1155,34 @@ public class MainPage : MonoBehaviour {
         _score = 0;
         TxtScore.text = _score.ToString();
 
+        _lives = 5;
+
+        _gameResult = "";
+
         _rightGameNumber = 0;
         _wrongGameNumber = 0;
 
         TxtGameRightNumber.text = _rightGameNumber.ToString();
-        TxtGameWrongNumber.text = _wrongGameNumber.ToString();
 
         if(_showAd==true) {
             _bannerView.Show();
         }
+
+        _record.gamePlayIndex++;
+        SaveGame();
+
+        TxtTimeSecond.color = new Color( 242/255.0f, 232/255.0f, 232/255.0f, 1.0f );
+        TxtTimeSecond.text = "05";
+        TxtTimeColon.color = new Color( 242/255.0f, 232/255.0f, 232/255.0f, 1.0f );
+        TxtTimeMiSecond.color = new Color( 242/255.0f, 232/255.0f, 232/255.0f, 1.0f );
+        TxtTimeMiSecond.text = "00";
+
+        for( int m=0; m<5; m++ ) {
+            ImgLives[m].color = new Color( 72/255.0f, 232/255.0f, 32/255.0f, 1.0f );
+        }
     }
 
     void SetFiveWithBoardAngle( float angle ) {
-        Debug.Log( "Angle:"+angle );
-
         float deltaX, deltaY;
 
         angle=angle*3.1415927f/180;
@@ -1112,7 +1206,7 @@ public class MainPage : MonoBehaviour {
     }
 
     void CreateNextGame() {
-        Debug.Log( "Create next game!!" );
+        Debug.Log( "Create next game!!"+_nextGameIndex );
 
         if(_nextGameIndex%MaxGameNumber==0) {
             for(int m=0;m<MaxGameNumber;m++ ) {
@@ -1120,14 +1214,25 @@ public class MainPage : MonoBehaviour {
             }
         }
 
+        KWUtility.SetRandomSeed( _gameSeed );
+
+        for( int m=0; m<_nextGameIndex;m++ ) {
+            KWUtility.Random( 0, 10000 );
+        }
+
         int gameID;
         do {
             gameID = KWUtility.Random( 0, MaxGameNumber );
         } while( _gamePlayed[gameID]==true );
 
+        Debug.Log( "Game ID:"+gameID+"---"+_gamePlayed[gameID] );
+
         _gamePlayed[gameID] = true;
 
-        GameLogic gameLogic = GameLogic.GetGameLogic( gameID, _nextGameIndex/4 );
+
+        //int gameID = _nextGameIndex%MaxGameNumber;
+
+        GameLogic gameLogic = GameLogic.GetGameLogic( gameID, _nextGameIndex/4, KWUtility.Random( 0, 10000 ) );
         _currentGameController[_nextBoardIndex].SetGameLogic( gameLogic );
 
         _nextGameIndex++;
@@ -1136,8 +1241,10 @@ public class MainPage : MonoBehaviour {
     }
 
     void MoveGameOut( int boardIndex ) {
-        DOTween.Play( _currentGameRect[boardIndex].DOScale( Vector3.one*0.6f, 0.25f ).SetEase( Ease.InCubic )  );
-        DOTween.Play( _currentGameRect[boardIndex].DOLocalMoveX( -1*ScreenWidth, 0.25f ).SetEase( Ease.InCubic ).OnComplete( () => {
+        
+        DOTween.Play( _currentGameRect[boardIndex].DOScale( Vector3.one*0.2f, 0.85f ).SetEase( CurveBoardMoveZoomOut )  );
+        DOTween.Play( _currentGameRect[boardIndex].DOLocalMoveY(  -1*ScreenHeight*5/12, 0.85f ).SetEase( CurveBoardMoveYOut ) );
+        DOTween.Play( _currentGameRect[boardIndex].DOLocalMoveX( -2.0f/3*ScreenWidth, 0.85f ).SetEase( CurveBoardMoveXOut ).OnComplete( () => {
             _currentGameController[boardIndex].Clear();
         } ) );
     }
@@ -1145,82 +1252,153 @@ public class MainPage : MonoBehaviour {
     void MoveGameIn( int boardIndex ) {
         _currentGameController[boardIndex].gameObject.SetActive( true );
 
-        _currentGameRect[boardIndex].localScale = Vector3.one*0.6f;
-        _currentGameRect[boardIndex].localPosition = new Vector3( ScreenWidth, 0, 0 );
+        _currentGameRect[boardIndex].localScale = Vector3.one*0.2f;
+        _currentGameRect[boardIndex].localPosition = new Vector3( ScreenWidth*2.0f/3, ScreenHeight/3, 0 );
 
-        DOTween.Play( _currentGameRect[boardIndex].DOScale( Vector3.one*1.1f, 0.35f ).SetEase( Ease.OutCubic ).SetDelay( 0.25f )  );
-        DOTween.Play( _currentGameRect[boardIndex].DOLocalMoveX( 0, 0.35f ).SetEase( Ease.OutCubic ).SetDelay( 0.25f ).OnComplete( ()=> {
+        DOTween.Play( _currentGameRect[boardIndex].DOLocalMoveX(  0, 0.65f ).SetEase( CurveBoardMoveX ).SetDelay( 0.85f ));
+        DOTween.Play( _currentGameRect[boardIndex].DOLocalMoveY(  0, 0.65f ).SetEase( CurveBoardMoveY ).SetDelay( 0.85f ) );
+        DOTween.Play( _currentGameRect[boardIndex].DOScale( Vector3.one*1.1f, 1.0f ).SetEase( CurveBoardMoveZoom ).SetDelay( 0.85f ).OnComplete( ()=> {
             _currentGameController[boardIndex].StartGame();
         } ) );
+
+
     }
 
     public void SendGameResult(bool isWin) {
 
+
+        int duration = (int)(_currentGameTimer*1000);
+        int score=0;
+        int success=0;
+
         if(isWin) {
             _gameTime+=5;
 
-            TxtTimePlusFive.text = "+5";
-            TxtTimePlusFive.color = new Color( 0.4f, 1.0f, 0.4f, 0.0f );
-
-            testSeq.Kill(true); 
+          
             TxtTimeMiSecond.color = Color.white;
             TxtTimeSecond.DOKill(); 
             TxtTimeSecond.color = Color.white;
             TxtTimeColon.DOKill(); 
             TxtTimeColon.color = Color.white;
 
-
-
-            Sequence seq = DOTween.Sequence();
-            Color color = TxtTimePlusFive.color;
-            color.a = 1.0f;
-
-            seq.Append( TxtTimePlusFive.DOColor( color, 0.1f) );
-            color.a = 0;
-            seq.Append( TxtTimePlusFive.DOColor( color, 1.0f) );
-
-            DOTween.Play( seq );
-
             if(_currentGameTimer>0) {
-                int baseScore=100;
+                float baseScore=20;
                 int difficult = (_nextGameIndex-1)/5+1;
                 for(int m=0;m<difficult;m++){
-                    baseScore*=2;
+                    baseScore*=1.5f;
                 }
-                _score+=(int)(baseScore*_currentGameTimer);
+                int baseScoreInt = ((int)(baseScore/10))*10;
+                score = (int)(baseScoreInt*_currentGameTimer)*5;
+                _score+=score;
                 TxtScore.text = _score.ToString();
             }
 
-            _currentGameTimer = 5.0f;
+
 
             _rightGameNumber++;
             TxtGameRightNumber.text = _rightGameNumber.ToString();
+
+            success = 1;
         }
         else {
             _gameTime-=5;
 
-            TxtTimePlusFive.text = "-5";
-            TxtTimePlusFive.color = new Color( 1.0f, 0.4f, 0.4f, 0.0f );
+
+            score = 0;
+
+            //_wrongGameNumber++;
+           // TxtGameWrongNumber.text = _wrongGameNumber.ToString();
+
+            _lives--;
+
+            Color color = new Color( 72/255.0f, 232/255.0f, 32/255.0f, 1.0f );
+            color = new Color( 218/255.0f, 32/255.0f, 32/255.0f, 1.0f );
+
+            DOTween.Play( ImgLives[_lives].DOColor( color, 0.35f ) );
 
             Sequence seq = DOTween.Sequence();
-            Color color = TxtTimePlusFive.color;
-            color.a = 1.0f;
-
-            seq.Append( TxtTimePlusFive.DOColor( color, 0.1f) );
-            color.a = 0;
-            seq.Append( TxtTimePlusFive.DOColor( color, 1.0f) );
-
+            seq.Append( ImgLives[_lives].rectTransform.DOScale( Vector3.one*2, 0.25f ) );
+            seq.Append( ImgLives[_lives].rectTransform.DOScale( Vector3.one, 0.25f ) );
             DOTween.Play( seq );
 
-            _currentGameTimer = 5.0f;
-
-            _wrongGameNumber++;
-            TxtGameWrongNumber.text = _wrongGameNumber.ToString();
+            success = 0;
         }
+
+        TxtTimeSecond.color = Color.white;
+        TxtTimeMiSecond.color = Color.white;
+        TxtTimeColon.color = Color.white;
+
+        GameLogic gameLogic = _currentGameController[_nextBoardIndex].gameLogic;
+
+        _gameResult += gameLogic.gameID.ToString()+"I";
+        _gameResult += gameLogic.difficulty.ToString()+"I";
+        _gameResult += duration.ToString()+"I";
+        _gameResult += score+"I";
+        _gameResult += success+"I";
+        _gameResult += gameLogic.seed.ToString()+"L";
+
+        if(_lives==0) {
+            PlaySound( Sound_GameOver );
+            _status = Status_GameOver;
+
+            // Show game over
+
+            Dictionary<string,string> postData = new Dictionary<string,string>();
+            postData.Add( "playerID", _record.playerID.ToString() );
+            postData.Add( "gameplayid", _record.gamePlayIndex.ToString() );
+            postData.Add( "duration", ((int)_totalGameTime*1000).ToString() );
+            postData.Add( "levelplayed", _rightGameNumber.ToString() );
+            postData.Add( "seed", _gameSeed.ToString() );
+            postData.Add( "score", _score.ToString() );
+            postData.Add( "levelData", _gameResult );
+
+            urlController.POST( URLPlayGame,  postData );
+
+            _bannerView.Hide();
+
+            Vector3 pos = RectTopBar.localPosition;
+            pos.y+=160;
+            DOTween.Play( RectTopBar.DOLocalMoveY(pos.y, 0.35f ).SetEase( Ease.OutCubic ).SetDelay( 0.25f )  );
+
+            RectGameOver.gameObject.SetActive( true );
+
+            ImgGameOverBG.color = new Color( 242/255.0f, 242/255.0f, 218/255.0f, 1.0f );
+
+            TxtGameOverTimeup.color = new Color( 208/255.0f, 64/255.0f, 64/255.0f, 1.0f );
+            TxtGameOverTimeup.rectTransform.localPosition = Vector3.zero;
+            TxtGameOverTimeup.rectTransform.localScale = new Vector3( 1, 3, 1 );
+            TxtGameOverTimeup.text = "GAMEOVER";
+            RectGameOver.localScale = new Vector3( 1, 0.333333f, 1 );
+            RectGameOver.localPosition = new Vector3( ScreenWidth, 0, 0 );
+
+            HideGameOverInfo();
+
+            MoveGameOut( _nextBoardIndex );
+
+            DOTween.Play( RectGameOver.DOLocalMoveX( 0, 0.35f ).SetEase( Ease.OutBack ).SetDelay( 0.45f ).OnComplete( ()=> {
+                ShowGameOver();
+            } ) );
+        }
+        else {
+            _currentGameTimer = 5.0f;
+            tweenSecond.Kill( true );
+            tweenColon.Kill( true );
+            tweenMiSecond.Kill( true );
+
+
+            TxtTimeSecond.color = new Color( 242/255.0f, 232/255.0f, 232/255.0f, 1.0f );
+            TxtTimeSecond.text = "05";
+            TxtTimeColon.color = new Color( 242/255.0f, 232/255.0f, 232/255.0f, 1.0f );
+            TxtTimeMiSecond.color = new Color( 242/255.0f, 232/255.0f, 232/255.0f, 1.0f );
+            TxtTimeMiSecond.text = "00";
+        }
+
     }
 
     public void ExecGameResult(  ) {
-        Debug.Log( "Mainpage SendGameResult!!!" );
+        if(_status==Status_GameOver) {
+            return;
+        }
 
         MoveGameOut( _nextBoardIndex );
 
@@ -1264,7 +1442,7 @@ public class MainPage : MonoBehaviour {
 
     public void OnButtonPlay() {
         Vector3 pos = RectBtnPlay.localPosition;
-
+        DOTween.Play( RectImgButtonBG.DOScaleY(0, 0.1f));
         DOTween.Play( RectBtnPlay.DOLocalMoveY( pos.y-ScreenHeight/5, 0.15f).SetEase( Ease.InCubic ) );
         DOTween.Play( RectBtnLeaderboard.DOLocalMoveY( pos.y-ScreenHeight/5, 0.15f).SetEase( Ease.InCubic ).SetDelay( 0.05f) );
         DOTween.Play( RectBtnMoreGames.DOLocalMoveY( pos.y-ScreenHeight/5, 0.15f).SetEase( Ease.InCubic ).SetDelay( 0.1f) );
@@ -1444,8 +1622,8 @@ public class MainPage : MonoBehaviour {
             color.a = 1;
             DOTween.Play( ImgBtnGameOverHome.DOColor( color, 0.15f).SetDelay(0.55f).OnComplete( () => {
                 int addEnergy = 0;
-                //if(_score>_record.bestScore) {
-                if(true) {
+                if(_score>_record.bestScore) {
+                //if(true) {
                     TxtGameOverScoreValueBest.gameObject.SetActive( true );
                     color = TxtGameOverScoreValueBest.color;
                     color.a = 0.2f;
@@ -1454,18 +1632,22 @@ public class MainPage : MonoBehaviour {
                     DOTween.Play( TxtGameOverScoreValueBest.DOColor( color,0.75f));
                     _record.bestScore = _score;
 
+                    Social.ReportScore (_record.bestScore, "com.kylinworks.games5seconds.lb.bestscore", success => {
+                        Debug.Log(success ? "Reported best score successfully" : "Failed to report score");
+                    });
+
                     addEnergy+=3;
                 }
 
-                //if(_rightGameNumber>_record.gameNumber) {
-                if(true) {
+                if(_rightGameNumber>_record.bestGameNumber) {
+                //ßif(true) {
                     TxtGameOverGamesValueBest.gameObject.SetActive( true );
                     color = TxtGameOverGamesValueBest.color;
                     color.a = 0.2f;
                     TxtGameOverGamesValueBest.color = color;
                     color.a = 1.0f;
                     DOTween.Play( TxtGameOverGamesValueBest.DOColor( color,0.75f) );
-                    _record.bestScore = _score;
+                    _record.bestGameNumber = _rightGameNumber;
 
                     addEnergy+=3;
                 }
@@ -1479,8 +1661,8 @@ public class MainPage : MonoBehaviour {
 
     public void OnButtonGameOverRetry() {
         _gamePlayedCounter++;
-        if(true) {
-            //if((_gamePlayedCounter%5==0)&&(HZIncentivizedAd.IsAvailable()==true)) {
+        //if(true) {
+        if((_gamePlayedCounter%5==0)&&(HZIncentivizedAd.IsAvailable()==true)) {
             _gamePlayedCounter=0;
 
             HideGameOverInfoAnimation();
@@ -1540,15 +1722,21 @@ public class MainPage : MonoBehaviour {
         RectBtnMoreGames.localPosition = pos;
         RectBtnMoreGames.localScale = Vector3.zero;
 
-        DOTween.Play( RectGameOver.DOScaleY( 0.01f, 0.5f ) );
-        DOTween.Play( RectGameOver.DOLocalMoveY( NoArtistHidePosY, 0.5f ).OnComplete( ()=> {
+        DOTween.Play( RectGameOver.DOScaleY( 0.003f, GameOverHideDuration/3 )/*.SetEase( CurveNoArtistScaleY )*/ );
+        DOTween.Play( RectGameOver.DOScaleX( 0.6f, GameOverHideDuration ).SetEase( CurveNoArtistScaleX ) );
+        Color color = new Color( 80/255.0f, 160/255.0f, 212/255.0f, 1.0f);
+        DOTween.Play( ImgGameOverBG.DOColor( color, GameOverHideDuration ) );
+        DOTween.Play( RectGameOver.DOLocalMoveY( NoArtistHidePosY, GameOverHideDuration ).SetEase( CurveNoArtistPosY ).OnComplete( ()=> {
             RectGameOver.gameObject.SetActive( false );
             ImgWhiteBar.gameObject.SetActive(true);
             RectNoArtist.gameObject.SetActive(true);
 
             _fiveSpeedY=0;
-            Gravity = 2400;
+            Gravity = 3200;
             _status=Status_ShowFiveWithBoard;
+            pos = RectFiveWithBoard.localPosition;
+            pos.y=1280;
+            RectFiveWithBoard.localPosition = pos;
             _secondDropTimer = -1;
         } ) );
 
@@ -1890,8 +2078,36 @@ public class MainPage : MonoBehaviour {
     }
 
     public void HandleOnAdLoaded(object sender, EventArgs args) {
-        _adBannerLoaded = true;
+        //_adBannerLoaded = true;
         _bannerView.Hide();
+    }
+
+    public void MainWWWCallbackFunction( WWW www ) {
+
+        // check for errors
+        if (www.error == null)
+        {
+            Debug.Log("WWW Ok!: " + www.text+ "------"+www.url);
+            if(www.url==URLRegisterUser) {
+                Debug.Log( "WWW Callback:"+www.text );
+                int playerID = Int32.Parse( www.text );
+                _record.playerID = playerID;
+                SaveGame();
+            }
+            else if(www.url==URLUpdateGameCenterID) {
+                _record.gamecenterIDReported = true;
+                SaveGame();
+            }
+            else if(www.url==URLLogin) {
+                _record.gamecenterIDReported = true;
+                SaveGame();
+            }
+        }
+        else
+        {
+            Debug.Log("WWW Error: " + www.error);
+        }
+
     }
 
     /*

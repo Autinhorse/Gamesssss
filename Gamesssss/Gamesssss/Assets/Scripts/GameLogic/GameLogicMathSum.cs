@@ -3,7 +3,7 @@ using System.Collections;
 
 public class GameLogicMathSum : GameLogicThreeButtons {
 
-    public GameLogicMathSum( int difficulty ) : base(difficulty) {
+    public GameLogicMathSum( int gameID, int difficulty, int randomSeed  ) : base(gameID,difficulty,randomSeed) {
     }
 
     public override void SetGameController( GameController controller ) {

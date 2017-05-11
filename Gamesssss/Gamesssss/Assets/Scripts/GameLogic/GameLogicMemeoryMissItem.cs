@@ -23,7 +23,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
     int _mapWidth;
     int _mapHeight;
 
-    public GameLogicMemeoryMissItem( int difficulty ) : base(difficulty) {
+    public GameLogicMemeoryMissItem( int gameID, int difficulty, int randomSeed  ) : base(gameID,difficulty,randomSeed) {
 
     }
 
@@ -49,7 +49,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
         }
         _timer = 2+_difficulty/2.0f;
 
-        _shapeNumber = 2+(_difficulty+1)*2;
+        _shapeNumber = 2+(_difficulty+1)/2;
             
 
         _mapData = new List<int>();
@@ -106,7 +106,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
                 }
             }
             break;
-       case 4:
+        case 4:
             _mapWidth = 2;
             _mapHeight = 2;
             for( int m=0; m<_mapWidth; m++) {
@@ -140,6 +140,8 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
             }
             break;
         case 7:
+        case 8:
+        case 9:
             _mapWidth = 3;
             _mapHeight = 3;
             for( int m=0; m<_mapWidth; m++) {
@@ -152,7 +154,8 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
                 }
             }
             break;
-        case 8:
+        case 10:
+        case 11:
             _mapWidth = 3;
             _mapHeight = 3;
             for( int m=0; m<_mapWidth; m++) {
@@ -165,7 +168,8 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
                 }
             }
             break;
-        case 9:
+        case 12:
+        case 13:
             _mapWidth = 3;
             _mapHeight = 3;
             for( int m=0; m<_mapWidth; m++) {
@@ -175,7 +179,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
                 }
             }
             break;
-        case 10:
+        case 14:
             _mapWidth = 4;
             _mapHeight = 3;
             for( int m=0; m<_mapWidth; m++) {
@@ -188,7 +192,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
                 }
             }
             break;
-        case 11:
+        case 15:
             _mapWidth = 3;
             _mapHeight = 4;
             for( int m=0; m<_mapWidth; m++) {
@@ -200,8 +204,8 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
                     shapeIndex++;
                 }
             }
-                break;
-        case 12:
+            break;
+        default:
             _mapWidth = 4;
             _mapHeight = 3;
             for( int m=0; m<_mapWidth; m++) {
@@ -258,6 +262,10 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
     }
 
     public override void FixedUpdate() {
+        if(_status==Status_Gameover) {
+            return;
+        }
+
         if(_status==Status_Remebering) {
             _timer-=Time.fixedDeltaTime;
             if(_timer<0) {

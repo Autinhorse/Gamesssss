@@ -25,7 +25,7 @@ public class GameLogicDecisionTapShape : GameLogic {
     int _shapeNumber;
     int _targetShape;
 
-    public GameLogicDecisionTapShape( int difficulty ) : base(difficulty) {
+    public GameLogicDecisionTapShape( int gameID, int difficulty, int randomSeed  ) : base(gameID,difficulty,randomSeed)  {
 
     }
 
@@ -63,46 +63,41 @@ public class GameLogicDecisionTapShape : GameLogic {
             shapeType=3;
             break;
         case 2:
-        case 3:
             _mapWidth=3;
             _mapHeight=4;
-            shapeType=3;
+            shapeType=4;
             break;
+        case 3:
         case 4:
-        case 5:
             _mapWidth=4;
             _mapHeight=4;
             shapeType=4;
             break;
-        case 6:
-        case 7:
-        case 8:
+        case 5:
             _mapWidth=4;
             _mapHeight=5;
-            shapeType=4;
+            shapeType=5;
             break;
-        case 9:
-        case 10:
+        case 6:
             _mapWidth=5;
             _mapHeight=5;
             shapeType=5;
             break;
-        case 11:
-        case 12:
+        case 7:
+        case 8:
             _mapWidth=5;
             _mapHeight=6;
-            shapeType=5;
+            shapeType=6;
             break;
-        case 13:
-        case 14:
+        case 9:
             _mapWidth=6;
             _mapHeight=6;
-            shapeType=5;
+            shapeType=6;
             break;
         default:
             _mapWidth=6;
             _mapHeight=6;
-            shapeType=5;
+            shapeType=7;
             break;
         }
         if(_mapWidth>2) {
@@ -130,7 +125,7 @@ public class GameLogicDecisionTapShape : GameLogic {
         for(int m=0;m<shapeType; m++ ) {
             bool same;
             do {
-                shapes[m]=KWUtility.Random( 0, shapeType );
+                shapes[m]=KWUtility.Random( 0, MainPage.instance.SptShapes.Length );
                 same = false;
                 for(int n=0;n<m;n++) {
                     if(shapes[m]==shapes[n]) {
@@ -150,7 +145,7 @@ public class GameLogicDecisionTapShape : GameLogic {
             }
         }
 
-        _shapeNumber = KWUtility.Random( _mapWidth*_mapHeight/3,_mapWidth*_mapHeight/2+1);
+        _shapeNumber = KWUtility.Random( _mapWidth*_mapHeight/4,_mapWidth*_mapHeight/3+1);
         int x, y;
         for(int m=0;m<_shapeNumber;m++ ) {
             do{
@@ -227,6 +222,7 @@ public class GameLogicDecisionTapShape : GameLogic {
         DOTween.Play( _mapBoard[x,y].rectTransform.DOScale( Vector3.zero, 0.5f ).SetEase( Ease.InBack ).OnComplete( ()=> {
             _blockNumber--;
             if(_blockNumber==0) {
+                _status = Status_Gameover;
                 _gameController.SendGameResult( true );
             }
         } ) );
@@ -257,6 +253,7 @@ public class GameLogicDecisionTapShape : GameLogic {
                 _shapeNumber--;
 
                 if(_shapeNumber==0) {
+                    _status = Status_Gameover;
                     _gameController.SendGameResult( true );
                 }
                 else {

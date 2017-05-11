@@ -33,72 +33,71 @@ public class GameLogic  {
 
     static int dif = 0;
 
-    public static GameLogic GetGameLogic( int gameID, int difficulty ) {
+    public static GameLogic GetGameLogic( int gameID, int difficulty, int randomSeed ) {
         GameLogic gameLogic = null;
-
 
         switch( gameID ) {
         case Game_Math_Sum:
-            gameLogic = new GameLogicMathSum( difficulty );
+            gameLogic = new GameLogicMathSum( gameID, difficulty, randomSeed );
             break;
         case Game_Math_Math:
-            gameLogic = new GameLogicMathMath( difficulty );
+            gameLogic = new GameLogicMathMath( gameID, difficulty, randomSeed );
             break;
         case Game_Math_WhichBig:
-            gameLogic = new GameLogicMathBigger( difficulty );
+            gameLogic = new GameLogicMathBigger( gameID, difficulty, randomSeed );
             break;
         case Game_Math_DiceSum:
-            gameLogic = new GameLogicMathDice( difficulty );
+            gameLogic = new GameLogicMathDice( gameID, difficulty, randomSeed );
             break;
         case Game_Decision_HowMany:
-            gameLogic = new GameLogicDecisionHowMany( difficulty );
+            gameLogic = new GameLogicDecisionHowMany( gameID, difficulty, randomSeed );
             break;
         case Game_Decision_Hand:
-            gameLogic = new GameLogicDecisionHand( difficulty );
+            gameLogic = new GameLogicDecisionHand( gameID, difficulty, randomSeed );
             break;
         case Game_Decision_NoExistChar:
-            gameLogic = new GameLogicDecisionNoExistChar( difficulty );
+            gameLogic = new GameLogicDecisionNoExistChar( gameID, difficulty, randomSeed );
             break;
         case Game_Decision_TapShape:
-            gameLogic = new GameLogicDecisionTapShape( difficulty );
+            gameLogic = new GameLogicDecisionTapShape( gameID, difficulty, randomSeed );
             break;
         case Game_Action_TapScreen:
-            gameLogic = new GameLogicActionTapScreen( difficulty );
+            gameLogic = new GameLogicActionTapScreen( gameID, difficulty, randomSeed );
             break;
         case  Game_Action_Spark:
-            gameLogic = new GameLogicActionSpark( difficulty );
+            gameLogic = new GameLogicActionSpark( gameID, difficulty, randomSeed );
             break;
         case Game_Action_ShootUFO:
-            gameLogic = new GameLogicActionShootUFO( difficulty );
+            gameLogic = new GameLogicActionShootUFO( gameID, difficulty, randomSeed );
             break;
         case Game_Action_SwipeArrow:
-            gameLogic = new GameLogicSwipeArrow( difficulty );
+            gameLogic = new GameLogicSwipeArrow( gameID, difficulty, randomSeed );
             break;
         
         case Game_Memory_Pair:
-            gameLogic = new GameLogicMemoryPair( difficulty );
+            gameLogic = new GameLogicMemoryPair( gameID, difficulty, randomSeed );
             break;
         case  Game_Memory_MissShape:
-            gameLogic = new GameLogicMemeoryMissItem( difficulty );
+            gameLogic = new GameLogicMemeoryMissItem( gameID, difficulty, randomSeed );
             break;
         case Game_Memory_NewShape:
-            gameLogic = new GameLogicMemoryNewItem( difficulty );
+            gameLogic = new GameLogicMemoryNewItem( gameID, difficulty, randomSeed );
             break;
         case Game_Memory_Order:
-            gameLogic = new GameLogicMemoryOrder( difficulty );
+            gameLogic = new GameLogicMemoryOrder( gameID, difficulty, randomSeed );
             break;
 
         case Game_Resolve_Headup:
-            gameLogic = new GameLogicResolveHeadup( difficulty );
+            gameLogic = new GameLogicResolveHeadup( gameID, difficulty, randomSeed );
             break;
         case Game_Resolve_Maze:
-            gameLogic = new GameLogicResolveMaze( difficulty );
+            gameLogic = new GameLogicResolveMaze( gameID, difficulty, randomSeed );
             break;
         case Game_Resolve_Number:
-            gameLogic = new GameLogicResolveNumber( difficulty );
+            gameLogic = new GameLogicResolveNumber( gameID, difficulty, randomSeed );
             break;
         case Game_Resolve_RotatePuzzle:
-            gameLogic = new GameLogicResolveRotatePuzzle( difficulty );
+            gameLogic = new GameLogicResolveRotatePuzzle( gameID, difficulty, randomSeed );
             break;
 
         }
@@ -122,9 +121,13 @@ public class GameLogic  {
             gameLogic = new GameLogicActionShootUFO( dif );
             break;
         }
-
-        dif++;*/
-        gameLogic = new GameLogicResolveRotatePuzzle(difficulty);
+        */
+        //dif=7;
+        dif++;
+        if(dif==20) {
+            dif=0;
+        }
+        //gameLogic = new GameLogicResolveRotatePuzzle(Game_Action_Spark, dif, randomSeed);
 
         return gameLogic;
     }
@@ -144,13 +147,39 @@ public class GameLogic  {
     protected GameObject _boardArea;
 
     protected int _difficulty;
+    public int difficulty {
+        get {
+            return _difficulty;
+        }
+    }
+
+    protected int _gameID;
+    public int gameID {
+        get {
+            return _gameID;
+        }
+    }
+
 
     protected List<GameObject> _goList;
 
-    public GameLogic( int difficulty ) {
-        _difficulty = difficulty;
+    protected int _seed;
+    public int seed {
+        get {
+            return _seed;
+        }
+    }
+
+    public GameLogic( int id, int diff, int seedValue ) {
+        _gameID = id;
+
+        _difficulty = diff;
 
         _goList = new List<GameObject>();
+
+        _seed = seedValue;
+
+        KWUtility.SetRandomSeed( _seed );
 
         _status = Status_Waiting;
     }
@@ -186,12 +215,20 @@ public class GameLogic  {
             GameObject.Destroy( go );
         }
         _goList.Clear();
+
+        _status = Status_Gameover;
     }
 
     public virtual void Update() {
     }
 
     public virtual void FixedUpdate() {
+    }
+
+    public void SetGameTimeout() {
+        _status = Status_Gameover;
+
+        _gameController.SendGameResult( GameController.GameResult_Timeout );
     }
 	
 }
