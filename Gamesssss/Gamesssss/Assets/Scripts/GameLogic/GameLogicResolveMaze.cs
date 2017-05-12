@@ -173,8 +173,8 @@ public class GameLogicResolveMaze : GameLogic {
         _gameController.SetButtonMode( GameController.Button_None );
 
 
-
-        _gameController.SetGameNameAndDescription( "MAZE", "Help me to exit.", null );
+        _gameController.SetGameName( "MAZE" );
+        _gameController.SetGameDescription1( 4, "Help me to exit." );
 
         _gameController.SetColorIndex( 1 );
 

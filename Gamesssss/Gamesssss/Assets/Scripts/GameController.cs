@@ -222,8 +222,8 @@ public class GameController : MonoBehaviour {
             break;
         case 4:
             TxtGameDesc1.rectTransform.localPosition = new Vector3( 0, boardHeight*25/80, 0 );
-            ImgContentCover.rectTransform.sizeDelta = new Vector2( 798, 920 );
-            ImgContentCover.rectTransform.localPosition = new Vector3( 0, -180 );
+            ImgContentCover.rectTransform.sizeDelta = new Vector2( 798, 940 );
+            ImgContentCover.rectTransform.localPosition = new Vector3( 0, -170 );
             break;
         }
         TxtGameDesc1.text = desc1;

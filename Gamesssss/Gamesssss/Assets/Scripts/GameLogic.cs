@@ -123,11 +123,11 @@ public class GameLogic  {
         }
         */
         //dif=7;
-        dif++;
+        dif=5;
         if(dif==20) {
             dif=0;
         }
-        //gameLogic = new GameLogicResolveRotatePuzzle(Game_Action_Spark, dif, randomSeed);
+        //gameLogic = new GameLogicResolveMaze(Game_Action_Spark, dif, randomSeed);
 
         return gameLogic;
     }

@@ -47,10 +47,13 @@ public class GameLogicActionShootUFO : GameLogic {
         case 4:
         case 5:
         case 6:
-            _UFONumber = 3;
+        case 7:
+        case 8:
+        case 9:
+            _UFONumber = 2;
             break;
         default:
-            _UFONumber = 4;
+            _UFONumber = 3;
             break;
         }
 
