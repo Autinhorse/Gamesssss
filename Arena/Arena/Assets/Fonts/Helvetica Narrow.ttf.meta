@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: aac38c18c75f8462b9fc396e6b3802fe
+timeCreated: 1492791563
+licenseType: Pro
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Helvetica Narrow
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 4fed38615e2384c879523ec1bafa3757, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
