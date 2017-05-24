@@ -29,6 +29,10 @@ public class GameLogicActionTapScreen : GameLogic {
     }
 
     public override void OnButtonPressed( int buttonIndex ) {
+        if(_status!=Status_Playing) {
+            return;
+        }
+
         _status = Status_Gameover;
         if(_count==_target) {
             _gameController.SendGameResult( true );
@@ -39,7 +43,7 @@ public class GameLogicActionTapScreen : GameLogic {
     }
 
     public override void OnBoardTapped( Vector3 pos ) {
-        MainPage.instance.PlaySound( MainPage.Sound_Tap );
+       // MainPage.instance.PlaySound( MainPage.Sound_Tap );
 
         _count++;
     }

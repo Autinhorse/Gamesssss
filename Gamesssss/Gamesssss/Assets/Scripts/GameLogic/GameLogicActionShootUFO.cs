@@ -192,6 +192,10 @@ public class GameLogicActionShootUFO : GameLogic {
     }
 
     public override void OnButtonPressed( int buttonIndex ) {
+        if(_status!=Status_Playing) {
+            return;
+        }
+
         _gameController.SetButtonEnable( 0, false );
 
         _bullet.gameObject.SetActive( true );
@@ -201,5 +205,10 @@ public class GameLogicActionShootUFO : GameLogic {
         _bulletPos = new Vector2( 0, _gameController.boardHeight*11/-32 );
 
         _bullet.rectTransform.localPosition = _bulletPos;
+    }
+
+    public override void SetGameTimeout() {
+        base.SetGameTimeout();
+        _gameController.SetButtonEnable( 0, true );
     }
 }

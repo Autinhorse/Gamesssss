@@ -243,6 +243,7 @@ public class GameController : MonoBehaviour {
 
     public void SetButtonMode( int buttonMode ) {
         Vector3 pos;
+
         switch( buttonMode ) {
         case Button_None:
             Buttons[0].gameObject.SetActive( false );
@@ -251,6 +252,7 @@ public class GameController : MonoBehaviour {
             break;
         case Button_One:
             Buttons[0].gameObject.SetActive( true );
+            SetButtonEnable( 0, true );
             pos = Buttons[0].transform.localPosition;
             pos.x = 0;
             Buttons[0].transform.localPosition = pos;
@@ -259,10 +261,12 @@ public class GameController : MonoBehaviour {
             break;
         case Button_Two:
             Buttons[0].gameObject.SetActive( true );
+            SetButtonEnable( 0, true );
             pos = Buttons[0].transform.localPosition;
             pos.x = -1*boardWidth/5;
             Buttons[0].transform.localPosition = pos;
             Buttons[1].gameObject.SetActive( true );
+            SetButtonEnable( 1, true );
             pos = Buttons[0].transform.localPosition;
             pos.x = boardWidth/5;
             Buttons[1].transform.localPosition = pos;
@@ -271,17 +275,21 @@ public class GameController : MonoBehaviour {
             break;
         case Button_Three:
             Buttons[0].gameObject.SetActive( true );
+            SetButtonEnable( 0, true );
             pos = Buttons[0].transform.localPosition;
             pos.x = -1*boardWidth*11/40;
             Buttons[0].transform.localPosition = pos;
             Buttons[1].gameObject.SetActive( true );
+            SetButtonEnable( 1, true );
             Buttons[2].gameObject.SetActive( true );
+            SetButtonEnable( 2, true );
             pos.x*=-1;
             Buttons[2].transform.localPosition = pos;
             pos.x=0;
             Buttons[1].transform.localPosition = pos;
             break;
         }
+
     }
 
     public void SetButtons( int index, string buttonText, Color color) {

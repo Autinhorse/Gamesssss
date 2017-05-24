@@ -231,7 +231,7 @@ public class GameLogicMemoryNewItem : GameLogic {
                 }
             }
             break;
-        case 12:
+        default:
             _mapWidth = 4;
             _mapHeight = 3;
             _mapData = new int[_mapWidth,_mapHeight];

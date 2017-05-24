@@ -51,6 +51,9 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
 
         _shapeNumber = 2+(_difficulty+1)/2;
             
+        if(_shapeNumber>12){
+            _shapeNumber=12;
+        }
 
         _mapData = new List<int>();
 
@@ -140,8 +143,6 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
             }
             break;
         case 7:
-        case 8:
-        case 9:
             _mapWidth = 3;
             _mapHeight = 3;
             for( int m=0; m<_mapWidth; m++) {
@@ -154,13 +155,12 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
                 }
             }
             break;
-        case 10:
-        case 11:
+        case 8:
             _mapWidth = 3;
             _mapHeight = 3;
             for( int m=0; m<_mapWidth; m++) {
                 for( int n=0; n<_mapHeight; n++ ) {
-                    if((m==1)&&(n==0)) {
+                    if((n==0)&&(m==1)) {
                         continue;
                     }
                     CreateShape( data[shapeIndex], m, n );
@@ -168,8 +168,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
                 }
             }
             break;
-        case 12:
-        case 13:
+        case 9:
             _mapWidth = 3;
             _mapHeight = 3;
             for( int m=0; m<_mapWidth; m++) {
@@ -179,12 +178,12 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
                 }
             }
             break;
-        case 14:
+        case 10:
             _mapWidth = 4;
             _mapHeight = 3;
             for( int m=0; m<_mapWidth; m++) {
                 for( int n=0; n<_mapHeight; n++ ) {
-                    if((n==0)&&((m==1)||(m==2))) {
+                    if(((m==0)||(m==1))&&(n==0)) {
                         continue;
                     }
                     CreateShape( data[shapeIndex], m, n );
@@ -192,12 +191,12 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
                 }
             }
             break;
-        case 15:
-            _mapWidth = 3;
-            _mapHeight = 4;
+        case 11:
+            _mapWidth = 4;
+            _mapHeight = 3;
             for( int m=0; m<_mapWidth; m++) {
                 for( int n=0; n<_mapHeight; n++ ) {
-                    if((n==0)&&(m==1)) {
+                    if((m==1)&&(n==0)) {
                         continue;
                     }
                     CreateShape( data[shapeIndex], m, n );

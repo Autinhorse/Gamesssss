@@ -123,12 +123,18 @@ public class GameLogic  {
         }
         */
         //dif=7;
-        dif=5;
+        /*
+        dif++;
         if(dif==20) {
             dif=0;
         }
-        //gameLogic = new GameLogicResolveMaze(Game_Action_Spark, dif, randomSeed);
-
+        if(dif%2==0){
+            gameLogic = new GameLogicDecisionNoExistChar(Game_Action_Spark, dif, randomSeed);
+        }
+        else {
+            gameLogic = new GameLogicSwipeArrow(Game_Action_Spark, dif, randomSeed);
+        }
+*/
         return gameLogic;
     }
 
@@ -225,7 +231,7 @@ public class GameLogic  {
     public virtual void FixedUpdate() {
     }
 
-    public void SetGameTimeout() {
+    public virtual void SetGameTimeout() {
         _status = Status_Gameover;
 
         _gameController.SendGameResult( GameController.GameResult_Timeout );

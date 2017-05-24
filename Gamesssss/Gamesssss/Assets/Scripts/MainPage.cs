@@ -18,6 +18,131 @@ using Heyzap;
 
 using Fenderrio.ImageWarp;
 
+class BGShape {
+    static GameObject goParent;
+    static GameObject goShape;
+    static List<Sprite> spriteList;
+    static float screenWidth;
+    static float screenHeight;
+    static float shapeSize;
+    static float shapeInitAlpha;
+    static float shapeMoveSpeed;
+    static float shapeLifeTime;
+    static float shapeDelayTime;
+    static float shapeRandomRate;
+
+    static public void InitData( GameObject goParentV, GameObject goShapeV, float screenWidthV, float screenHeightV, float shapeSizeV, float shapeInitScaleV, float shapeInitAlphaV, float shapeEndScaleV, 
+        float shapeMoveSpeedV, float shapeRotateSpeedV, float shapeRandomRateV, float shapeLifeTimeV, float shapeDelayTimeV, Sprite[] shapesV ) {
+        goParent = goParentV;
+        goShape = goShapeV;
+        screenWidth = screenWidthV;
+        screenHeight = screenWidthV;
+        shapeSize = shapeSizeV;
+        shapeInitAlpha = shapeInitAlphaV;
+        shapeMoveSpeed = shapeMoveSpeedV;
+        shapeRandomRate = shapeRandomRateV;
+        shapeLifeTime = shapeLifeTimeV;
+        shapeDelayTime = shapeDelayTimeV;
+
+        spriteList = new List<Sprite>();
+        for(int m=0;m<shapesV.Length;m++ ) {
+            spriteList.Add( shapesV[m] );
+        }
+
+        shapeList = new BGShape[BGShapeNumber];
+        for(int m=0; m<BGShapeNumber; m++ ) {
+            shapeList[m] = new BGShape();
+        }
+
+    }
+
+    const int BGShapeNumber = 12;
+
+    static BGShape[] shapeList;
+
+    public static void FixedUpdate() {
+        for(int m=0;m<shapeList.Length;m++ ) {
+            shapeList[m].DoFixedUpdate();
+        }
+    }
+
+    /* ------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+    public const int Status_Waiting = 1;
+    public const int Status_Running = 2;
+
+    Vector3 _speed;
+    float _rotateSpeed;
+    int _status;
+    float _timer;
+    Image _imgShape;
+
+    public BGShape() {
+
+        _imgShape = (Image) GameObject.Instantiate( goShape ).GetComponent<Image>();
+        _imgShape.gameObject.transform.SetParent( goParent.transform );
+
+        _imgShape.rectTransform.sizeDelta = new Vector2( shapeSize, shapeSize );
+
+        _imgShape.gameObject.SetActive( false );
+
+
+
+        ReStart();
+    }
+
+
+    public void DoFixedUpdate() {
+        if(_status==Status_Waiting) {
+            _timer-=Time.fixedDeltaTime;
+            if(_timer<0) {
+                _status = Status_Running;
+
+                float duration = shapeLifeTime+ (KWUtility.Random( 0, shapeRandomRate*200000)/100000-shapeRandomRate)*shapeLifeTime;
+
+                Vector3 pos = new Vector3( KWUtility.Random(0, screenWidth)-screenWidth/2, KWUtility.Random(0, (screenHeight-shapeSize*2))-screenHeight/2, 0 );
+                _speed = new Vector3(0, KWUtility.Random( shapeMoveSpeed*2500, shapeMoveSpeed*10000)/10000, 0 );
+
+               
+                _imgShape.gameObject.SetActive( true );
+
+                //_imgShape.rectTransform.localScale = Vector3.one*startScale;
+                Color color = Color.black;
+
+                color.a = shapeInitAlpha;
+
+                _imgShape.color = color;
+
+                color.a = 0;
+
+                _imgShape.sprite = spriteList[KWUtility.Random( 0, spriteList.Count) ];
+
+                _imgShape.rectTransform.localPosition = pos;
+                pos += _speed*duration;
+
+                _imgShape.rectTransform.localScale = Vector3.zero;
+
+                DOTween.Play( _imgShape.rectTransform.DOScale( Vector3.one, 4.0f ) );
+
+                DOTween.Play( _imgShape.rectTransform.DOLocalMove( pos, duration ) );
+                //DOTween.Play( _imgShape.rectTransform.DOScale( Vector3.one*endScale, duration ) );
+                DOTween.Play( _imgShape.DOColor( color, 2.05f).SetDelay( duration-2.0f).OnComplete( ()=>{
+                    ReStart();
+                } ) );
+            }
+        }
+    }
+
+    public void ReStart() {
+        float delay = KWUtility.Random( 0, shapeDelayTime*100000)/100000;
+
+
+        _timer = delay;
+        _status = Status_Waiting;
+
+    }
+}
+
 [Serializable]
 public class GameRecord {
     public GameRecord() {
@@ -127,6 +252,8 @@ public class MainPage : MonoBehaviour {
     [Header("----------这里是预定义的游戏参数----------")]
     public Color[] GameBoardColor;
 
+    public GameObject goBackgroundShape;
+
     public Sprite SptAnswerRight;
     public Sprite SptAnswerWrong;
     public Sprite SptAnswerTimeout;
@@ -203,9 +330,9 @@ public class MainPage : MonoBehaviour {
 
 
     [Header("----------这里是UI对象----------")]
+    public GameObject goBackground;
+
     public RectTransform RectFiveWithBoard;
-    //public Image ImgFive;
-    //public Image ImgFiveBoard;
 
     public RectTransform RectBtnPlay;
     public RectTransform RectBtnLeaderboard;
@@ -552,7 +679,12 @@ public class MainPage : MonoBehaviour {
         });
 
 
-        GA.StartWithAppKeyAndChannelId("58f2431af5ade43ea8000e79", "App Store");
+        GA.StartWithAppKeyAndChannelId("591fda1a65b6d65b170023b9", "App Store");
+
+        ScreenHeight = 1920;
+        ScreenWidth = ScreenHeight/Screen.height*Screen.width;
+
+        //BGShape.InitData( goBackground, goBackgroundShape, ScreenWidth, ScreenHeight, 180, 0.1f, 0.05f, 1.0f, 120, 60, 0.2f, 12.0f, 10.0f, SptShapes );
 
         //GameBoardColor[0] = new Color( 32/255.0f, 216/255.0f, 160/255.0f );
         //GameBoardColor[0] = new Color( 88/255.0f, 218/255.0f, 164/255.0f );
@@ -566,8 +698,7 @@ public class MainPage : MonoBehaviour {
         Img321Go.gameObject.SetActive( false );
 
 
-        ScreenHeight = 1920;
-        ScreenWidth = ScreenHeight/Screen.height*Screen.width;
+
 
         _currentGameController = new GameController[2];
         _currentGameRect = new RectTransform[2];
@@ -660,7 +791,7 @@ public class MainPage : MonoBehaviour {
         if(paused==true) {
             _gamePlayedCounter = 0;
 
-            DateTime logoutTime = DateTime.Now;
+            DateTime logoutTime = DateTime.UtcNow;
            
             _record.logoutTime = (logoutTime.Year%100).ToString("00")+logoutTime.Month.ToString("00")+logoutTime.Day.ToString("00")
                 +logoutTime.Hour.ToString("00")+logoutTime.Minute.ToString("00")+logoutTime.Second.ToString("00");
@@ -692,7 +823,7 @@ public class MainPage : MonoBehaviour {
                 SaveGame();
             }
 
-            _loginTime = DateTime.Now;
+            _loginTime = DateTime.UtcNow;
         }
     }
 	
@@ -790,6 +921,8 @@ public class MainPage : MonoBehaviour {
 	}
 
     void FixedUpdate() {
+
+       // BGShape.FixedUpdate();
 
         foreach( CallbackItem item in _callbackList ) {
             item.timer-=Time.fixedDeltaTime;
@@ -1441,6 +1574,10 @@ public class MainPage : MonoBehaviour {
     }
 
     public void OnButtonPlay() {
+        if(_record.soundFlag==true) {
+            PlaySound( Sound_Button);
+        }
+
         Vector3 pos = RectBtnPlay.localPosition;
         DOTween.Play( RectImgButtonBG.DOScaleY(0, 0.1f));
         DOTween.Play( RectBtnPlay.DOLocalMoveY( pos.y-ScreenHeight/5, 0.15f).SetEase( Ease.InCubic ) );
@@ -1563,18 +1700,18 @@ public class MainPage : MonoBehaviour {
     }
 
     void ShowGameOver() {
-        DOTween.Play( RectGameOver.DOScaleY( 1.0f, 0.3f).SetDelay( 1.0f) );
+        DOTween.Play( RectGameOver.DOScaleY( 1.0f, 0.6f).SetDelay( 1.0f) );
 
-        DOTween.Play( TxtGameOverTimeup.rectTransform.DOScaleY( 0.333333f, 0.3f).SetDelay( 1.0f) );
-        DOTween.Play( TxtGameOverTimeup.rectTransform.DOLocalMoveY( 360, 0.3f).SetDelay( 1.0f) );
-        Color color = new Color( 208/255.0f, 64/255.0f, 64/255.0f, 1.0f );
-        color.a = 0;
-        DOTween.Play( TxtGameOverTimeup.DOColor( color, 0.3f).SetDelay( 1.0f).OnComplete( ()=> {
-            color = TxtGameOver.color;
-            color.a = 1;
-            DOTween.Play( TxtGameOver.DOColor( color, 0.15f).SetDelay(0.3f) );
+        DOTween.Play( TxtGameOverTimeup.rectTransform.DOScaleY( 1.0f, 0.6f).SetDelay( 1.0f) );
+        DOTween.Play( TxtGameOverTimeup.rectTransform.DOLocalMoveY( 440, 0.6f).SetDelay( 1.0f).OnComplete( ()=> {
+       // Color color = new Color( 208/255.0f, 64/255.0f, 64/255.0f, 1.0f );
+       // color.a = 0;
+        //DOTween.Play( TxtGameOverTimeup.DOColor( color, 0.3f).SetDelay( 1.0f).OnComplete( ()=> {
+            //color = TxtGameOver.color;
+            //color.a = 1;
+            //DOTween.Play( TxtGameOver.DOColor( color, 0.15f).SetDelay(0.3f) );
 
-            color = TxtGameOverScore.color;
+            Color color = TxtGameOverScore.color;
             color.a = 1;
             DOTween.Play( TxtGameOverScore.DOColor( color, 0.15f).SetDelay(0.35f) );
 
@@ -1584,43 +1721,43 @@ public class MainPage : MonoBehaviour {
 
             color = TxtGameOverBestScore.color;
             color.a = 1;
-            DOTween.Play( TxtGameOverBestScore.DOColor( color, 0.15f).SetDelay(0.4f) );
+            DOTween.Play( TxtGameOverBestScore.DOColor( color, 0.15f).SetDelay(0.45f) );
 
             color = TxtGameOverBestScoreValue.color;
             color.a = 1;
-            DOTween.Play( TxtGameOverBestScoreValue.DOColor( color, 0.15f).SetDelay(0.4f) );
+            DOTween.Play( TxtGameOverBestScoreValue.DOColor( color, 0.15f).SetDelay(0.45f) );
 
             color = TxtGameOverGames.color;
             color.a = 1;
-            DOTween.Play( TxtGameOverGames.DOColor( color, 0.15f).SetDelay(0.45f) );
+            DOTween.Play( TxtGameOverGames.DOColor( color, 0.15f).SetDelay(0.55f) );
 
             color = TxtGameOverGamesValue.color;
             color.a = 1;
-            DOTween.Play( TxtGameOverGamesValue.DOColor( color, 0.15f).SetDelay(0.45f) );
+            DOTween.Play( TxtGameOverGamesValue.DOColor( color, 0.15f).SetDelay(0.55f) );
 
             color = TxtGameOverBestGames.color;
             color.a = 1;
-            DOTween.Play( TxtGameOverBestGames.DOColor( color, 0.15f).SetDelay(0.5f) );
+            DOTween.Play( TxtGameOverBestGames.DOColor( color, 0.15f).SetDelay(0.65f) );
 
             color = TxtGameOverBestGamesValue.color;
             color.a = 1;
-            DOTween.Play( TxtGameOverBestGamesValue.DOColor( color, 0.15f).SetDelay(0.5f) );
+            DOTween.Play( TxtGameOverBestGamesValue.DOColor( color, 0.15f).SetDelay(0.65f) );
 
             color = TxtBtnGameOverRetry.color;
             color.a = 1;
-            DOTween.Play( TxtBtnGameOverRetry.DOColor( color, 0.15f).SetDelay(0.55f) );
+            DOTween.Play( TxtBtnGameOverRetry.DOColor( color, 0.15f).SetDelay(0.75f) );
 
             color = TxtBtnGameOverHome.color;
             color.a = 1;
-            DOTween.Play( TxtBtnGameOverHome.DOColor( color, 0.15f).SetDelay(0.55f) );
+            DOTween.Play( TxtBtnGameOverHome.DOColor( color, 0.15f).SetDelay(0.75f) );
 
             color = ImgBtnGameOverRetry.color;
             color.a = 1;
-            DOTween.Play( ImgBtnGameOverRetry.DOColor( color, 0.15f).SetDelay(0.55f) );
+            DOTween.Play( ImgBtnGameOverRetry.DOColor( color, 0.15f).SetDelay(0.85f) );
 
             color = ImgBtnGameOverHome.color;
             color.a = 1;
-            DOTween.Play( ImgBtnGameOverHome.DOColor( color, 0.15f).SetDelay(0.55f).OnComplete( () => {
+            DOTween.Play( ImgBtnGameOverHome.DOColor( color, 0.15f).SetDelay(0.85f).OnComplete( () => {
                 int addEnergy = 0;
                 if(_score>_record.bestScore) {
                 //if(true) {
