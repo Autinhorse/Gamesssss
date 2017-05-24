@@ -2,38 +2,43 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/MainPage.cs">
     <Files>
-      <File FileName="Assets/Scripts/MainPage.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameLogic/GameLogicMemoryNewItem.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameController.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/MainPage.cs" Line="535" Column="29" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicMemoryNewItem.cs" Line="350" Column="26" />
+      <File FileName="Assets/Scripts/GameController.cs" Line="359" Column="20" />
       <File FileName="Assets/Scripts/GameLogic/GameLogicDecisionHowMany.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/GameLogic/GameLogicMathSum.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameLogic/GameLogicThreeButtons.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameLogic.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameLogic/GameLogicActionTapScreen.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameLogic/GameLogicMemoryPair.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicThreeButtons.cs" Line="109" Column="26" />
+      <File FileName="Assets/Scripts/GameLogic.cs" Line="212" Column="25" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicActionTapScreen.cs" Line="48" Column="10" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicMemoryPair.cs" Line="210" Column="26" />
       <File FileName="Assets/Scripts/KWUtility.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameLogic/GameLogicResolveHeadup.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicResolveHeadup.cs" Line="203" Column="26" />
       <File FileName="Assets/Scripts/GameLogic/GameLogicMathMath.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/GameLogic/GameLogicMathBigger.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameLogic/GameLogicDecisionTapShape.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicDecisionTapShape.cs" Line="233" Column="26" />
       <File FileName="Assets/Scripts/GameLogic/GameLogicMemeoryMissItem.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameLogic/GameLogicMemoryOrder.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicMemoryOrder.cs" Line="188" Column="26" />
       <File FileName="Assets/Scripts/GameLogic/GameLogicResolveMaze.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/GameLogic/GameLogicResolveNumber.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameLogic/GameLogicResolveRotatePuzzle.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicResolveRotatePuzzle.cs" Line="256" Column="56" />
       <File FileName="Assets/Image Warp/Scripts/ImageWarp.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameLogic/GameLogicActionShootUFO.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicActionShootUFO.cs" Line="194" Column="26" />
       <File FileName="Assets/Scripts/ButtonController.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicActionSwipeArrow.cs" Line="144" Column="48" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicDecisionNoExistChar.cs" Line="6" Column="42" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicTwoButtons.cs" Line="52" Column="26" />
+      <File FileName="Assets/Scripts/BoardTapHandler.cs" Line="28" Column="22" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicActionSpark.cs" Line="134" Column="10" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="/Users/xiaoyuma/Documents/My_Works/Gamesssss/Gamesssss/Gamesssss/Assets/Scripts/GameLogic/GameLogicResolveHeadup.cs" line="219" column="1" />
       <Breakpoint file="/Users/xiaoyuma/Documents/My_Works/Gamesssss/Gamesssss/Gamesssss/Assets/Scripts/GameLogic/GameLogicMemoryPair.cs" line="34" column="1" />
-      <Breakpoint file="/Users/xiaoyuma/Documents/My_Works/Gamesssss/Gamesssss/Gamesssss/Assets/Scripts/MainPage.cs" line="780" column="1" />
       <Breakpoint file="/Users/xiaoyuma/Documents/My_Works/Gamesssss/Gamesssss/Gamesssss/Assets/Scripts/MainPage.cs" line="35" column="1" />
-      <Breakpoint file="/Users/xiaoyuma/Documents/My_Works/Gamesssss/Gamesssss/Gamesssss/Assets/Scripts/MainPage.cs" line="691" column="1" />
       <Breakpoint file="/Users/xiaoyuma/Documents/My_Works/Gamesssss/Gamesssss/Gamesssss/Assets/Scripts/MainPage.cs" line="99" column="1" />
+      <Breakpoint file="/Users/xiaoyuma/Documents/My_Works/Gamesssss/Gamesssss/Gamesssss/Assets/Scripts/MainPage.cs" line="2245" column="1" />
+      <Breakpoint file="/Users/xiaoyuma/Documents/My_Works/Gamesssss/Gamesssss/Gamesssss/Assets/Scripts/MainPage.cs" line="800" column="1" />
+      <Breakpoint file="/Users/xiaoyuma/Documents/My_Works/Gamesssss/Gamesssss/Gamesssss/Assets/Scripts/MainPage.cs" line="808" column="39" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

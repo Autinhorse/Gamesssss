@@ -107,6 +107,9 @@ public class GameLogicThreeButtons : GameLogic {
     }
 
     public override void OnButtonPressed( int buttonIndex ) {
+        if(_status!=Status_Playing) {
+            return;
+        }
         _status = Status_Gameover;
 
         if(buttonIndex==_rightButtonIndex){

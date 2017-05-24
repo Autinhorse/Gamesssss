@@ -129,6 +129,10 @@ public class GameLogicActionSpark : GameLogic {
     }
 
     public override void OnBoardTapped( Vector3 pos ) {
+        if(_status!=Status_Playing) {
+            return;
+        }
+
         _flyingSpark.Add( _spark );
 
         _spark = (Image) GameObject.Instantiate( _gameController.goBoardImage );
