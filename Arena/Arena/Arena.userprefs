@@ -1,16 +1,57 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameLogic/GameLogicResolveRotatePuzzle.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameLogic/GameLogicMathDice.cs">
     <Files>
-      <File FileName="Assets/Scripts/MainPage.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameController.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/MainPage.cs" Line="319" Column="33" />
+      <File FileName="Assets/Scripts/GameController.cs" Line="236" Column="1" />
       <File FileName="Assets/Scripts/GameLogic/GameLogicResolveNumber.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/GameLogic/GameLogicResolveRotatePuzzle.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameLogic.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameLogic.cs" Line="193" Column="42" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicActionTap.cs" Line="22" Column="48" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicActionTapScreen.cs" Line="20" Column="63" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicActionSwipe.cs" Line="11" Column="5" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicActionSwipeArrow.cs" Line="95" Column="44" />
+      <File FileName="Assets/Scripts/BoardTapHandler.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicDecisionHowManyNumber.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicDecisionHowMany.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicActionShootUFO.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicActionSpark.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicDecisionNoExistChar.cs" Line="83" Column="9" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicDecisionTapShape.cs" Line="5" Column="19" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicMathBigger.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicMathDice.cs" Line="99" Column="27" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicMathMath.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicMathSum.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicMemeoryMissItem.cs" Line="191" Column="44" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicMemoryNewItem.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicMemoryOrder.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicMemoryPair.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicResolveHeadup.cs" Line="78" Column="26" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicResolveMaze.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicDecisionNoExistNumber.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicDecisionNoExistShape.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicThreeButtons.cs" Line="12" Column="5" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicDecisionCharInWord.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/KWUtility.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicDecisionTapNumber.cs" Line="205" Column="2" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicDecisionBigToSmall.cs" Line="270" Column="67" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicTwoButtons.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicActionTapAlien.cs" Line="5" Column="1" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicActionTapBall.cs" Line="150" Column="71" />
+      <File FileName="Assets/Scripts/GameLogic/GameLogicActionTurnRight.cs" Line="8" Column="38" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/xiaoyuma/Documents/My_Works/Gamesssss/Arena/Arena/Assets/Scripts/GameLogic/GameLogicDecisionNoExistShape.cs" line="108" column="1" />
+      <Breakpoint file="/Users/xiaoyuma/Documents/My_Works/Gamesssss/Arena/Arena/Assets/Scripts/GameLogic/GameLogicDecisionNoExistShape.cs" line="28" column="1" />
+      <Breakpoint file="/Users/xiaoyuma/Documents/My_Works/Gamesssss/Arena/Arena/Assets/Scripts/MainPage.cs" line="2110" column="1" />
+      <Breakpoint file="/Users/xiaoyuma/Documents/My_Works/Gamesssss/Arena/Arena/Assets/Scripts/GameLogic/GameLogicDecisionBigToSmall.cs" line="192" column="1" />
+      <Breakpoint file="/Users/xiaoyuma/Documents/My_Works/Gamesssss/Arena/Arena/Assets/Scripts/GameLogic/GameLogicActionTapAlien.cs" line="52" column="1" />
+      <Breakpoint file="/Users/xiaoyuma/Documents/My_Works/Gamesssss/Arena/Arena/Assets/Scripts/MainPage.cs" line="2812" column="1" />
+      <Breakpoint file="/Users/xiaoyuma/Documents/My_Works/Gamesssss/Arena/Arena/Assets/Scripts/GameLogic/GameLogicActionTapAlien.cs" line="70" column="1" />
+      <Breakpoint file="/Users/xiaoyuma/Documents/My_Works/Gamesssss/Arena/Arena/Assets/Scripts/GameLogic/GameLogicActionTurnRight.cs" line="163" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

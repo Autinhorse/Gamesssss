@@ -9,7 +9,6 @@ public class GameLogicDecisionTapShape : GameLogic {
     const int MapBlockDelta = 24;
     int MapBlockSize;
 
-    float _timer;
     int _blockNumber;
     int[,] _mapData;
     Image[,] _mapBoard;
@@ -62,14 +61,19 @@ public class GameLogicDecisionTapShape : GameLogic {
             _mapHeight=3;
             shapeType=3;
             break;
-        default:
+        case 2:
             _mapWidth=4;
             _mapHeight=3;
             shapeType=4;
             break;
+        default:
+            _mapWidth=4;
+            _mapHeight=4;
+            shapeType=4;
+            break;
         }
         if(_mapWidth>2) {
-            MapBlockSize = (int) _gameController.boardHeight/(_mapWidth+4);
+            MapBlockSize = (int) _gameController.boardHeight/(_mapWidth+5);
         }
         else {
             MapBlockSize = (int) _gameController.boardHeight/7;

@@ -32,7 +32,7 @@ public class GameLogicSwipeArrow : GameLogic {
 
         _arrows = new List<ArrowData>();
 
-        _arrowNumber = 4+3*_difficulty;
+        _arrowNumber = 2+2*_difficulty;
         if(_arrowNumber>10){
             _arrowNumber=10;
         }
@@ -76,8 +76,8 @@ public class GameLogicSwipeArrow : GameLogic {
 
         }
 
-        _gameController.SetGameDescription1( 6, "         Swipe same direction." );
-        _gameController.SetGameDescription2( 3, "        Swipe opposite direction." );
+        _gameController.SetGameDescription1( 6, 36, "    Swipe same direction" );
+        _gameController.SetGameDescription2( 7, "    Swipe opposite direction" );
 
         _gameController.SetColorIndex( 2 );
 
@@ -101,7 +101,7 @@ public class GameLogicSwipeArrow : GameLogic {
         arrowEmpty.sprite = MainPage.instance.SptArrowEmpty;
 
         arrowEmpty.rectTransform.sizeDelta = new Vector2( _gameController.boardWidth/10, _gameController.boardWidth/10 );
-        arrowEmpty.rectTransform.localPosition = new Vector3( _gameController.boardWidth*-3/8, _gameController.boardHeight*22/80, 0 );
+        arrowEmpty.rectTransform.localPosition = new Vector3( _gameController.boardWidth*-3/8, _gameController.boardHeight*20/80, 0 );
         arrowEmpty.rectTransform.localScale = Vector3.one;
         _goList.Add( arrowEmpty.gameObject );
 

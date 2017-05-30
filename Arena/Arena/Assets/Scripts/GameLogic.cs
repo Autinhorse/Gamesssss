@@ -31,10 +31,35 @@ public class GameLogic  {
     public const int Game_Resolve_Headup = 18;
     public const int Game_Resolve_RotatePuzzle = 19;
 
-    static int dif = 0;
+    public const int Game_Action_Tap = 20;
+    public const int Game_Action_Swipe = 21;
+
+    public const int Game_Decision_HowManyNumber = 22;
+    public const int Game_Decision_NoExistNumber = 23;
+    public const int Game_Decision_NoExistShape = 24;
+    public const int Game_Decision_CharInWord = 25;
+    public const int Game_Decision_YES = 26;
+    public const int Game_Action_01 = 27;
+    public const int Game_Decision_TapNumber = 28;
+    public const int Game_Decision_BigToSmall = 29;
+    public const int Game_Action_TapAlien = 30;
+    public const int Game_Action_TapBall = 31;
+    public const int Game_Action_TapTurnRight = 32;
+    public const int Game_Resolve_TapLetter = 33;
+    public const int Game_Memory_Shape = 34;
+
+
+
+    static int dif = 20;
 
     public static GameLogic GetGameLogic( int gameID, int difficulty, int randomSeed ) {
         GameLogic gameLogic = null;
+
+        difficulty=3;
+
+       
+
+        gameID = dif;
 
         switch( gameID ) {
         case Game_Math_Sum:
@@ -99,7 +124,51 @@ public class GameLogic  {
         case Game_Resolve_RotatePuzzle:
             gameLogic = new GameLogicResolveRotatePuzzle( gameID, difficulty, randomSeed );
             break;
-
+        case Game_Action_Tap:
+            gameLogic = new GameLogicActionTap( gameID, difficulty, randomSeed );
+            break;
+        case Game_Action_Swipe:
+            gameLogic = new GameLogicActionSwipe( gameID, difficulty, randomSeed );
+            break;
+        case Game_Decision_HowManyNumber:
+            gameLogic = new GameLogicDecisionHowManyNumber( gameID, difficulty, randomSeed );
+            break;
+        case Game_Decision_NoExistNumber:
+            gameLogic = new GameLogicDecisionNoExistNumber( gameID, difficulty, randomSeed );
+            break;
+        case Game_Decision_NoExistShape:
+            gameLogic = new GameLogicDecisionNoExistShape( gameID, difficulty, randomSeed );
+            break;
+        case Game_Decision_CharInWord:
+            gameLogic = new GameLogicDecisionCharInWord( gameID, difficulty, randomSeed );
+            break;
+        case Game_Decision_YES:
+            gameLogic = new GameLogicDecisionYes( gameID, difficulty, randomSeed );
+            break;
+        case Game_Action_01:
+            gameLogic = new GameLogicAction01( gameID, difficulty, randomSeed );
+            break;
+        case Game_Decision_TapNumber:
+            gameLogic = new GameLogicDecisionTapNumber( gameID, difficulty, randomSeed );
+            break;
+        case Game_Decision_BigToSmall:
+            gameLogic = new GameLogicDecisionBigToSmall( gameID, difficulty, randomSeed );
+            break;
+        case Game_Action_TapAlien:
+            gameLogic = new GameLogicActionTapAlien( gameID, difficulty, randomSeed );
+            break;
+        case Game_Action_TapBall:
+            gameLogic = new GameLogicActionTapBall( gameID, difficulty, randomSeed );
+            break;
+        case Game_Action_TapTurnRight:
+            gameLogic = new GameLogicActionTurnRight( gameID, difficulty, randomSeed );
+            break;    
+        case Game_Resolve_TapLetter:
+            gameLogic = new GameLogicResolveTapLetter( gameID, difficulty, randomSeed );
+            break;    
+        case Game_Memory_Shape:
+            gameLogic = new GameLogicMemoryShape( gameID, difficulty, randomSeed );
+            break;    
         }
 
         //gameLogic = new GameLogicActionSpark( dif );
@@ -123,11 +192,13 @@ public class GameLogic  {
         }
         */
         //dif=7;
-        dif=2;
-        if(dif==20) {
+       
+        dif++;
+        if(dif==26) {
             dif=0;
         }
-        gameLogic = new GameLogicResolveRotatePuzzle(Game_Action_Spark, dif, randomSeed);
+
+        //gameLogic = new GameLogicMemoryShape(dif, 3, randomSeed);
 
         return gameLogic;
     }
@@ -186,6 +257,9 @@ public class GameLogic  {
         _gameID = id;
 
         _difficulty = diff;
+        if(_difficulty>3) {
+            _difficulty = 3;
+        }
 
         _totalGameTime = StartTime - TimeDeltaPerDifficultLevel * _difficulty;
         if(_totalGameTime<MinGameTime) {
@@ -248,7 +322,7 @@ public class GameLogic  {
         
     }
 
-    public void SetGameTimeout() {
+    public virtual void SetGameTimeout() {
         _status = Status_Gameover;
 
         _gameController.SendGameResult( GameController.GameResult_Timeout );

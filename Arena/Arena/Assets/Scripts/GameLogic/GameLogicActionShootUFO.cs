@@ -46,7 +46,7 @@ public class GameLogicActionShootUFO : GameLogic {
             _UFONumber = 1;
             break;
         default:
-            _UFONumber = 3;
+            _UFONumber = 2;
             break;
         }
 
@@ -56,7 +56,7 @@ public class GameLogicActionShootUFO : GameLogic {
         //loat speed;
 
         int[] line = new int[8];
-        line[0] = 0;
+        line[0] = 2;
         line[1] = 4;
         line[2] = 2;
         line[3] = 0;
@@ -108,7 +108,7 @@ public class GameLogicActionShootUFO : GameLogic {
         imgCannon.rectTransform.localScale = Vector3.one;
         _goList.Add( imgCannon.gameObject );
 
-        _gameController.SetGameDescription1( 5, "Shoot them down!");
+        _gameController.SetGameDescription1( 7, "Shoot them down!");
 
         _gameController.SetColorIndex( 2 );
 
@@ -188,6 +188,10 @@ public class GameLogicActionShootUFO : GameLogic {
     }
 
     public override void OnBoardTapped( Vector3 pos ) {
+        if(_status!=Status_Playing) {
+            return;
+        }
+
         _gameController.SetButtonEnable( 0, false );
 
         _bullet.gameObject.SetActive( true );
@@ -197,5 +201,10 @@ public class GameLogicActionShootUFO : GameLogic {
         _bulletPos = new Vector2( 0, _gameController.boardHeight*19/-48 );
 
         _bullet.rectTransform.localPosition = _bulletPos;
+    }
+
+    public override void SetGameTimeout() {
+        _status = Status_Gameover;
+        _gameController.SetButtonEnable( 0, true );
     }
 }

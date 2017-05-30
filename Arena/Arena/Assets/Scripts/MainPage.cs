@@ -18,6 +18,8 @@ using Heyzap;
 
 using Fenderrio.ImageWarp;
 
+
+
 class BGShape {
     static GameObject goParent;
     static GameObject goShape;
@@ -63,6 +65,8 @@ class BGShape {
         for(int m=0;m<shapeList.Length;m++ ) {
             shapeList[m].DoFixedUpdate();
         }
+
+
     }
 
     /* ------------------------------------------------------------------------------------------------------------------------------------------------------ */
@@ -145,6 +149,7 @@ class BGShape {
 
 }
 
+
 [Serializable]
 public class GameRecord {
     public GameRecord() {
@@ -166,7 +171,45 @@ public class GameRecord {
         data3 = 0;
         data4 = 0;
         data5 = 0;
+
+        gameTotalTime = new int[256];
+        gameRightNumber = new int[256];
+        gameWrongNumber = new int[256];
+        gameRecordChanged = new bool[256];
+
+        for(int m=0; m<256; m++ ) {
+            gameTotalTime[m] = 0;
+            gameRightNumber[m] = 0;
+            gameWrongNumber[m] = 0;
+            gameRecordChanged[m]=false;
+        }
     }
+
+    public void ResetGameRecordChangedFlag() {
+        for(int m=0; m<256; m++ ) {
+            gameRecordChanged[m]=false;
+        }
+    }
+
+    public string[] GetChangedGameRecord() {
+        List<string> result = new List<string>();
+        string str="";
+        for(int m=0; m<256; m++ ) {
+            if(gameRecordChanged[m]==true) {
+                str="";
+                str+=(m/4).ToString("00")+(m%4).ToString()+gameTotalTime[m].ToString()+":"+gameRightNumber[m].ToString()+":"+gameWrongNumber[m].ToString();
+                result.Add( str );
+            }
+        }
+
+        string[] value = new string[result.Count];
+        for(int m=0; m<result.Count; m++ ) {
+            value[m] = result[m];
+        }
+
+        return value;
+    }
+
 
     public int bestScore;
     public int bestGameSeed;
@@ -178,6 +221,11 @@ public class GameRecord {
     public long startSecond;
     public int playerID;
     public int loginID;
+
+    public int[] gameTotalTime;
+    public int[] gameRightNumber;
+    public int[] gameWrongNumber;
+
     public bool gamecenterIDReported;
     public int gamePlayIndex;
     public string logoutTime;
@@ -187,6 +235,9 @@ public class GameRecord {
     public int data3;
     public int data4;
     public int data5;
+
+    [NonSerialized]
+    public bool[] gameRecordChanged;
 }
 
 public delegate void WWWCallbackFunction( WWW www );
@@ -215,6 +266,12 @@ public class CallbackItem {
     public float timer;
 }
 
+class GameCreateItem{
+    public int gameID;
+    public int difficult;
+    public int seed;
+}
+
 public class MainPage : MonoBehaviour {
     static MainPage _instance;
     public static MainPage instance {
@@ -233,6 +290,7 @@ public class MainPage : MonoBehaviour {
     public const int Status_Main = 3;
     public const int Status_ShowFiveWithBoard = 4;
     public const int Status_GameOver = 5;
+    public const int Status_Starting = 6;
 
     public const int Mode_Challenge = 1;
     public const int Mode_Random = 2;
@@ -257,6 +315,8 @@ public class MainPage : MonoBehaviour {
     public Sprite SptAnswerRight;
     public Sprite SptAnswerWrong;
     public Sprite SptAnswerTimeout;
+
+    public Sprite SptWhiteBlock;
 
     public Sprite[] SptShapes;
     public Sprite[] SptHands;
@@ -467,6 +527,11 @@ public class MainPage : MonoBehaviour {
     GameController[] _currentGameController;
     RectTransform[] _currentGameRect;
 
+    List<GameCreateItem> _gameCreateList;
+    int _gameCreateIndex;
+    List<int>[] _gameDifficulties; 
+    int[,] _gameDifficultiesRandom;
+
     public const int MaxBoardNumber = 4;
     int[] _boardIndex;
 
@@ -481,7 +546,7 @@ public class MainPage : MonoBehaviour {
 
     int _nextGameIndex;
 
-    float _currentGameTimer;
+    float _currentGameTime;
     int _rightGameNumber;
     int _leftGameNumber;
 
@@ -570,7 +635,83 @@ public class MainPage : MonoBehaviour {
 
         _gamePlayedCounter = 0;
 
+        _gameDifficulties = new List<int>[3];
+        _gameDifficulties[0] = new List<int>();
+        _gameDifficulties[1] = new List<int>();
+        _gameDifficulties[2] = new List<int>();
 
+        _gameDifficulties[0].Add(GameLogic.Game_Math_Sum );
+        _gameDifficulties[0].Add(GameLogic.Game_Math_Math );
+        _gameDifficulties[0].Add(GameLogic.Game_Math_WhichBig );
+        _gameDifficulties[0].Add(GameLogic.Game_Math_DiceSum );
+        _gameDifficulties[0].Add(GameLogic.Game_Decision_HowMany );
+        _gameDifficulties[0].Add(GameLogic.Game_Decision_Hand );
+        _gameDifficulties[0].Add(GameLogic.Game_Decision_NoExistChar );
+        _gameDifficulties[0].Add(GameLogic.Game_Decision_TapShape );
+        _gameDifficulties[0].Add(GameLogic.Game_Action_TapScreen );
+        _gameDifficulties[0].Add(GameLogic.Game_Action_Spark );
+        _gameDifficulties[0].Add(GameLogic.Game_Action_ShootUFO );
+        _gameDifficulties[0].Add(GameLogic.Game_Action_SwipeArrow );
+        _gameDifficulties[0].Add(GameLogic.Game_Memory_Pair );
+        _gameDifficulties[0].Add(GameLogic.Game_Memory_MissShape );
+        _gameDifficulties[0].Add(GameLogic.Game_Memory_NewShape );
+        _gameDifficulties[0].Add(GameLogic.Game_Memory_Order );
+        _gameDifficulties[0].Add(GameLogic.Game_Resolve_Maze );
+        _gameDifficulties[0].Add(GameLogic.Game_Resolve_Number );
+        _gameDifficulties[0].Add(GameLogic.Game_Resolve_Headup );
+        _gameDifficulties[0].Add(GameLogic.Game_Resolve_RotatePuzzle );
+        _gameDifficulties[0].Add(GameLogic.Game_Action_Tap );
+        _gameDifficulties[0].Add(GameLogic.Game_Action_Swipe );
+
+        _gameDifficulties[0].Add(GameLogic.Game_Decision_HowManyNumber);
+
+
+        _gameDifficulties[1].Add(GameLogic.Game_Math_Sum );
+        _gameDifficulties[1].Add(GameLogic.Game_Math_Math );
+        _gameDifficulties[1].Add(GameLogic.Game_Math_WhichBig );
+        _gameDifficulties[1].Add(GameLogic.Game_Math_DiceSum );
+        _gameDifficulties[1].Add(GameLogic.Game_Decision_HowMany );
+        //_gameDifficulties[1].Add(GameLogic.Game_Decision_Hand );
+        _gameDifficulties[1].Add(GameLogic.Game_Decision_NoExistChar );
+        _gameDifficulties[1].Add(GameLogic.Game_Decision_TapShape );
+        _gameDifficulties[1].Add(GameLogic.Game_Action_TapScreen );
+        _gameDifficulties[1].Add(GameLogic.Game_Action_Spark );
+        _gameDifficulties[1].Add(GameLogic.Game_Action_ShootUFO );
+        _gameDifficulties[1].Add(GameLogic.Game_Action_SwipeArrow );
+        _gameDifficulties[1].Add(GameLogic.Game_Memory_Pair );
+        _gameDifficulties[1].Add(GameLogic.Game_Memory_MissShape );
+        _gameDifficulties[1].Add(GameLogic.Game_Memory_NewShape );
+        _gameDifficulties[1].Add(GameLogic.Game_Memory_Order );
+        _gameDifficulties[1].Add(GameLogic.Game_Resolve_Maze );
+        _gameDifficulties[1].Add(GameLogic.Game_Resolve_Number );
+        _gameDifficulties[1].Add(GameLogic.Game_Resolve_Headup );
+        _gameDifficulties[1].Add(GameLogic.Game_Resolve_RotatePuzzle );
+
+        _gameDifficulties[2].Add(GameLogic.Game_Math_Sum );
+        _gameDifficulties[2].Add(GameLogic.Game_Math_Math );
+        _gameDifficulties[2].Add(GameLogic.Game_Math_WhichBig );
+        _gameDifficulties[2].Add(GameLogic.Game_Math_DiceSum );
+        _gameDifficulties[2].Add(GameLogic.Game_Decision_HowMany );
+        //_gameDifficulties[2].Add(GameLogic.Game_Decision_Hand );
+        _gameDifficulties[2].Add(GameLogic.Game_Decision_NoExistChar );
+        _gameDifficulties[2].Add(GameLogic.Game_Decision_TapShape );
+        _gameDifficulties[2].Add(GameLogic.Game_Action_TapScreen );
+        _gameDifficulties[2].Add(GameLogic.Game_Action_Spark );
+        _gameDifficulties[2].Add(GameLogic.Game_Action_ShootUFO );
+        _gameDifficulties[2].Add(GameLogic.Game_Action_SwipeArrow );
+        _gameDifficulties[2].Add(GameLogic.Game_Memory_Pair );
+        _gameDifficulties[2].Add(GameLogic.Game_Memory_MissShape );
+        _gameDifficulties[2].Add(GameLogic.Game_Memory_NewShape );
+        _gameDifficulties[2].Add(GameLogic.Game_Memory_Order );
+        _gameDifficulties[2].Add(GameLogic.Game_Resolve_Maze );
+        _gameDifficulties[2].Add(GameLogic.Game_Resolve_Number );
+        _gameDifficulties[2].Add(GameLogic.Game_Resolve_Headup );
+        _gameDifficulties[2].Add(GameLogic.Game_Resolve_RotatePuzzle );
+
+        int max = Math.Max( _gameDifficulties[0].Count, _gameDifficulties[1].Count );
+        max = Math.Max( max, _gameDifficulties[2].Count );
+
+        _gameDifficultiesRandom = new int[3,max];
 
     }
 
@@ -756,7 +897,7 @@ public class MainPage : MonoBehaviour {
         GameBoardColor[3] = new Color( 218/255.0f, 186/255.0f, 82/255.0f );
         GameBoardColor[4] = new Color( 132/255.0f, 120/255.0f, 244/255.0f );
 */
-        GameBoardColor[0] = new Color( 104/255.0f, 188/255.0f, 132/255.0f );
+        GameBoardColor[0] = new Color( 88/255.0f, 188/255.0f, 120/255.0f );
         GameBoardColor[1] = new Color( 88/255.0f, 196/255.0f, 232/255.0f );
         GameBoardColor[2] = new Color( 232/255.0f, 88/255.0f, 88/255.0f );
         GameBoardColor[3] = new Color( 236/255.0f, 192/255.0f, 72/255.0f );
@@ -1256,7 +1397,9 @@ public class MainPage : MonoBehaviour {
             */
             break;
         case Status_Playing:
+            _gameTime-=Time.fixedDeltaTime;
             ShowGameTime();
+            _currentGameTime+=Time.fixedDeltaTime;
             break;
         }
 
@@ -1301,9 +1444,6 @@ public class MainPage : MonoBehaviour {
 
     void ShowGameTime() {
         int secondValue = (int)_gameTime;
-
-        _totalGameTime+=Time.fixedDeltaTime;
-        _gameTime-=Time.fixedDeltaTime;
 
         if(secondValue!=(int)_gameTime) {
             if(secondValue<=5) {
@@ -1485,8 +1625,8 @@ public class MainPage : MonoBehaviour {
         }
     }
 
-    void StartGame() {
-        _status = Status_Playing;
+    void StartGame(int seed) {
+        _status = Status_Starting;
 
         _nextGameIndex = 0;
         _boardIndex = new int[MaxBoardNumber];
@@ -1494,7 +1634,77 @@ public class MainPage : MonoBehaviour {
             _boardIndex[m] = 0;
         }
 
-        _gameSeed = KWUtility.Random( 0, 1000000 );
+        if(seed==-1) {
+            _gameSeed = KWUtility.Random( 0, 10000000 );
+        }
+        else {
+            _gameSeed = seed;
+        }
+        KWUtility.SetRandomSeed(_gameSeed);
+
+        _gameCreateList = new List<GameCreateItem>();
+        int difficult1=0, difficult2=0;
+        switch(_gameMode){
+        case GameMode_Practise:
+        case GameMode_Challenge:
+            difficult1=10;
+            difficult2=25;
+            break;
+
+        case GameMode_Compete:
+            difficult1=15;
+            difficult2=35;
+            break;
+        }
+
+        for( int n=0; n<3; n++ ) {
+            for( int m=0; m<_gameDifficulties[n].Count; m++ ) {
+                _gameDifficultiesRandom[n,m]=_gameDifficulties[n][m];
+            }
+        }
+
+        int i1, i2, temp;
+        for( int n=0; n<3; n++ ) {
+            for(int m=0; m<100;m++ ) {
+                i1=KWUtility.Random(0, _gameDifficulties[n].Count );
+                i2=KWUtility.Random(0, _gameDifficulties[n].Count );
+                temp = _gameDifficultiesRandom[n,i1];
+                _gameDifficultiesRandom[n,i1] = _gameDifficultiesRandom[n,i2];
+                _gameDifficultiesRandom[n,i2] = temp;
+            }
+        }
+
+
+        int gameSeekIndex=0;
+        for(int m=0; m<120; m++ ) {
+            GameCreateItem item = new GameCreateItem();
+
+            int difficult = 0;
+            if(m>=difficult2){
+                difficult = 2;
+
+            }
+            else if(m>=difficult1) {
+                difficult = 1;
+            }
+
+            if((m==difficult1)||(m==difficult2)) {
+                gameSeekIndex=0;
+            }
+
+            item.gameID = _gameDifficultiesRandom[0,gameSeekIndex];
+            item.difficult = difficult;
+            item.seed = KWUtility.Random( 0, 10000000 );
+
+            gameSeekIndex++;
+            if(gameSeekIndex==_gameDifficulties[difficult].Count) {
+                gameSeekIndex=0;
+            }
+
+            _gameCreateList.Add( item );
+        }    
+
+
         _levelResult = "";
 
         TxtTimeColon.color = ClrTopBarTextColor;
@@ -1507,13 +1717,14 @@ public class MainPage : MonoBehaviour {
         MoveGameIn( 0, 1.5f, 0);
 
         CreateNextGame(1);
-        MoveGameIn( 1, 1.25f, 0.25f);
-
-        CreateNextGame(2);
-        MoveGameIn( 2, 0.75f, 0.75f);
+        MoveGameIn( 1, 1.25f, 0.5f);
 
         CreateNextGame(3);
-        MoveGameIn( 3, 1.0f, 0.5f);
+        MoveGameIn( 3, 1.0f, 0.8f);
+
+        CreateNextGame(2);
+        MoveGameIn( 2, 0.75f, 1.0f);
+
         //}
 
         Vector3 pos = RectTopBar.localPosition;
@@ -1521,7 +1732,8 @@ public class MainPage : MonoBehaviour {
 
         DOTween.Play( RectTopBar.DOLocalMoveY(pos.y, 0.35f ).SetEase( Ease.OutCubic ).SetDelay( 0.25f )  );
 
-        _gameTime = 15.0f;
+        _gameTime = 90.0f;
+        ShowGameTime();
         _totalGameTime = 0;
 
         _score = 0;
@@ -1582,43 +1794,13 @@ public class MainPage : MonoBehaviour {
     }
 
     void CreateNextGame(int  boardIndex) {
-        /*
-        if(boardIndex==0) {
-            ImgLeftGameBar.rectTransform.sizeDelta = new Vector2( 400, 24 );
-            ImgLeftGameBar.color = new Color( 72/255.0f, 232/255.0f, 32/255.0f, 1.0f );
-        }
-        else {
-            ImgRightGameBar.rectTransform.sizeDelta = new Vector2( 400, 24 );
-            ImgRightGameBar.color = new Color( 72/255.0f, 232/255.0f, 32/255.0f, 1.0f );
-        }*/
+        
         Debug.Log( "Create next game!!"+_nextGameIndex );
 
-        if(_nextGameIndex%MaxGameNumber==0) {
-            for(int m=0;m<MaxGameNumber;m++ ) {
-                _gamePlayed[m]=false;
-            }
-        }
+        GameCreateItem item = _gameCreateList[_gameCreateIndex];
+        _gameCreateIndex++;
 
-        //KWUtility.SetRandomSeed( _gameSeed );
-        _gameSeed = KWUtility.Random( 0, 1000000 );
-
-        for( int m=0; m<_nextGameIndex;m++ ) {
-            KWUtility.Random( 0, 10000 );
-        }
-
-        int gameID;
-        do {
-            gameID = KWUtility.Random( 0, MaxGameNumber );
-        } while( _gamePlayed[gameID]==true );
-
-        Debug.Log( "Game ID:"+gameID+"---"+_gamePlayed[gameID] );
-
-        _gamePlayed[gameID] = true;
-
-
-        //int gameID = _nextGameIndex%MaxGameNumber;
-
-        GameLogic gameLogic = GameLogic.GetGameLogic( gameID, _nextGameIndex/4, KWUtility.Random( 0, 10000 ) );
+        GameLogic gameLogic = GameLogic.GetGameLogic( item.gameID, item.difficult, item.seed );
 
         _boardIndex[boardIndex]++;
         if(_boardIndex[boardIndex]==2) {
@@ -1626,8 +1808,6 @@ public class MainPage : MonoBehaviour {
         }
 
         _currentGameController[_boardIndex[boardIndex]+boardIndex*2].SetGameLogic( gameLogic );
-
-        _currentGameTimer = 5.0f;
     }
 
     void MoveGameOut( int boardIndex ) {
@@ -1635,30 +1815,30 @@ public class MainPage : MonoBehaviour {
 
         switch(boardIndex) {
         case 0:
-            DOTween.Play( _currentGameRect[_boardIndex[boardIndex]+boardIndex*2].DOScale( Vector3.zero, 0.45f ).SetEase( CurveBoardMoveZoomOut )  );
+            DOTween.Play( _currentGameRect[_boardIndex[boardIndex]+boardIndex*2].DOScale( Vector3.zero, 0.85f ).SetEase( CurveBoardMoveZoomOut )  );
             //DOTween.Play( _currentGameRect[_boardIndex[boardIndex]+boardIndex*2].DOLocalMoveY(  -2*ScreenHeight/3, 0.45f ).SetEase( CurveBoardMoveYOut ) );
-            DOTween.Play( _currentGameRect[_boardIndex[boardIndex]+boardIndex*2].DOLocalMoveX( -3.0f/5*ScreenWidth, 0.45f ).SetEase( CurveBoardMoveXOut ).OnComplete( () => {
+            DOTween.Play( _currentGameRect[_boardIndex[boardIndex]+boardIndex*2].DOLocalMoveX( -3.0f/5*ScreenWidth, 0.85f ).SetEase( CurveBoardMoveXOut ).OnComplete( () => {
                 _currentGameController[currentIndex].Clear();
             } ) );
             break;
         case 1:
-            DOTween.Play( _currentGameRect[_boardIndex[boardIndex]+boardIndex*2].DOScale( Vector3.zero, 0.45f ).SetEase( CurveBoardMoveZoomOut )  );
+            DOTween.Play( _currentGameRect[_boardIndex[boardIndex]+boardIndex*2].DOScale( Vector3.zero, 0.85f ).SetEase( CurveBoardMoveZoomOut )  );
             //DOTween.Play( _currentGameRect[_boardIndex[boardIndex]+boardIndex*2].DOLocalMoveY(  -2*ScreenHeight/3, 0.85f ).SetEase( CurveBoardMoveYOut ) );
-            DOTween.Play( _currentGameRect[_boardIndex[boardIndex]+boardIndex*2].DOLocalMoveX( 3.0f/5*ScreenWidth, 0.45f ).SetEase( CurveBoardMoveXOut ).OnComplete( () => {
+            DOTween.Play( _currentGameRect[_boardIndex[boardIndex]+boardIndex*2].DOLocalMoveX( 3.0f/5*ScreenWidth, 0.85f ).SetEase( CurveBoardMoveXOut ).OnComplete( () => {
                 _currentGameController[currentIndex].Clear();
             } ) );
             break;
         case 2:
-            DOTween.Play( _currentGameRect[_boardIndex[boardIndex]+boardIndex*2].DOScale( Vector3.zero, 0.45f ).SetEase( CurveBoardMoveZoomOut )  );
+            DOTween.Play( _currentGameRect[_boardIndex[boardIndex]+boardIndex*2].DOScale( Vector3.zero, 0.85f ).SetEase( CurveBoardMoveZoomOut )  );
             //DOTween.Play( _currentGameRect[_boardIndex[boardIndex]+boardIndex*2].DOLocalMoveY(  2*ScreenHeight/3, 0.85f ).SetEase( CurveBoardMoveYOut ) );
-            DOTween.Play( _currentGameRect[_boardIndex[boardIndex]+boardIndex*2].DOLocalMoveX( -3.0f/5*ScreenWidth, 0.45f ).SetEase( CurveBoardMoveXOut ).OnComplete( () => {
+            DOTween.Play( _currentGameRect[_boardIndex[boardIndex]+boardIndex*2].DOLocalMoveX( -3.0f/5*ScreenWidth, 0.85f ).SetEase( CurveBoardMoveXOut ).OnComplete( () => {
                 _currentGameController[currentIndex].Clear();
             } ) );
             break;
         case 3:
-            DOTween.Play( _currentGameRect[_boardIndex[boardIndex]+boardIndex*2].DOScale( Vector3.zero, 0.45f ).SetEase( CurveBoardMoveZoomOut )  );
+            DOTween.Play( _currentGameRect[_boardIndex[boardIndex]+boardIndex*2].DOScale( Vector3.zero, 0.85f ).SetEase( CurveBoardMoveZoomOut )  );
             //DOTween.Play( _currentGameRect[_boardIndex[boardIndex]+boardIndex*2].DOLocalMoveY(  2*ScreenHeight/3, 0.85f ).SetEase( CurveBoardMoveYOut ) );
-            DOTween.Play( _currentGameRect[_boardIndex[boardIndex]+boardIndex*2].DOLocalMoveX( 3.0f/5*ScreenWidth, 0.45f ).SetEase( CurveBoardMoveXOut ).OnComplete( () => {
+            DOTween.Play( _currentGameRect[_boardIndex[boardIndex]+boardIndex*2].DOLocalMoveX( 3.0f/5*ScreenWidth, 0.85f ).SetEase( CurveBoardMoveXOut ).OnComplete( () => {
                 _currentGameController[currentIndex].Clear();
             } ) );
             break;
@@ -1721,9 +1901,21 @@ public class MainPage : MonoBehaviour {
 
     public void SendGameResult(bool isWin, int boardIndex) {
 
-        int duration = (int)(_currentGameTimer*1000);
+        int duration = 0;
         int score=0;
         int success=0;
+
+        GameLogic gameLogic = _currentGameController[_boardIndex[boardIndex]+boardIndex*2].gameLogic;
+
+
+        int gameID = gameLogic.gameID;
+        int difficult = gameLogic.difficulty;
+
+        int gameRecordIndex = gameID*4+difficult;
+
+        _record.gameRecordChanged[gameRecordIndex]=true;
+        _record.gameTotalTime[gameRecordIndex]+=(int)(_currentGameTime*100);
+        _currentGameTime = 0;
 
         if(isWin) {
             //_gameTime+=5;
@@ -1735,30 +1927,10 @@ public class MainPage : MonoBehaviour {
             TxtTimeSecond.color = ClrTopBarTextColor;
             TxtTimeColon.DOKill(); 
             TxtTimeColon.color = ClrTopBarTextColor;
-            /*
-            float baseScore=20;
-            int difficult = (_nextGameIndex-1)/5+1;
-            for(int m=0;m<difficult;m++){
-                baseScore*=2.0f;
-            }
-            int baseScoreInt = ((int)(baseScore/10))*10;
 
-            float gameTime = _currentGameController[_boardIndex[boardIndex]+2*boardIndex].timeLeft;
-
-            score = (int)(baseScoreInt*gameTime)*5;
-            _score+=score;
-            TxtScore.text = _score.ToString();
-
-            if(boardIndex==0) {
-                _leftGameNumber++;
-                TxtLeftGameNumber.text = _leftGameNumber.ToString();
-            }
-            else {
-                _rightGameNumber++;
-                TxtRightGameNumber.text = _rightGameNumber.ToString();
-            }
-*/
             success = 1;
+
+            _record.gameRightNumber[gameRecordIndex]++;
         }
         else {
             _score--;
@@ -1767,32 +1939,13 @@ public class MainPage : MonoBehaviour {
             }
             TxtLeftGameNumber.text = _score.ToString();
 
+            _record.gameWrongNumber[gameRecordIndex]++;
 
-            score = 0;
-
-            _lives--;
-
-            if(_lives>=0) {
-
-                Color color = new Color( 72/255.0f, 232/255.0f, 32/255.0f, 1.0f );
-                color = new Color( 218/255.0f, 32/255.0f, 32/255.0f, 1.0f );
-
-                DOTween.Play( ImgLives[_lives].DOColor( color, 0.35f ) );
-
-                Sequence seq = DOTween.Sequence();
-                seq.Append( ImgLives[_lives].rectTransform.DOScale( Vector3.one*2, 0.25f ) );
-                seq.Append( ImgLives[_lives].rectTransform.DOScale( Vector3.one, 0.25f ) );
-                DOTween.Play( seq );
-
-                success = 0;
-            }
         }
 
         TxtTimeSecond.color = ClrTopBarTextColor;
         TxtTimeMiSecond.color = ClrTopBarTextColor;
         TxtTimeColon.color = ClrTopBarTextColor;
-
-        GameLogic gameLogic = _currentGameController[_boardIndex[boardIndex]+boardIndex*2].gameLogic;
 
         _gameResult += gameLogic.gameID.ToString()+"I";
         _gameResult += gameLogic.difficulty.ToString()+"I";
@@ -1800,26 +1953,6 @@ public class MainPage : MonoBehaviour {
         _gameResult += score+"I";
         _gameResult += success+"I";
         _gameResult += gameLogic.seed.ToString()+"L";
-        /*
-        if(_lives==0) {
-            
-
-
-        }
-        else {
-            _currentGameTimer = 5.0f;
-            tweenSecond.Kill( true );
-            tweenColon.Kill( true );
-            tweenMiSecond.Kill( true );
-
-
-            TxtTimeSecond.color = new Color( 242/255.0f, 232/255.0f, 232/255.0f, 1.0f );
-            TxtTimeSecond.text = "05";
-            TxtTimeColon.color = new Color( 242/255.0f, 232/255.0f, 232/255.0f, 1.0f );
-            TxtTimeMiSecond.color = new Color( 242/255.0f, 232/255.0f, 232/255.0f, 1.0f );
-            TxtTimeMiSecond.text = "00";
-        }*/
-
     }
 
     public void ExecGameResult( int boardIndex ) {
@@ -1831,8 +1964,15 @@ public class MainPage : MonoBehaviour {
 
         CreateNextGame( boardIndex );
 
-        MoveGameIn( boardIndex, 0.9f, 0 );
+        MoveGameIn( boardIndex, 1.0f, 0.3f );
 
+    }
+
+    public void GameStarted() {
+        if(_status!=Status_Playing) {
+            _status = Status_Playing;
+            _currentGameTime = 0;
+        }
     }
 
     public void PlaySound( int soundIndex ) {
@@ -1937,7 +2077,7 @@ public class MainPage : MonoBehaviour {
         } ));
         seq.Append( Img321Go.rectTransform.DORotate(Vector3.zero, 0.5f).SetEase( Ease.OutBack ).OnComplete( ()=> {
             DOTween.Play( Img321Go.rectTransform.DOLocalMoveX( -1*ScreenWidth*3/5, 0.5f ).SetEase( Ease.InCubic).OnComplete( ()=> {
-                StartGame();
+                StartGame(101);
             } ) );
         } ) );
 
@@ -2596,8 +2736,9 @@ public class MainPage : MonoBehaviour {
         string  path=Application.persistentDataPath+"/GameRecord.dat";
 
         GameRecord record;
-
-        if(File.Exists( path)) {
+        bool fileExist = File.Exists( path);
+        //fileExist = false;
+        if(fileExist) {
             StreamReader sr = new StreamReader (path);
             string line = sr.ReadLine ();
             sr.Close ();

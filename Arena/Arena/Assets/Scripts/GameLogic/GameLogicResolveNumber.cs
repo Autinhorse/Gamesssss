@@ -42,7 +42,8 @@ public class GameLogicResolveNumber : GameLogicThreeButtons {
         base.SetGameController( controller );
 
         _gameController.SetGameName( "PATTERNS" );
-        _gameController.SetGameDescription1( 0, "Which number fills the pattern?" );
+        _gameController.SetGameDescription1( 6, "Which number" );
+        _gameController.SetGameDescription2( 7, "fills the pattern?" );
 
         _gameController.SetColorIndex( 1 );
 
@@ -59,6 +60,10 @@ public class GameLogicResolveNumber : GameLogicThreeButtons {
         case 1:
             minPuzzle = 2;
             maxPuzzle = 3;
+            break;
+        case 2:
+            minPuzzle = 3;
+            maxPuzzle = 4;
             break;
         default:
             minPuzzle = 3;
@@ -299,6 +304,8 @@ public class GameLogicResolveNumber : GameLogicThreeButtons {
             txtChar.rectTransform.localPosition = Vector3.zero;
             txtChar.rectTransform.localScale = Vector3.one;
             txtChar.color = Color.white;
+
+            txtChar.fontSize = 48; 
             if(ques.numbers[m]==-1) {
                 txtChar.text = "?";
             }
@@ -313,6 +320,6 @@ public class GameLogicResolveNumber : GameLogicThreeButtons {
     }
 
     Vector2 GetPosition( int x, int y ) {
-        return new Vector2( (-1*(_mapWidth-1.0f)/2+x)*(MapBlockSize+MapBlockDelta), ((_mapHeight-1.0f)/2-y)*(MapBlockSize+MapBlockDelta));
+        return new Vector2( (-1*(_mapWidth-1.0f)/2+x)*(MapBlockSize+MapBlockDelta), ((_mapHeight-1.0f)/2-y)*(MapBlockSize+MapBlockDelta)-32);
     }
 }

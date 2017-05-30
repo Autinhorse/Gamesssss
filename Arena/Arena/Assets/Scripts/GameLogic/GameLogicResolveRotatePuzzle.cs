@@ -55,14 +55,20 @@ public class GameLogicResolveRotatePuzzle : GameLogic {
         case 1:
             _mapWidth =3 ;
             _mapHeight = 3;
+            boardNumber = 3;
+            rotateNumber = 5;
+            break;
+        case 2:
+            _mapWidth =3 ;
+            _mapHeight = 3;
             boardNumber = 4;
             rotateNumber = 6;
             break;
         default:
             _mapWidth =3 ;
             _mapHeight = 3;
-            boardNumber = 5;
-            rotateNumber = 8;
+            boardNumber = 6;
+            rotateNumber = 9;
             break;
         }
 

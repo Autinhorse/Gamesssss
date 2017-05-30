@@ -16,7 +16,7 @@ public class GameLogicDecisionHowMany : GameLogicThreeButtons {
         base.SetGameController( controller );
 
         _gameController.SetGameName( "COUNT" );
-        _gameController.SetGameDescription1( 6, "How many         are here?" );
+        _gameController.SetGameDescription1( 6, "How many          here?" );
 
         _gameController.SetColorIndex( 4 );
 
@@ -30,10 +30,14 @@ public class GameLogicDecisionHowMany : GameLogicThreeButtons {
 
         switch(_difficulty){
         case 0:
-            mapWidth = 3;
+            mapWidth = 2;
             mapHeight = 2;
             break;
         case 1:
+            mapWidth = 3;
+            mapHeight = 2;
+            break;
+        case 2:
             mapWidth = 3;
             mapHeight = 3;
             break;
@@ -102,7 +106,7 @@ public class GameLogicDecisionHowMany : GameLogicThreeButtons {
         go1.gameObject.SetActive( true );
 
         go1.gameObject.transform.SetParent( _gameController.goBoardArea.transform );
-        go1.rectTransform.localPosition = new Vector3( 12, _gameController.boardHeight*27/80, 0 ); 
+        go1.rectTransform.localPosition = new Vector3( 44, _gameController.boardHeight*27/80, 0 ); 
 
         go1.rectTransform.sizeDelta = new Vector2( 48, 48 );
         go1.rectTransform.localScale = Vector3.one;
@@ -111,7 +115,7 @@ public class GameLogicDecisionHowMany : GameLogicThreeButtons {
 
         go1.sprite = MainPage.instance.SptShapes[shapes[maxIndex]];
 
-        switch(UnityEngine.Random.Range(0,3)){
+        switch(KWUtility.Random(0,3)){
         case 0:
             SetButtonsRandom( maxValue.ToString(), (maxValue-2).ToString(), (maxValue-1).ToString() );
             break;

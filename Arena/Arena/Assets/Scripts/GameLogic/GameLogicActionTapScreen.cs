@@ -17,7 +17,7 @@ public class GameLogicActionTapScreen : GameLogic {
             difficult=2;
         }
 
-        _target = KWUtility.Random( 4+difficult, 4+difficult*4 );
+        _target = KWUtility.Random( 3+difficult, 4+difficult*2 );
         if(_target>12) {
             _target=12;
         }
@@ -34,6 +34,10 @@ public class GameLogicActionTapScreen : GameLogic {
     }
 
     public override void OnButtonPressed( int buttonIndex ) {
+        if(_status!=Status_Playing) {
+            return;
+        }
+
         _status = Status_Gameover;
         if(_count==_target) {
             _gameController.SendGameResult( true );
@@ -44,6 +48,9 @@ public class GameLogicActionTapScreen : GameLogic {
     }
 
     public override void OnBoardTapped( Vector3 pos ) {
+        if(_status!=Status_Playing) {
+            return;
+        }
         MainPage.instance.PlaySound( MainPage.Sound_Tap );
 
         _count++;

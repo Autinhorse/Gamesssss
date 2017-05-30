@@ -16,7 +16,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
 
     //float _timer;
 
-    int _secondStatus;
+    //int _secondStatus;
 
     int _shapeNumber;
     List<int> _mapData; 
@@ -44,17 +44,15 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
         MapBlockSize = (int) _gameController.boardHeight/8;
 
         _gameController.SetGameName( "MISS  SHAPE" );
-        _gameController.SetGameDescription1( 7, "Remember these shapes" );
-        _gameController.SetGameDescription2( 4, "Tap screen when you done" );
+        _gameController.SetGameDescription1( 4, "Remember the shapes" );
+        _gameController.SetGameDescription2( 5, 46, "Then tap screen" );
 
         _gameController.SetColorIndex( 3 );
 
         int difficulty = _difficulty;
-        if(difficulty>2){
-            difficulty=2;
+        if(difficulty>3){
+            difficulty=3;
         }
-        _timer = 3+_difficulty/2.0f;
-        _totalGameTime = _timer;
 
         _shapeNumber = 3+difficulty;
             
@@ -79,10 +77,10 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
             }
         }
 
-        ShowShape(_mapData);
+        ShowShape( false, _mapData);
     }
 
-    void ShowShape( List<int> data ) {
+    void ShowShape( bool isHigh, List<int> data ) {
         int shapeIndex = 0;
 
         switch( data.Count ) {
@@ -91,7 +89,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
             _mapHeight = 1;
             for( int m=0; m<_mapWidth; m++) {
                 for( int n=0; n<_mapHeight; n++ ) {
-                    CreateShape( data[shapeIndex], m, n );
+                    CreateShape( isHigh, data[shapeIndex], m, n );
                     shapeIndex++;
                 }
             }
@@ -101,7 +99,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
             _mapHeight = 1;
             for( int m=0; m<_mapWidth; m++) {
                 for( int n=0; n<_mapHeight; n++ ) {
-                    CreateShape( data[shapeIndex], m, n );
+                    CreateShape( isHigh, data[shapeIndex], m, n );
                     shapeIndex++;
                 }
             }
@@ -111,7 +109,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
             _mapHeight = 1;
             for( int m=0; m<_mapWidth; m++) {
                 for( int n=0; n<_mapHeight; n++ ) {
-                    CreateShape( data[shapeIndex], m, n );
+                    CreateShape( isHigh, data[shapeIndex], m, n );
                     shapeIndex++;
                 }
             }
@@ -121,7 +119,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
             _mapHeight = 2;
             for( int m=0; m<_mapWidth; m++) {
                 for( int n=0; n<_mapHeight; n++ ) {
-                    CreateShape( data[shapeIndex], m, n );
+                    CreateShape( isHigh, data[shapeIndex], m, n );
                     shapeIndex++;
                 }
             }
@@ -134,7 +132,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
                     if((m==1)&&(n==0)) {
                         continue;
                     }
-                    CreateShape( data[shapeIndex], m, n );
+                    CreateShape( isHigh, data[shapeIndex], m, n );
                     shapeIndex++;
                 }
             }
@@ -144,7 +142,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
             _mapHeight = 2;
             for( int m=0; m<_mapWidth; m++) {
                 for( int n=0; n<_mapHeight; n++ ) {
-                    CreateShape( data[shapeIndex], m, n );
+                    CreateShape( isHigh, data[shapeIndex], m, n );
                     shapeIndex++;
                 }
             }
@@ -157,7 +155,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
                     if((n==0)&&((m==0)||(m==2))) {
                         continue;
                     }
-                    CreateShape( data[shapeIndex], m, n );
+                    CreateShape( isHigh, data[shapeIndex], m, n );
                     shapeIndex++;
                 }
             }
@@ -170,7 +168,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
                     if((n==0)&&(m==1)) {
                         continue;
                     }
-                    CreateShape( data[shapeIndex], m, n );
+                    CreateShape( isHigh, data[shapeIndex], m, n );
                     shapeIndex++;
                 }
             }
@@ -180,7 +178,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
             _mapHeight = 3;
             for( int m=0; m<_mapWidth; m++) {
                 for( int n=0; n<_mapHeight; n++ ) {
-                    CreateShape( data[shapeIndex], m, n );
+                    CreateShape( isHigh, data[shapeIndex], m, n );
                     shapeIndex++;
                 }
             }
@@ -193,7 +191,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
                     if(((m==0)||(m==3))&&(n==0)) {
                         continue;
                     }
-                    CreateShape( data[shapeIndex], m, n );
+                    CreateShape( isHigh,data[shapeIndex], m, n );
                     shapeIndex++;
                 }
             }
@@ -206,7 +204,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
                     if((m==0)&&(n==0)) {
                         continue;
                     }
-                    CreateShape( data[shapeIndex], m, n );
+                    CreateShape( isHigh, data[shapeIndex], m, n );
                     shapeIndex++;
                 }
             }
@@ -217,7 +215,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
             _mapHeight = 3;
             for( int m=0; m<_mapWidth; m++) {
                 for( int n=0; n<_mapHeight; n++ ) {
-                    CreateShape( data[shapeIndex], m, n );
+                    CreateShape( isHigh, data[shapeIndex], m, n );
                     shapeIndex++;
                 }
             }
@@ -230,7 +228,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
                     if((n==0)&&((m==1)||(m==2))) {
                         continue;
                     }
-                    CreateShape( data[shapeIndex], m, n );
+                    CreateShape( isHigh, data[shapeIndex], m, n );
                     shapeIndex++;
                 }
             }
@@ -243,7 +241,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
                     if((n==0)&&(m==1)) {
                         continue;
                     }
-                    CreateShape( data[shapeIndex], m, n );
+                    CreateShape( isHigh, data[shapeIndex], m, n );
                     shapeIndex++;
                 }
             }
@@ -253,7 +251,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
             _mapHeight = 3;
             for( int m=0; m<_mapWidth; m++) {
                 for( int n=0; n<_mapHeight; n++ ) {
-                    CreateShape( data[shapeIndex], m, n );
+                    CreateShape( isHigh, data[shapeIndex], m, n );
                     shapeIndex++;
                 }
             }
@@ -261,8 +259,8 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
         }
     }
 
-    void CreateShape( int shape, int m, int n ) {
-        Vector2 pos = GetPosition( m, n );
+    void CreateShape(bool isHigh, int shape, int m, int n ) {
+        Vector2 pos = GetPosition( isHigh, m, n );
         Image imgBoard = (Image) GameObject.Instantiate( _gameController.goBoardImage );
         imgBoard.gameObject.SetActive( true );
         imgBoard.transform.SetParent( _gameController.goBoardArea.transform );
@@ -287,8 +285,12 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
         DOTween.Play( imgBoard.rectTransform.DOScale( Vector3.one, 0.75f).SetEase( Ease.OutBack ) );
     }
 
-    Vector2 GetPosition( int x, int y ) {
-        return new Vector2( (-1*(_mapWidth-1.0f)/2+x)*(MapBlockSize+MapBlockDelta), ((_mapHeight-1.0f)/2-y)*(MapBlockSize+MapBlockDelta) );
+    Vector2 GetPosition( bool isHigh, int x, int y ) {
+        if(isHigh==true) {
+            return new Vector2( (-1*(_mapWidth-1.0f)/2+x)*(MapBlockSize+MapBlockDelta), ((_mapHeight-1.0f)/2-y)*(MapBlockSize+MapBlockDelta) );
+        }
+
+        return new Vector2( (-1*(_mapWidth-1.0f)/2+x)*(MapBlockSize+MapBlockDelta), ((_mapHeight-1.0f)/2-y)*(MapBlockSize+MapBlockDelta) - MapBlockSize );
     }
 
     void HideCard( int x, int y ) {
@@ -299,7 +301,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
     public override void StartGame() {
         _status = Status_Playing;
 
-        _secondStatus = Status_Remebering;
+       // _secondStatus = Status_Remebering;
 
     }
 
@@ -315,9 +317,12 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
     }
 
     public override void OnBoardTapped( Vector3 pos ) {
+        if(_status!=Status_Playing) {
+            return;
+        }
         MainPage.instance.PlaySound( MainPage.Sound_Tap );
 
-        _secondStatus=Status_Deciding;
+       // _secondStatus=Status_Deciding;
 
         _gameController.SetGameDescription1( 0, "Which one has gone?" );
 
@@ -356,7 +361,7 @@ public class GameLogicMemeoryMissItem : GameLogicThreeButtons {
                         _mapData.Add( swap[n] );
                     }
 
-                    ShowShape( _mapData );
+                    ShowShape( true, _mapData );
                     int wrong1 = KWUtility.Random( 0, _nonexistData.Count );
                     int wrong2;
 

@@ -20,6 +20,10 @@ public class GameLogicResolveHeadup : GameLogic {
 
     Text[,] _mapChar;
 
+    Image[,] _mapImage;
+
+    int _targetType;
+
     // 关于这个游戏的难度
     // 难度支持0-11:
     // 0-2:有4个字母，其中分别有2，3，4个需要旋转
@@ -33,7 +37,22 @@ public class GameLogicResolveHeadup : GameLogic {
 
         _gameController.SetButtonMode( GameController.Button_None );
 
-        _gameController.SetGameNameAndDescription( "Headup", "Tap the charactors", "Make them headup" );
+        ;
+        if(_difficulty>1) {
+            _targetType=0;
+        }
+        else {
+            _targetType=1;
+        }
+
+        if(_targetType==0) {
+           _gameController.SetGameDescription1( 4, "Tap the charactors" );
+        }
+        else {
+            _gameController.SetGameDescription1( 4, "Tap the aliens" );
+        }
+
+        _gameController.SetGameDescription2( 5, "Make them headup" );
 
         _gameController.SetColorIndex( 1 );
 
@@ -45,7 +64,12 @@ public class GameLogicResolveHeadup : GameLogic {
             charNumber=3;
             break;
         case 1:
-            _mapWidth=2;
+            _mapWidth=3;
+            _mapHeight=2;
+            charNumber=3;
+            break;
+        case 2:
+            _mapWidth=3;
             _mapHeight=2;
             charNumber=4;
             break;
@@ -57,7 +81,12 @@ public class GameLogicResolveHeadup : GameLogic {
         }
 
         _mapData = new int[_mapWidth*_mapHeight];
-        _mapChar = new Text[_mapWidth, _mapHeight];
+        if(_targetType==0){
+            _mapChar = new Text[_mapWidth, _mapHeight];
+        }
+        else {
+            _mapImage= new Image[_mapWidth, _mapHeight];
+        }
 
         for( int m=0; m<_mapHeight*_mapWidth; m++ ) {
             if(m<charNumber){
@@ -82,44 +111,72 @@ public class GameLogicResolveHeadup : GameLogic {
             
         for(int m=0; m<_mapWidth; m++ ) {
             for( int n=0; n<_mapHeight; n++ ) {
-                
-                Text textObject = (Text) GameObject.Instantiate( _gameController.goBoardChar );
-                _goList.Add( textObject.gameObject );
-                textObject.gameObject.SetActive( true );
 
-                textObject.transform.SetParent( _gameController.goBoardArea.transform );
-                Vector2 pos = GetPosition( m, n );
+                if(_targetType==0) {
+                    Text textObject = (Text) GameObject.Instantiate( _gameController.goBoardChar );
+                    _goList.Add( textObject.gameObject );
+                    textObject.gameObject.SetActive( true );
 
-                textObject.rectTransform.localPosition = new Vector3( pos.x, pos.y, 0 );
+                    textObject.transform.SetParent( _gameController.goBoardArea.transform );
+                    Vector2 pos = GetPosition( m, n );
 
-                int unicode;
-                do {
-                    unicode = 65+ KWUtility.Random( 0, 26 );
-                } while((unicode==72)||(unicode==73)||(unicode==78)||(unicode==79)||(unicode==83)||(unicode==88)||(unicode==90));
+                    textObject.rectTransform.localPosition = new Vector3( pos.x, pos.y, 0 );
 
-                char character = (char) unicode;
-                string text = character.ToString();
+                    int unicode;
+                    do {
+                        unicode = 65+ KWUtility.Random( 0, 26 );
+                    } while((unicode==72)||(unicode==73)||(unicode==78)||(unicode==79)||(unicode==83)||(unicode==88)||(unicode==90));
 
-                textObject.text = text;
-                textObject.color = Color.white;
+                    char character = (char) unicode;
+                    string text = character.ToString();
 
-                _mapChar[m,n] = textObject;
+                    textObject.text = text;
+                    textObject.color = Color.white;
 
-                switch( _mapData[m*_mapHeight+n] ) {
-                case 1:
-                case 2:
-                case 3:
-                    _mapData[m*_mapHeight+n]  = 1;
-                    textObject.rectTransform.localEulerAngles = new Vector3( 0, 0, 90 );
-                    break;
-                /*case 2:
-                    textObject.rectTransform.localEulerAngles = new Vector3( 0, 0, 180 );
-                    break;
-                case 3:
-                    textObject.rectTransform.localEulerAngles = new Vector3( 0, 0, 270 );
-                    break;*/
+                    _mapChar[m,n] = textObject;
+
+                    switch( _mapData[m*_mapHeight+n] ) {
+                    case 1:
+                    case 2:
+                    case 3:
+                        _mapData[m*_mapHeight+n]  = 1;
+                        textObject.rectTransform.localEulerAngles = new Vector3( 0, 0, 90 );
+                        break;
+                    /*case 2:
+                        textObject.rectTransform.localEulerAngles = new Vector3( 0, 0, 180 );
+                        break;
+                    case 3:
+                        textObject.rectTransform.localEulerAngles = new Vector3( 0, 0, 270 );
+                        break;*/
+                    }
+                    textObject.rectTransform.localScale = Vector3.one;
                 }
-                textObject.rectTransform.localScale = Vector3.one;
+                else {
+                    Image imageObject = (Image) GameObject.Instantiate( _gameController.goBoardImage );
+                    _goList.Add( imageObject.gameObject );
+                    imageObject.gameObject.SetActive( true );
+
+                    imageObject.transform.SetParent( _gameController.goBoardArea.transform );
+                    Vector2 pos = GetPosition( m, n );
+
+                    imageObject.rectTransform.localPosition = new Vector3( pos.x, pos.y, 0 );
+
+                    imageObject.sprite = MainPage.instance.SptAlien;
+                    imageObject.color = Color.white;
+
+                    _mapImage[m,n] = imageObject;
+
+                    switch( _mapData[m*_mapHeight+n] ) {
+                    case 1:
+                    case 2:
+                    case 3:
+                        _mapData[m*_mapHeight+n]  = 1;
+                        imageObject.rectTransform.localEulerAngles = new Vector3( 0, 0, 90 );
+                        break;
+                    }
+                
+                    imageObject.rectTransform.localScale = Vector3.one;
+                }
             }
         }
 
@@ -127,7 +184,7 @@ public class GameLogicResolveHeadup : GameLogic {
     }
 
     Vector2 GetPosition( int x, int y ) {
-        return new Vector2( (-1*(_mapWidth-1.0f)/2+x)*(MapBlockSize+MapBlockDelta), ((_mapHeight-1.0f)/2-y)*(MapBlockSize+MapBlockDelta)-MapBlockSize/2 );
+        return new Vector2( (-1*(_mapWidth-1.0f)/2+x)*(MapBlockSize+MapBlockDelta), ((_mapHeight-1.0f)/2-y)*(MapBlockSize+MapBlockDelta)-MapBlockSize );
     }
 
     public override void OnBoardTapped( Vector3 pos ) {
@@ -155,19 +212,37 @@ public class GameLogicResolveHeadup : GameLogic {
             if(_mapData[tapX*_mapHeight+tapY]<0) {
                 _mapData[tapX*_mapHeight+tapY]=3;
             }
-            switch(_mapData[tapX*_mapHeight+tapY]) {
-            case 0:
-                _mapChar[tapX,tapY].rectTransform.localEulerAngles = Vector3.zero;
-                break;
-            case 1:
-                _mapChar[tapX,tapY].rectTransform.localEulerAngles = new Vector3( 0, 0, 90 );
-                break;
-            case 2:
-                _mapChar[tapX,tapY].rectTransform.localEulerAngles = new Vector3( 0, 0, 180 );
-                break;
-            case 3:
-                _mapChar[tapX,tapY].rectTransform.localEulerAngles = new Vector3( 0, 0, 270 );
-                break;
+            if(_targetType==0) {
+                switch(_mapData[tapX*_mapHeight+tapY]) {
+                case 0:
+                    _mapChar[tapX,tapY].rectTransform.localEulerAngles = Vector3.zero;
+                    break;
+                case 1:
+                    _mapChar[tapX,tapY].rectTransform.localEulerAngles = new Vector3( 0, 0, 90 );
+                    break;
+                case 2:
+                    _mapChar[tapX,tapY].rectTransform.localEulerAngles = new Vector3( 0, 0, 180 );
+                    break;
+                case 3:
+                    _mapChar[tapX,tapY].rectTransform.localEulerAngles = new Vector3( 0, 0, 270 );
+                    break;
+                }
+            }
+            else {
+                switch(_mapData[tapX*_mapHeight+tapY]) {
+                case 0:
+                    _mapImage[tapX,tapY].rectTransform.localEulerAngles = Vector3.zero;
+                    break;
+                case 1:
+                    _mapImage[tapX,tapY].rectTransform.localEulerAngles = new Vector3( 0, 0, 90 );
+                    break;
+                case 2:
+                    _mapImage[tapX,tapY].rectTransform.localEulerAngles = new Vector3( 0, 0, 180 );
+                    break;
+                case 3:
+                    _mapImage[tapX,tapY].rectTransform.localEulerAngles = new Vector3( 0, 0, 270 );
+                    break;
+                }
             }
 
             int count = 0;

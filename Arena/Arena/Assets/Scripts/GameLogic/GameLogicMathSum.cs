@@ -10,17 +10,17 @@ public class GameLogicMathSum : GameLogicThreeButtons {
         base.SetGameController( controller );
 
         _gameController.SetGameName( "Sum" );
-        _gameController.SetGameDescription1( 0, "Which is the right answer?" );
+        _gameController.SetGameDescription1( 0, "Find right answer" );
 
         _gameController.SetColorIndex( 0 );
 
-        int maxNumber = _difficulty*5+4;
+        int maxNumber = _difficulty*3+4;
         int number1 = UnityEngine.Random.Range( 0, maxNumber )+1;
         int number2 = UnityEngine.Random.Range( 0, maxNumber )+1;
 
         int result = number1+number2;
 
-        _gameController.SetMainText( number1.ToString()+" + "+number2.ToString(), Color.clear );
+        _gameController.SetMainText( number1.ToString()+" + "+number2.ToString()+" = ?", Color.clear );
 
         switch(UnityEngine.Random.Range(0,3)){
         case 0:

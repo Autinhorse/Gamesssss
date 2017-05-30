@@ -30,7 +30,7 @@ public class GameLogicMathBigger : GameLogic {
         int result1=0;
         int result2=0;
 
-        if(_difficulty<2) {
+        if(_difficulty==0) {
             result1 = UnityEngine.Random.Range( 15, 25 );
             do {
                 result2 = UnityEngine.Random.Range( 15, 25 );
@@ -39,7 +39,7 @@ public class GameLogicMathBigger : GameLogic {
             button1 = result1.ToString();
             button2 = result2.ToString();
         }  
-        else if(_difficulty<4 ) {
+        else if(_difficulty==1 ) {
             int number1, number2;
             number1 = KWUtility.Random( 3, 8+_difficulty );
             number2 = KWUtility.Random( 3, 8+_difficulty );
@@ -69,7 +69,7 @@ public class GameLogicMathBigger : GameLogic {
                 button2=tempStr;
             }
         }
-        else if(_difficulty<6 ) {
+        else  {
             int number1, number2;
             number1 = KWUtility.Random( _difficulty, 8+_difficulty*3/2 );
             number2 = KWUtility.Random( _difficulty, 8+_difficulty*3/2 );
@@ -105,82 +105,7 @@ public class GameLogicMathBigger : GameLogic {
                 button2=tempStr;
             }
         }
-        else if(_difficulty<9 ) {
-            int number1, number2;
-            number1 = KWUtility.Random( _difficulty/2, 8+_difficulty );
-            number2 = KWUtility.Random( _difficulty/2, 8+_difficulty );
 
-            if(KWUtility.Random(0,2)==0) {
-                result1 = number1 + number2;
-                button1 = number1.ToString()+" + "+number2.ToString();
-            }
-            else {
-                result1 = number2;
-                button1 = (number1+number2).ToString()+" - "+number1.ToString();
-            }
-
-            do {
-                number1 = KWUtility.Random( _difficulty/2, 8+_difficulty );
-                number2 = KWUtility.Random( _difficulty/2, 8+_difficulty );
-
-                if(KWUtility.Random(0,2)==0) {
-                    result2 = number1 + number2;
-                    button2 = number1.ToString()+" + "+number2.ToString();
-                }
-                else {
-                    result2 = number2;
-                    button2 = (number1+number2).ToString()+" - "+number1.ToString();
-                }
-            }while( result1==result2);
-        }
-        else  {
-            int number1, number2, number3;
-            number1 = KWUtility.Random( _difficulty/2, 8+_difficulty );
-            number2 = KWUtility.Random( _difficulty/2, 8+_difficulty );
-            number3 = KWUtility.Random( _difficulty/2, 8+_difficulty );
-
-            if(KWUtility.Random(0,2)==0) {
-                result1 = number1 + number2;
-                button1 = number1.ToString()+" + "+number2.ToString();
-            }
-            else {
-                result1 = number2;
-                button1 = (number1+number2).ToString()+" - "+number1.ToString();
-            }
-
-            if(KWUtility.Random(0,2)==0) {
-                result1 = result1 + number3;
-                button1 = button1+" + "+number3.ToString();
-            }
-            else {
-                result1 = result1-number3;
-                button1 = button1+" - "+number3.ToString();
-            }
-
-            do {
-                number1 = KWUtility.Random( _difficulty/2, 8+_difficulty );
-                number2 = KWUtility.Random( _difficulty/2, 8+_difficulty );
-                number3 = KWUtility.Random( _difficulty/2, 8+_difficulty );
-
-                if(KWUtility.Random(0,2)==0) {
-                    result2 = number1 + number2;
-                    button2 = number1.ToString()+" + "+number2.ToString();
-                }
-                else {
-                    result2 = number2;
-                    button2 = (number1+number2).ToString()+" - "+number1.ToString();
-                }
-
-                if(KWUtility.Random(0,2)==0) {
-                    result2 = result2 + number3;
-                    button2 = button2+" + "+number3.ToString();
-                }
-                else {
-                    result2 = result2-number3;
-                    button2 = button2+" - "+number3.ToString();
-                }
-            }while(result1==result2);
-        }
 
         Button button = (Button) GameObject.Instantiate( _gameController.goBoardButton);
         button.gameObject.SetActive( true );

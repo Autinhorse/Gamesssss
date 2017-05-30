@@ -18,13 +18,12 @@ public class GameLogicMathMath : GameLogicTwoButtons {
 
         if(_difficulty<3) {
             int maxNumber = _difficulty*3+4;
-            int number1 = UnityEngine.Random.Range( _difficulty, maxNumber )+1;
-            int number2 = UnityEngine.Random.Range( _difficulty, maxNumber )+1;
+            int number1 = KWUtility.Random( _difficulty, maxNumber )+1;
+            int number2 = KWUtility.Random( _difficulty, maxNumber )+1;
 
             int result = number1+number2;
 
-            bool right;
-            if(KWUtility.Random(0,2)==0){
+           if(KWUtility.Random(0,2)==0){
                 _rightButtonIndex = 0;
             }
             else {
@@ -54,9 +53,9 @@ public class GameLogicMathMath : GameLogicTwoButtons {
             if(minNumber>5) {
                 minNumber=5;
             }
-            int number1 = UnityEngine.Random.Range( minNumber, maxNumber )+1;
-            int number2 = UnityEngine.Random.Range( minNumber, maxNumber )+1;
-            int number3 = UnityEngine.Random.Range( minNumber, maxNumber )+1;
+            int number1 = KWUtility.Random( 5, 10 );
+            int number2 = KWUtility.Random( 5, 10 );
+            int number3 = KWUtility.Random( 5, 10 );
 
             string question;
 
@@ -68,8 +67,8 @@ public class GameLogicMathMath : GameLogicTwoButtons {
                 question = number1.ToString()+" + "+number2.ToString();
             }
             else {
-                question = result1.ToString()+" - "+number1.ToString();
-                result1 = number2;
+                question = number1.ToString()+" - "+number2.ToString();
+                result1 = number1-number2;
             }
 
             sign2=(KWUtility.Random( 0, 2)==0);
@@ -84,7 +83,6 @@ public class GameLogicMathMath : GameLogicTwoButtons {
                 result2 = result1-number3;
             }
 
-            bool right;
             if(KWUtility.Random(0,2)==0){
                 _rightButtonIndex = 0;
             }

@@ -15,6 +15,7 @@ public class GameController : MonoBehaviour {
     public Image goBoardImage;
     public Text goBoardChar;
     public Button goBoardButton;
+    public Text goBoardTapLetterChar;
 
     [Header("----------这里是UI对象----------")]
     public Text TxtGameDesc1;
@@ -128,12 +129,12 @@ public class GameController : MonoBehaviour {
     public void InitBoard( int boardIndexV ) {
         _boardIndex = boardIndexV;
 
-        _boardWidth = MainPage.instance.ScreenWidth/2;
+        _boardWidth = MainPage.instance.ScreenWidth/2+32;
         _boardHeight = (MainPage.instance.ScreenHeight-MainPage.instance.TopBarHeight)/2;
 
-        ImgBackground.rectTransform.sizeDelta = new Vector2( _boardWidth-32, _boardHeight-32 );
+        ImgBackground.rectTransform.sizeDelta = new Vector2( _boardWidth, _boardHeight+32 );
 
-        ImgTouchBoard.rectTransform.sizeDelta = new Vector2( _boardWidth-32, _boardHeight-32 );
+        ImgTouchBoard.rectTransform.sizeDelta = new Vector2( _boardWidth, _boardHeight+32 );
     }
 
     void FixedUpdate() {
@@ -142,6 +143,7 @@ public class GameController : MonoBehaviour {
 
     public void StartGame() {
         _gameLogic.StartGame();
+        MainPage.instance.GameStarted();
     }
 
     public void StopGame() {
@@ -230,6 +232,7 @@ public class GameController : MonoBehaviour {
 
     public void SetGameDescription1( int posIndex, string desc1 ) {
         TxtGameDesc1.gameObject.SetActive( true );
+        TxtGameDesc1.resizeTextForBestFit=true;
         TxtGameDesc2.gameObject.SetActive( false );
         switch(posIndex) {
         case 0:
@@ -256,11 +259,52 @@ public class GameController : MonoBehaviour {
         case 7:
             TxtGameDesc1.rectTransform.localPosition = new Vector3( 0, boardHeight*32/80, 0 );
             break;
+        case 8:
+            TxtGameDesc1.rectTransform.localPosition = new Vector3( 0, boardHeight*30/80, 0 );
+            break;
+            }
+        TxtGameDesc1.text = desc1;
+    }
+
+    public void SetGameDescription1( int posIndex, int fontSize, string desc1 ) {
+        TxtGameDesc1.gameObject.SetActive( true );
+        TxtGameDesc1.resizeTextForBestFit=false;
+        TxtGameDesc1.fontSize=fontSize;
+        TxtGameDesc2.gameObject.SetActive( false );
+        switch(posIndex) {
+        case 0:
+            TxtGameDesc1.rectTransform.localPosition = new Vector3( 0, boardHeight*5/16, 0 );
+            break;
+        case 1:
+            TxtGameDesc1.rectTransform.localPosition = new Vector3( 0, boardHeight/12, 0 );
+            break;
+        case 2:
+            TxtGameDesc1.rectTransform.localPosition = new Vector3( 0, boardHeight*19/80, 0 );
+            break;
+        case 3:
+            TxtGameDesc1.rectTransform.localPosition = new Vector3( 0, boardHeight*21/80, 0 );
+            break;
+        case 4:
+            TxtGameDesc1.rectTransform.localPosition = new Vector3( 0, boardHeight*25/80, 0 );
+            break;
+        case 5:
+            TxtGameDesc1.rectTransform.localPosition = new Vector3( 0, boardHeight*33/80, 0 );
+            break;
+        case 6:
+            TxtGameDesc1.rectTransform.localPosition = new Vector3( 0,  boardHeight*27/80, 0 );
+            break;
+        case 7:
+            TxtGameDesc1.rectTransform.localPosition = new Vector3( 0, boardHeight*32/80, 0 );
+            break;
+        case 8:
+            TxtGameDesc1.rectTransform.localPosition = new Vector3( 0, boardHeight*30/80, 0 );
+            break;
         }
         TxtGameDesc1.text = desc1;
     }
 
     public void SetGameDescription2( int posIndex, string desc2 ) {
+        TxtGameDesc2.resizeTextForBestFit=true;
         TxtGameDesc2.gameObject.SetActive( true );
         switch(posIndex) {
         case 0:
@@ -277,6 +321,42 @@ public class GameController : MonoBehaviour {
             break;
         case 4:
             TxtGameDesc2.rectTransform.localPosition = new Vector3( 0, boardHeight*26/80, 0 );
+            break;
+        case 5:
+            TxtGameDesc2.rectTransform.localPosition = new Vector3( 0, boardHeight*17/80, 0 );
+            break;
+        case 7:
+            TxtGameDesc2.rectTransform.localPosition = new Vector3( 0, boardHeight*20/80, 0 );
+            break;
+        }
+        TxtGameDesc2.text = desc2;
+    }
+
+    public void SetGameDescription2( int posIndex, int fontSize, string desc2 ) {
+        TxtGameDesc2.resizeTextForBestFit=false;
+        TxtGameDesc2.fontSize=fontSize;
+        TxtGameDesc2.gameObject.SetActive( true );
+        switch(posIndex) {
+        case 0:
+            TxtGameDesc2.rectTransform.localPosition = new Vector3( 0, boardHeight/4, 0 );
+            break;
+        case 1:
+            TxtGameDesc2.rectTransform.localPosition = new Vector3( 0, boardHeight/-12, 0 );
+            break;
+        case 2:
+            TxtGameDesc2.rectTransform.localPosition = new Vector3( 0, 0, 0 );
+            break;
+        case 3:
+            TxtGameDesc2.rectTransform.localPosition = new Vector3( 0, boardHeight*22/80, 0 );
+            break;
+        case 4:
+            TxtGameDesc2.rectTransform.localPosition = new Vector3( 0, boardHeight*26/80, 0 );
+            break;
+        case 5:
+            TxtGameDesc2.rectTransform.localPosition = new Vector3( 0, boardHeight*17/80, 0 );
+            break;
+        case 7:
+            TxtGameDesc2.rectTransform.localPosition = new Vector3( 0, boardHeight*20/80, 0 );
             break;
         }
         TxtGameDesc2.text = desc2;
@@ -297,6 +377,7 @@ public class GameController : MonoBehaviour {
             ButtonBGImage[2].rectTransform.sizeDelta = new Vector2( _boardWidth/3.0f, _boardHeight/11.0f);
 
             Buttons[0].gameObject.SetActive( true );
+            SetButtonEnable( 0, true );
             pos = Buttons[0].transform.localPosition;
             pos.x = 0;
             pos.y = -1.0f*_boardHeight/3;//*7/18;
@@ -310,11 +391,13 @@ public class GameController : MonoBehaviour {
             ButtonBGImage[2].rectTransform.sizeDelta = new Vector2( _boardWidth/3.2f, _boardHeight/11.0f);
 
             Buttons[0].gameObject.SetActive( true );
+            SetButtonEnable( 0, true );
             pos = Buttons[0].transform.localPosition;
             pos.y = -1.0f*_boardHeight/3;//*7/18;
             pos.x = -1*boardWidth/5;
             Buttons[0].transform.localPosition = pos;
             Buttons[1].gameObject.SetActive( true );
+            SetButtonEnable( 1, true );
             pos = Buttons[0].transform.localPosition;
             pos.x = boardWidth/5;
             Buttons[1].transform.localPosition = pos;
@@ -327,12 +410,15 @@ public class GameController : MonoBehaviour {
             ButtonBGImage[2].rectTransform.sizeDelta = new Vector2( _boardWidth/4.5f, _boardHeight/11.0f);
 
             Buttons[0].gameObject.SetActive( true );
+            SetButtonEnable( 0, true );
             pos = Buttons[0].transform.localPosition;
             pos.y = -1.0f*_boardHeight/3;//*7/18;
             pos.x = -1*boardWidth*11/40;
             Buttons[0].transform.localPosition = pos;
             Buttons[1].gameObject.SetActive( true );
+            SetButtonEnable( 1, true );
             Buttons[2].gameObject.SetActive( true );
+            SetButtonEnable( 2, true );
             pos.x*=-1;
             Buttons[2].transform.localPosition = pos;
             pos.x=0;

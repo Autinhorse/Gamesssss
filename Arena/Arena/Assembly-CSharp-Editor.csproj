@@ -226,9 +226,6 @@
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-sl\common_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-ml-rIN\common_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\color\wallet_primary_text_holo_light.xml" />
- <Reference Include="UnityEngine.Advertisements">
- <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
- </Reference>
  <Reference Include="UnityEditor.Advertisements">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll</HintPath>
  </Reference>

@@ -23,21 +23,24 @@ public class GameLogicDecisionNoExistChar : GameLogicThreeButtons {
 
         switch(_difficulty) {
         case 0:
-            charNumber=6;
+            charNumber=5;
             candidateNumber = 3;
             break;
         case 1:
-            charNumber=8;
+            charNumber=7;
             candidateNumber = 4;
             break;
+        case 2:
+            charNumber=9;
+            candidateNumber = 5;
+            break;
         default:
-            charNumber=10;
-            candidateNumber = 4;
+            charNumber=11;
+            candidateNumber = 6;
             break;
         }
 
 
-        
         string chars="";
         int[] candidates = new int[candidateNumber+1];
         for(int m=0; m<candidateNumber+1; m++ ) {
@@ -78,11 +81,7 @@ public class GameLogicDecisionNoExistChar : GameLogicThreeButtons {
             chars+=((char)charData[m]).ToString();
         }
 
-        Debug.Log( "String:"+chars );
-
         _gameController.SetMainText( chars, Color.clear );
-
-        Debug.Log( "Buttons:"+ ((char)candidates[candidateNumber]).ToString()+ ((char)candidates[0]).ToString()+ ((char)candidates[1]).ToString() );
 
         SetButtonsRandom( ((char)candidates[candidateNumber]).ToString(), ((char)candidates[0]).ToString(), ((char)candidates[1]).ToString() );
     }

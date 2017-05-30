@@ -44,17 +44,17 @@ public class GameLogicMemoryOrder : GameLogic {
 
         MapBlockSize = (int) _gameController.boardHeight/8;
 
-        _gameController.SetGameDescription1( 7, "Remember the numbers on tiles."  );
-        _gameController.SetGameDescription2( 4, "Tap screen when you are ready." );
+        _gameController.SetGameDescription1( 4, "Remember the numbers"  );
+        _gameController.SetGameDescription2( 5, 42, "Then tap screen" );
 
         _gameController.SetColorIndex( 3 );
 
         int difficulty = _difficulty;
-        if(difficulty>2){
-            difficulty=2;
+        if(difficulty>3){
+            difficulty=3;
         }
 
-        _blockNumber = 4+difficulty;
+        _blockNumber = 3+difficulty;
 
         if(_blockNumber>7) {
             _blockNumber=7;

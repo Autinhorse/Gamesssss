@@ -41,20 +41,15 @@ public class GameLogicMemoryPair : GameLogic {
 
         MapBlockSize = (int) _gameController.boardHeight/8;
 
-        _gameController.SetGameDescription1( 7, "Remember the pairs."  );
-        _gameController.SetGameDescription2( 4, "Tap screen when you are ready." );
+        _gameController.SetGameDescription1( 6, "Remember the pairs"  );
+        _gameController.SetGameDescription2( 7, 48, "Then tap screen" );
 
 
         _gameController.SetColorIndex( 3 );
 
         int difficulty = _difficulty;
-        if(difficulty>2){
-            difficulty=2;
-        }
-        _timer = 5+difficulty/1.5f;
-        _totalGameTime = _timer;
 
-        int[] blockNumber = { 4, 6, 8, 6, 6, 8, 8, 8, 8, 10, 10, 10, 10, 10, 10, 10 };
+        int[] blockNumber = { 4, 4, 6, 8, 6, 8, 8, 8, 8, 10, 10, 10, 10, 10, 10, 10 };
 
         _blockNumber = blockNumber[difficulty];
 
@@ -153,7 +148,7 @@ public class GameLogicMemoryPair : GameLogic {
     }
 
     Vector2 GetPosition( int x, int y ) {
-        return new Vector2( (-1*(_mapWidth-1.0f)/2+x)*(MapBlockSize+MapBlockDelta), ((_mapHeight-1.0f)/2-y)*(MapBlockSize+MapBlockDelta)-MapBlockSize/2 );
+        return new Vector2( (-1*(_mapWidth-1.0f)/2+x)*(MapBlockSize+MapBlockDelta), ((_mapHeight-1.0f)/2-y)*(MapBlockSize+MapBlockDelta)-MapBlockSize );
     }
 
     void TurnCard( int x, int y, int delay ) {

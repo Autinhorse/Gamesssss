@@ -52,17 +52,15 @@ public class GameLogicMemoryNewItem : GameLogic {
         _gameController.SetColorIndex( 3 );
 
         int difficulty = _difficulty;
-        if(difficulty>15){
-            difficulty=15;
+        if(difficulty>3){
+            difficulty=3;
         }
-        _timer = 4+_difficulty/2.0f;
-        _totalGameTime = _timer;
-
-        int[] shapeNumber = { 2, 3, 3, 4, 4, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8 }; 
+       
+        int[] shapeNumber = { 2, 3, 4, 5, 4, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8 }; 
         _shapeNumber = shapeNumber[difficulty];
 
-        _gameController.SetGameDescription1( 7, "Remember these shapes." );
-        _gameController.SetGameDescription2( 4, "Tap screen when you are ready." );
+        _gameController.SetGameDescription1( 4, "Remember the shapes" );
+        _gameController.SetGameDescription2( 5, 46,"Then tap screen" );
         /*
         if((_shapeNumber==11)||(_shapeNumber==10)){
             _gameController.SetGameDescription1( 5, "Remember these shapes." );
@@ -285,7 +283,7 @@ public class GameLogicMemoryNewItem : GameLogic {
     }
 
     Vector2 GetPosition( int x, int y ) {
-        return new Vector2( (-1*(_mapWidth-1.0f)/2+x)*(MapBlockSize+MapBlockDelta), ((_mapHeight-1.0f)/2-y)*(MapBlockSize+MapBlockDelta) );
+        return new Vector2( (-1*(_mapWidth-1.0f)/2+x)*(MapBlockSize+MapBlockDelta), ((_mapHeight-1.0f)/2-y)*(MapBlockSize+MapBlockDelta) -MapBlockSize );
     }
 
  

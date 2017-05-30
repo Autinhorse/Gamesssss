@@ -26,13 +26,13 @@ public class GameLogicActionSpark : GameLogic {
         _timer = _totalGameTime;
 
 
-        _target = 4 + _difficulty*2;
+        _target = 4 + _difficulty;
 
         if(_target>8){
             _target=8;
         }
 
-        _gameController.SetGameDescription1( 5, "Tap to pin the ball" );
+        _gameController.SetGameDescription1( 6, "Tap to pin the ball" );
         _gameController.SetGameDescription2( 2, _target.ToString() );
 
         _gameController.SetColorIndex( 2 );
@@ -137,6 +137,9 @@ public class GameLogicActionSpark : GameLogic {
     }
 
     public override void OnBoardTapped( Vector3 pos ) {
+        if(_status!=Status_Playing) {
+            return;
+        }
         _flyingSpark.Add( _spark );
 
         _spark = (Image) GameObject.Instantiate( _gameController.goBoardImage );

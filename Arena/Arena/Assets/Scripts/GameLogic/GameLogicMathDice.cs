@@ -11,6 +11,8 @@ public class GameLogicMathDice : GameLogicThreeButtons {
     int _mapWidth;
     int _mapHeight;
 
+    int _targetType;
+
     public GameLogicMathDice( int gameID, int difficulty, int randomSeed  ) : base(gameID,difficulty,randomSeed) {
     }
 
@@ -24,8 +26,6 @@ public class GameLogicMathDice : GameLogicThreeButtons {
     public override void SetGameController( GameController controller ) {
         base.SetGameController( controller );
 
-        _gameController.SetGameName( "DICE" );
-        _gameController.SetGameDescription1( 0, "How many dots on dices?" );
 
         _gameController.SetColorIndex( 0 );
 
@@ -43,11 +43,24 @@ public class GameLogicMathDice : GameLogicThreeButtons {
             _mapWidth = 3;
             _mapHeight = 1;
             break;
-        default:
-             diceNumber=4;
+        case 2:
+            diceNumber=4;
             _mapWidth = 2;
             _mapHeight = 2;
             break;
+        default:
+             diceNumber=5;
+            _mapWidth = 3;
+            _mapHeight = 2;
+            break;
+        }
+
+        _targetType = KWUtility.Random( 0, 2 );
+        if(_targetType==0){
+            _gameController.SetGameDescription1( 0, "How many dots here?" );
+        }
+        else {
+            _gameController.SetGameDescription1( 0, "How many vertices here?" );
         }
 
         int result = 0;
@@ -56,14 +69,38 @@ public class GameLogicMathDice : GameLogicThreeButtons {
                 if((diceNumber==5)&&(m==1)&&(n==0)) {
                     continue;
                 }
-                int dice = KWUtility.Random( 0, 6 );
+                int dice;
+                if(_targetType==0){
+                    dice = KWUtility.Random( 0, 6 );
+                }
+                else {
+                    dice = KWUtility.Random( 2, 6 );
+                }
                 result += dice+1;
 
                 Image imgBoard = (Image) GameObject.Instantiate( _gameController.goBoardImage );
                 imgBoard.gameObject.SetActive( true );
                 imgBoard.transform.SetParent( _gameController.goBoardArea.transform );
                 imgBoard.color = Color.white;
-                imgBoard.sprite = MainPage.instance.SptDices[dice];
+                if(_targetType==0) {
+                    imgBoard.sprite = MainPage.instance.SptDices[dice];
+                }
+                else {
+                    switch(dice) {
+                    case 2:
+                        imgBoard.sprite = MainPage.instance.SptShapes[1];
+                        break;
+                    case 3:
+                        imgBoard.sprite = MainPage.instance.SptShapes[8];
+                        break;
+                    case 4:
+                        imgBoard.sprite = MainPage.instance.SptShapes[11];
+                        break;
+                    case 5:
+                        imgBoard.sprite = MainPage.instance.SptShapes[2];
+                        break;
+                    }
+                }
                 _goList.Add( imgBoard.gameObject );
 
                 Vector2 pos = GetPosition( m, n);
